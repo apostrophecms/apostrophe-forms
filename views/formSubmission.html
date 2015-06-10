@@ -1,0 +1,12 @@
+<p>The form "{{ form.title | e }}" has been submitted.</p>
+
+<p>Here is the information that was submitted.</p>
+
+<table>
+  {% for key, val in result %}
+    <tr>
+      <th>{{ key | e }}</th>
+      <td>{{ val | e | nlbr }}</td>
+    </tr>
+  {% endfor %}
+</table>

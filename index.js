@@ -264,7 +264,6 @@ forms.Forms = function(options, callback) {
     self.widgets[widget.name] = widget;
   });
 
-  console.log(self._action);
   self._app.post(self._action + '/submit/:id', function(req, res) {
     var form;
     var result = {};
@@ -300,13 +299,16 @@ forms.Forms = function(options, callback) {
           'Form submission: ' + form.title,
           'formSubmission',
           {
-            result: result
+            result: _.omit(result, 'formId', '_id'),
+            form: form
           },
           function(err) {
             // The form was already recorded, so
             // we shouldn't panic altogether here,
             // that could lead to a duplicate submission
-            console.error(err);
+            if (err) {
+              console.error(err);
+            }
             return callback(null);
           }
         );
