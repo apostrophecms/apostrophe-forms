@@ -118,6 +118,7 @@ forms.Forms = function(options, callback) {
         {
           name: 'choices',
           type: 'array',
+          label: 'Choice',
           schema: [
             {
               name: 'value',
@@ -141,12 +142,54 @@ forms.Forms = function(options, callback) {
           required: true
         },
         {
-          name: 'required',
-          label: 'Must Check to Complete Form',
-          type: 'boolean'
+          name: 'minimum',
+          label: 'Minimum number of options to be selected',
+          type: 'integer'
+        },
+        {
+          name: 'maximum',
+          label: 'Maximum number of options to be selected',
+          type: 'integer'
+        },
+        {
+          name: 'checkboxes',
+          type: 'array',
+          label: 'Checkbox',
+          schema: [
+            {
+              name: 'value',
+              label: 'Value',
+              type: 'string'
+            },
+            {
+              name: 'required',
+              label: 'Must Check to Complete Form',
+              type: 'boolean'
+            }
+          ]
+        }
+      ]
+    },
+    {
+      name: 'dateField',
+      label: 'Date Field',
+      css: 'apostrophe-date-field',
+      schema: [
+        {
+          name: 'label',
+          label: 'Label',
+          type: 'string',
+          required: true
+        },
+        {
+          name: 'date',
+          label: 'Date',
+          type: 'date',
+          required: true
         }
       ]
     }
+    //TODO add datetime
   ].concat(options.addWidgets || []);
 
   // widgetEditors.html will spit out a frontend DOM template for editing
