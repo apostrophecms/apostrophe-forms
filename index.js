@@ -18,7 +18,7 @@ forms.Forms = function(options, callback) {
   // Controls to be displayed.
   options.controls = options.controls || [
     // form field widgets
-    'textField', 'textareaField', 'selectField', 'radioField', 'checkboxField', 'dateField', 'timeField',
+    'textField', 'textareaField', 'selectField', 'radioField', 'checkboxesField', 'dateField', 'timeField',
     // text controls
     'style', 'bold', 'italic', 'createLink', 'unlink', 'insertUnorderedList', 'insertTable',
     // misc widgets
@@ -383,6 +383,11 @@ forms.Forms = function(options, callback) {
   // thus very useful
 
   self.sanitizeField = function(field, value) {
+    if (field.type === 'checkboxesField') {
+      return _.map(Array.isArray(value) ? value : [], function(item) {
+        return self._apos.sanitizeString(item);
+      });
+    }
     return self._apos.sanitizeString(value);
   };
 
