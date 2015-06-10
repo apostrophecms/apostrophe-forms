@@ -163,9 +163,9 @@ forms.Forms = function(options, callback) {
       ]
     },
     {
-      name: 'checkboxField',
-      label: 'Checkbox Field',
-      css: 'apostrophe-checkbox-field',
+      name: 'checkboxesField',
+      label: 'Checkboxes Field',
+      css: 'apostrophe-checkboxes-field',
       schema: [
         {
           name: 'label',
