@@ -1,0 +1,32 @@
+{
+  "name": "apostrophe-forms",
+  "version": "0.5.0",
+  "description": "Allow your users to build forms on the fly on their Apostrophe sites",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/punkave/apostrophe-forms.git"
+  },
+  "keywords": [
+    "forms",
+    "apostrophe",
+    "cms",
+    "form",
+    "builder",
+    "a2"
+  ],
+  "author": "P'unk Avenue LLC",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/punkave/apostrophe-forms/issues"
+  },
+  "homepage": "https://github.com/punkave/apostrophe-forms",
+  "dependencies": {
+    "apostrophe-snippets": "^0.5.82",
+    "async": "^1.2.1",
+    "lodash": "^3.9.3"
+  }
+}
