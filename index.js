@@ -230,6 +230,7 @@ forms.Forms = function(options, callback) {
 
   self.pushAsset('script', 'editor', { when: 'user' });
   self.pushAsset('stylesheet', 'editor', { when: 'user' });
+  self.pushAsset('stylesheet', 'content', { when: 'always' });
 
   self._apos.pushGlobalData({
     formWidgets: _.map(options.widgets, function(info) {

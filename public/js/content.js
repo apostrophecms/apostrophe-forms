@@ -1,5 +1,6 @@
 apos.widgetPlayers.forms = function($el) {
   var $form = $el.find('form');
+
   $form.on('submit', function() {
     var action = $form.attr('action');
     var result = {};
