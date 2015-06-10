@@ -1,0 +1,11 @@
+{# The form insertion widget. This is a snippet subclass widget, so #}
+{# it loops over an array, but there will in reality be only one form #}
+{# per widget. -Tom #}
+
+{% for form in item._snippets %}
+  <h4>{{ form.title | e }}</h4>
+  <form method="POST" action="/apos-forms/submit/{{ form._id | e }}">
+    {{ aposArea(form, 'body') }}
+    <input type="submit" name="submit" value="{{ (form.submitButtonLabel or __('Submit Form')) | e }}" />
+  </form>
+{% endfor %}
