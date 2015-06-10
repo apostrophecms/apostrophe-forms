@@ -15,7 +15,7 @@ forms.Forms = function(options, callback) {
 
   var self = this;
 
-  // Controls to be displayed. 
+  // Controls to be displayed.
   options.controls = options.controls || [
     // form field widgets
     'textField', 'textareaField', 'selectField', 'radioField', 'checkboxField', 'dateField', 'timeField',
@@ -36,29 +36,61 @@ forms.Forms = function(options, callback) {
     ],
     addFields: [
       {
-        name: 'submitLabel',
-        label: 'Label for Submit Button',
-        type: 'string'
-      },
-      {
-        name: 'email',
-        label: 'Email Results To',
-        type: 'string'
-      },
-      {
         name: 'body',
         label: 'Form Content',
         type: 'area',
         options: {
           controls: options.controls
         }
-      }
+      },
+      {
+        name: 'submitLabel',
+        label: 'Label for Submit Button',
+        type: 'string'
+      },
+      {
+        name: 'thankYouLabel',
+        label: 'Thank You Message (title)',
+        type: 'string'
+      },
+      {
+        name: 'thankYouBody',
+        label: 'Thank You Message (body)',
+        type: 'string',
+        textarea: true
+      },
+      {
+        name: 'email',
+        label: 'Email Results To',
+        type: 'string'
+      },
     ]
   });
 
   options.modules = (options.modules || []).concat([ { dir: __dirname, name: 'forms' } ]);
 
   snippets.Snippets.call(this, options, null);
+  self._apos.mixinModuleEmail(self);
+
+  // Adjust the widget used to actually insert the form. We're
+  // subclassing snippets here, so we use extendWidget to change
+  // that over to a single-selection autocomplete widget. This
+  // is unrelated to the widgets used for the individual form
+  // fields, see "self.widgets" code below. -Tom
+
+  self.addCriteria = function(item, criteria, options) {
+    // only one form per widget
+    if (item.ids && item.ids[0]) {
+      criteria._id = item.ids[0]
+    }
+  };
+  self.sanitize = function(item) {
+    // only one form per widget, always selected by id
+    item.by = 'id';
+    if (item.ids && item.ids[0]) {
+      item.ids = [ self.apos.sanitizeId(item.ids[0]) ];
+    }
+  };
 
   self.widgets = {};
 
@@ -194,7 +226,7 @@ forms.Forms = function(options, callback) {
 
   // widgetEditors.html will spit out a frontend DOM template for editing
   // each widget type we register
-  self.pushAsset('template', 'widgetEditors', { when: 'user', data: options });
+  self.pushAsset('template', 'formFieldWidgetEditors', { when: 'user', data: options });
 
   self.pushAsset('script', 'editor', { when: 'user' });
   self.pushAsset('stylesheet', 'editor', { when: 'user' });
@@ -217,7 +249,7 @@ forms.Forms = function(options, callback) {
     if (_.find(options.schema, function(field) {
       return (field.name === 'content');
     })) {
-      console.error('\n\nERROR: apostrophe-forms schema fields must not be named "content". Fix your \"' + widget.name + '\" widget definition.\n\n');
+      console.error('\n\nERROR: apostrophe-forms widget schema fields must not be named "content". Fix your \"' + widget.name + '\" widget definition.\n\n');
     }
 
     widget.sanitize = function(req, item, callback) {
@@ -275,12 +307,103 @@ forms.Forms = function(options, callback) {
     self.widgets[widget.name] = widget;
   });
 
-  if (callback) {
-    // Invoke callback on next tick so that the people object
-    // is returned first and can be assigned to a variable for
-    // use in whatever our callback is invoking
-    process.nextTick(function() { return callback(null); });
-  }
+  self._app.post(self._action + '/submit/:id', function(req, res) {
+    var form;
+    var result = {};
+    return async.series({
+      getForm: function(callback) {
+        return self.getOne(req, { _id: req.params.id }, {}, function(err, _form) {
+          if (err) {
+            return callback(err);
+          }
+          form = _form;
+          if (!form) {
+            return callback('notfound');
+          }
+          return callback(null);
+        });
+      },
+      sanitizeAndStore: function(callback) {
+        self.eachField(form, function(field) {
+          var value = req.body[field.label];
+          result[field.label] = self.sanitizeField(field, value);
+        });
+        result.submittedAt = new Date();
+        result.formId = form._id;
+        return self.submissions.insert(result, callback);
+      },
+      email: function(callback) {
+        if (!form.email) {
+          return setImmediate(callback);
+        }
+        return self.email(
+          req,
+          form.email,
+          'Form submission: ' + form.title,
+          'formSubmission',
+          {
+            result: _.omit(result, 'formId', '_id'),
+            form: form
+          },
+          function(err) {
+            // The form was already recorded, so
+            // we shouldn't panic altogether here,
+            // that could lead to a duplicate submission
+            if (err) {
+              console.error(err);
+            }
+            return callback(null);
+          }
+        );
+      }
+    }, function(err) {
+      if (err) {
+        return res.send({ status: 'error' });
+      }
+      return res.send({ status: 'ok', replacement: self.render('thankYou', { form: form, result: result }, req) });
+    });
+  });
+
+  self.ensureSubmissionsCollection = function() {
+    self._apos.db.collection('aposFormSubmissions', function(err, collection) {
+      if (err) {
+        throw err;
+      }
+      self.submissions = collection;
+      return self.submissions.ensureIndex({ formId: 1 }, { safe: true }, function(err) {
+        if (err) {
+          throw err;
+        }
+      });
+    });
+  };
+
+  // A good extension point for more precise sanitization.
+  // "field" is the widget for the field, "field.type" is
+  // thus very useful
+
+  self.sanitizeField = function(field, value) {
+    return self._apos.sanitizeString(value);
+  };
+
+  self.eachField = function(form, fn) {
+    var valid = _.pluck(options.widgets, 'name');
+    _.each((form.body && form.body.items) || [], function(widget) {
+      if (_.contains(valid, widget.name)) {
+        return;
+      }
+      fn(widget);
+    });
+  };
+
+  // busted-ass A2 0.5 bootstrap process fails if I
+  // don't do this right here, so I'm doing my
+  // mongodb initialization stuff afterwards, which
+  // is ridiculous. 0.6 time please. -Tom
+
+  process.nextTick(_.partial(callback, null));
+
+  self.ensureSubmissionsCollection();
 
 };
 

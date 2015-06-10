@@ -1,4 +1,4 @@
 <fieldset class="apos-forms-field">
   <label class="apos-forms-label">{{ item.label | e }}</label>
-  <input type="text" {% if item.required %}required{% endif %} />
+  <input type="text" data-forms-name="{{ item.label | e }}" {% if item.required %}required{% endif %} />
 </fieldset>

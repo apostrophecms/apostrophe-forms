@@ -1,0 +1,35 @@
+{% extends "baseWidgetEditor.html" %}
+{% include "schemas:schemaMacros.html" %}
+
+{% block modalClass %}
+  apos-{{widget.css}}-editor apos-schema-widget apos-ui-modal-no-sidebar
+{% endblock %}
+
+{% block modalLabel %}
+  {{ widget.label | e }}
+{% endblock %}
+
+{% block modalInstructions %}
+  <p>{{ widget.instructions | e }}</p>
+{% endblock %}
+
+{% block formBody %}
+  <div class="apos-modal-tabs">
+    <div class="apos-modal-tab-control">
+      <div data-tab-button="edit" class="apos-modal-tab-title apos-active" >
+        Edit
+      </div>
+      <div data-tab-button="preview" class="apos-modal-tab-title">
+        Preview
+      </div>
+    </div>
+
+    <div class="apos-modal-tab apos-active" data-tab="edit">
+      <div data-fields>
+        {{ schemaFields(widget.schema) }}
+      </div>
+    </div>
+    <div class="apos-modal-tab apos-modal-preview" data-tab="preview">
+    </div>
+  </div>
+{% endblock %}

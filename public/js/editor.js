@@ -1,9 +1,8 @@
-// @class Editor for all schema widgets
+// Editor for all form field widgets. This is
+// borrowed from apostrophe-schema-widgets.
 
 // After apos.data is available
 $(function() {
-  apos.log('hi');
-  apos.log(apos.data.formWidgets);
   _.each(apos.data.formWidgets, function(info) {
     apos.widgetTypes[info.name] = {
       label: info.label,
