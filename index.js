@@ -230,12 +230,6 @@ forms.Forms = function(options, callback) {
           label: 'Label',
           type: 'string',
           required: true
-        },
-        {
-          name: 'date',
-          label: 'Date',
-          type: 'date',
-          required: true
         }
       ]
     }
