@@ -171,6 +171,7 @@ forms.Forms = function(options, callback) {
           name: 'label',
           label: 'Label',
           type: 'string',
+          required: true
         },
         {
           name: 'value',
@@ -193,7 +194,8 @@ forms.Forms = function(options, callback) {
         {
           name: 'label',
           label: 'Label',
-          type: 'string'
+          type: 'string',
+          required: true
         },
         {
           name: 'minimum',
