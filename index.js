@@ -18,7 +18,7 @@ forms.Forms = function(options, callback) {
   // Controls to be displayed.
   options.controls = options.controls || [
     // form field widgets
-    'textField', 'textareaField', 'selectField', 'radioField', 'checkboxesField', 'dateField', 'timeField',
+    'textField', 'textareaField', 'selectField', 'radioField', 'checkboxField', '  checkboxesField', 'dateField', 'timeField',
     // text controls
     'style', 'bold', 'italic', 'createLink', 'unlink', 'insertUnorderedList', 'insertTable',
     // misc widgets
@@ -163,8 +163,32 @@ forms.Forms = function(options, callback) {
       ]
     },
     {
+      name: 'checkboxField',
+      label: 'Single Checkbox Field',
+      css: 'apostrophe-checkbox-field',
+      schema: [
+        {
+          name: 'label',
+          label: 'Label',
+          type: 'string',
+          required: true
+        },
+        {
+          name: 'value',
+          label: 'Value',
+          type: 'string',
+          required: true
+        },
+        { 
+          name: 'required',
+          label: 'Must Check to Complete Form',
+          type: 'boolean'
+        }
+      ]
+    },
+    {
       name: 'checkboxesField',
-      label: 'Checkboxes Field',
+      label: 'Multiple Checkboxes Field',
       css: 'apostrophe-checkboxes-field',
       schema: [
         {
@@ -191,12 +215,8 @@ forms.Forms = function(options, callback) {
             {
               name: 'value',
               label: 'Value',
-              type: 'string'
-            },
-            {
-              name: 'required',
-              label: 'Must Check to Complete Form',
-              type: 'boolean'
+              type: 'string',
+              required: true
             }
           ]
         }
@@ -211,12 +231,6 @@ forms.Forms = function(options, callback) {
           name: 'label',
           label: 'Label',
           type: 'string',
-          required: true
-        },
-        {
-          name: 'date',
-          label: 'Date',
-          type: 'date',
           required: true
         }
       ]
