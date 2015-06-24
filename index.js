@@ -234,6 +234,19 @@ forms.Forms = function(options, callback) {
           required: true
         }
       ]
+    },
+    {
+      name: 'timeField',
+      label: 'Time Field',
+      css: 'apostrophe-time-field',
+      schema: [
+        {
+          name: 'label',
+          label: 'Label',
+          type: 'string',
+          required: true
+        }
+      ]
     }
     //TODO add datetime
   ].concat(options.addWidgets || []);
@@ -402,6 +415,9 @@ forms.Forms = function(options, callback) {
       return _.map(Array.isArray(value) ? value : [], function(item) {
         return self._apos.sanitizeString(item);
       });
+    }
+    else if(field.type === 'timeField'){
+      return self._apos.sanitizeTime(value);
     }
     return self._apos.sanitizeString(value);
   };
