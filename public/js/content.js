@@ -18,6 +18,8 @@ apos.widgetPlayers.forms = function($el) {
 
     apos.emit('sanitizeForm', $form, result, errors);
 
+    //remove old errors & display new error message(s)
+    $('.apos-forms-error-message').remove();
     if (errors.length) {
       var $first;
       _.each(errors, function(error) {
@@ -30,13 +32,14 @@ apos.widgetPlayers.forms = function($el) {
           $first = $fieldset;
         }
       });
+
       $first.scrollintoview();
-      return;
+      return false;
     }
 
     $.jsonCall(action, result, function(data) {
       if (data.status !== 'ok') {
-        return;
+        return false;
       }
       $el.html(data.replacement);
     });
@@ -64,7 +67,8 @@ apos.on('sanitizeForm', function($form, result, errors) {
     var $field = $(this);
     var min = $field.attr('data-forms-checkbox-min');
     var max = $field.attr('data-forms-checkbox-max');
-    var name = $field.attr('data-forms-field-name')
+    var name = $field.attr('data-forms-field-name');
+
     if(min > 0 || max > 0) {
      var checked = 0;
      checked = result[name].length;
