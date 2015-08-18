@@ -1,6 +1,6 @@
 {# TODO add javascript to check min & max checkboxes selected #}
 
-<fieldset class="apos-forms-field" {% if item.minimum %}data-forms-checkbox-min='{{ item.minimum | e}}'{% endif %}{% if item.maximum %}data-forms-checkbox-max='{{ item.maximum | e }}'{% endif %}>
+<fieldset class="apos-forms-field" {% if item.minimum %}data-forms-checkbox-min='{{ item.minimum | e}}'{% endif %}{% if item.maximum %}data-forms-checkbox-max='{{ item.maximum | e }}'{% endif %} data-forms-fieldset-name="{{ item.label | e }}">
   <label class="apos-forms-label">{{ item.label | e }}</label>
   {% for checkbox in item.checkboxes %}
   	<input type="checkbox" data-forms-name="{{ item.label | e }}" name="{{ checkbox.value | e }}" value="{{ checkbox.value | e }}">

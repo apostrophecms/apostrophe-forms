@@ -21,17 +21,20 @@ apos.widgetPlayers.forms = function($el) {
     if (errors.length) {
       var $first;
       _.each(errors, function(error) {
-        var $fieldset = $form.find('[data-forms-field-name="' + error.name + '"]');
+        apos.log(error.name);
+        var $fieldset = $form.find('[data-forms-fieldset-name="' + error.name + '"]').closest('fieldset');
         $fieldset.addClass('apos-forms-error');
+        apos.log($fieldset.length);
         var $message = $('<div class="apos-forms-error-message"></div>');
         $message.text(error.message);
         $fieldset.append($message);
+        apos.log($fieldset[0]);
         if (!$first) {
           $first = $fieldset;
         }
       });
       $first.scrollintoview();
-      return;
+      return false;
     }
 
     $.jsonCall(action, result, function(data) {
@@ -43,6 +46,18 @@ apos.widgetPlayers.forms = function($el) {
     return false;
   });
 };
+
+// anything might be required
+apos.on('sanitizeFormField', function($field, key, result, errors) {
+  if ($field.is('[required]')) {
+    if (!$field.val().toString().length) {
+      errors.push({
+        name: key,
+        message: 'required'
+      });
+    }
+  }
+});
 
 // checkboxes build arrays
 apos.on('sanitizeFormField', function($field, key, result, errors) {
@@ -64,7 +79,7 @@ apos.on('sanitizeForm', function($form, result, errors) {
     var $field = $(this);
     var min = $field.attr('data-forms-checkbox-min');
     var max = $field.attr('data-forms-checkbox-max');
-    var name = $field.attr('data-forms-field-name')
+    var name = $field.attr('data-forms-name')
     if(min > 0 || max > 0) {
      var checked = 0;
      checked = result[name].length;

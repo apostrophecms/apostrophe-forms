@@ -116,3 +116,14 @@ $(function() {
 
   });
 });
+
+function AposForms(optionsArg) {
+  var self = this;
+  var options = {
+    instance: 'form',
+    name: 'forms'
+  };
+  $.extend(options, optionsArg);
+  AposSnippets.call(self, options);
+}
+

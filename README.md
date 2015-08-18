@@ -3,7 +3,7 @@ A form builder for the [Apostrophe CMS](http://apostrophenow.org).
 To enable this module, just configure it in `app.js`.
 
 ```javascript
-apostrophe-forms: {}
+'apostrophe-forms': {}
 ```
 
 Then add `aposFormsMenu` to outerLayout:
