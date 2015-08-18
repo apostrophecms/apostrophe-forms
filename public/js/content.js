@@ -6,9 +6,9 @@ apos.widgetPlayers.forms = function($el) {
     var result = {};
     var errors = [];
 
-    $form.find('[data-forms-name]').each(function() {
+    $form.find('[data-forms-field-name]').each(function() {
       var $field = $(this);
-      var key = $(this).attr('data-forms-name');
+      var key = $(this).attr('data-forms-field-name');
       apos.emit('sanitizeFormField', $field, key, result, errors);
       if (!_.has(result, key)) {
         // simple field
@@ -18,28 +18,28 @@ apos.widgetPlayers.forms = function($el) {
 
     apos.emit('sanitizeForm', $form, result, errors);
 
+    //remove old errors & display new error message(s)
+    $('.apos-forms-error-message').remove();
     if (errors.length) {
       var $first;
       _.each(errors, function(error) {
-        apos.log(error.name);
         var $fieldset = $form.find('[data-forms-fieldset-name="' + error.name + '"]').closest('fieldset');
         $fieldset.addClass('apos-forms-error');
-        apos.log($fieldset.length);
         var $message = $('<div class="apos-forms-error-message"></div>');
         $message.text(error.message);
         $fieldset.append($message);
-        apos.log($fieldset[0]);
         if (!$first) {
           $first = $fieldset;
         }
       });
+
       $first.scrollintoview();
       return false;
     }
 
     $.jsonCall(action, result, function(data) {
       if (data.status !== 'ok') {
-        return;
+        return false;
       }
       $el.html(data.replacement);
     });
@@ -79,7 +79,7 @@ apos.on('sanitizeForm', function($form, result, errors) {
     var $field = $(this);
     var min = $field.attr('data-forms-checkbox-min');
     var max = $field.attr('data-forms-checkbox-max');
-    var name = $field.attr('data-forms-name')
+    var name = $field.attr('data-forms-field-name');
     if(min > 0 || max > 0) {
      var checked = 0;
      checked = result[name].length;

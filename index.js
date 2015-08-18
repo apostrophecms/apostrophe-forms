@@ -18,11 +18,11 @@ forms.Forms = function(options, callback) {
   // Controls to be displayed.
   options.controls = options.controls || [
     // form field widgets
-    'textField', 'textareaField', 'selectField', 'radioField', 'checkboxField', '  checkboxesField', 'dateField', 'timeField',
+    'textField', 'textareaField', 'selectField', 'radioField', 'checkboxField', 'checkboxesField', 'dateField', 'timeField',
     // text controls
     'style', 'bold', 'italic', 'createLink', 'unlink', 'insertUnorderedList', 'insertTable',
     // misc widgets
-    'slideshow', 'buttons', 'video', 'files', 'embed', 'pullquote', 'html'
+    'slideshow', 'video'
   ];
 
   _.defaults(options, {
@@ -234,6 +234,19 @@ forms.Forms = function(options, callback) {
           required: true
         }
       ]
+    },
+    {
+      name: 'timeField',
+      label: 'Time Field',
+      css: 'apostrophe-time-field',
+      schema: [
+        {
+          name: 'label',
+          label: 'Label',
+          type: 'string',
+          required: true
+        }
+      ]
     }
     //TODO add datetime
   ].concat(options.addWidgets || []);
@@ -370,6 +383,9 @@ forms.Forms = function(options, callback) {
             return callback(null);
           }
         );
+      },
+      afterSubmit: function(callback) {
+        return self.afterSubmit(req, form, callback);
       }
     }, function(err) {
       if (err) {
@@ -378,6 +394,12 @@ forms.Forms = function(options, callback) {
       return res.send({ status: 'ok', replacement: self.render('thankYou', { form: form, result: result }, req) });
     });
   });
+
+  // A convenient method to override to do something special when a
+  // form has been submitted
+  self.afterSubmit = function(req, form, callback) {
+    return setImmediate(callback);
+  };
 
   self.ensureSubmissionsCollection = function() {
     self._apos.db.collection('aposFormSubmissions', function(err, collection) {
@@ -402,6 +424,9 @@ forms.Forms = function(options, callback) {
       return _.map(Array.isArray(value) ? value : [], function(item) {
         return self._apos.sanitizeString(item);
       });
+    }
+    else if(field.type === 'timeField'){
+      return self._apos.sanitizeTime(value);
     }
     return self._apos.sanitizeString(value);
   };
