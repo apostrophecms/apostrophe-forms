@@ -31,6 +31,7 @@ Set the `controls` option when configuring the module. This code recreates the d
     'slideshow', 'video'
   ]
 }
+```
 
 Including non-form-field widgets is a great way to dress up a form with explanatory material.
 
