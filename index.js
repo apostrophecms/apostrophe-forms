@@ -359,7 +359,10 @@ forms.Forms = function(options, callback) {
       sanitizeAndStore: function(callback) {
         self.eachField(form, function(field) {
           var value = req.body[field.label];
-          result[field.label] = self.sanitizeField(field, value);
+          result[field.fieldId] = {
+            label: field.label,
+            value: self.sanitizeField(field, value)
+          };
         });
         result.submittedAt = new Date();
         result.formId = form._id;
