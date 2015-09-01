@@ -44,3 +44,9 @@ The long-term goal is to provide a handy interface for exporting past submission
 ## Running your own code when a form is submitted
 
 Subclass the module and override the `afterSubmit` method which is provided for this purpose.
+
+## Changelog
+
+0.5.3: fields now have a `fieldId` which will improve CSV export (however, not saving yet). The next minor version will be a bc break in the way content is saved in the collection.
+
+The forms widget now shows only the selected form, not all of them!
