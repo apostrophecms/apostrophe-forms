@@ -12,7 +12,6 @@ function forms(options, callback) {
 var snippets = require('apostrophe-snippets');
 
 forms.Forms = function(options, callback) {
-
   var self = this;
 
   // Controls to be displayed.
@@ -431,6 +430,19 @@ forms.Forms = function(options, callback) {
       fn(widget);
     });
   };
+
+  //csv exporter: /apos-forms/export
+  // self._app.post(self._action + '/export', function(req, res) {
+  //   console.log('HERE!');
+
+  //   return callback('i dont know');
+  // });
+
+  // self.exportPost = function(options){
+  //   self._apos.db.collection('aposFormSubmissions', function(err, collection) {
+
+  //   });
+  // };
 
   // busted-ass A2 0.5 bootstrap process fails if I
   // don't do this right here, so I'm doing my
