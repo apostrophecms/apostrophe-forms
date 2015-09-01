@@ -80,15 +80,18 @@ forms.Forms = function(options, callback) {
   self.addCriteria = function(item, criteria, options) {
     // only one form per widget
     if (item.ids && item.ids[0]) {
-      criteria._id = item.ids[0]
+      criteria._id = item.ids[0];
     }
   };
-  self.sanitize = function(item) {
-    // only one form per widget, always selected by id
-    item.by = 'id';
-    if (item.ids && item.ids[0]) {
-      item.ids = [ self.apos.sanitizeId(item.ids[0]) ];
-    }
+
+  self.extendWidget = function(widget) {
+    widget.sanitize = function(item) {
+      // only one form per widget, always selected by id
+      item.by = 'id';
+      if (item.ids && item.ids[0]) {
+        item.ids = [ self._apos.sanitizeId(item.ids[0]) ];
+      }
+    };
   };
 
   self.widgets = {};
@@ -178,7 +181,7 @@ forms.Forms = function(options, callback) {
           type: 'string',
           required: true
         },
-        { 
+        {
           name: 'required',
           label: 'Must Check to Complete Form',
           type: 'boolean'
@@ -286,6 +289,9 @@ forms.Forms = function(options, callback) {
         if (err) {
           return callback(err, object);
         }
+
+        object.fieldId = self._apos.sanitizeId(item.fieldId) || self._apos.generateId();
+
         return widget.afterConvertFields(req, object, function(e) {
           return callback(e, object);
         });
@@ -441,11 +447,7 @@ forms.Forms = function(options, callback) {
   };
 
   //csv exporter: /apos-forms/export
-  // self._app.post(self._action + '/export', function(req, res) {
-  //   console.log('HERE!');
-
-  //   return callback('i dont know');
-  // });
+  // require('./lib/exporter.js')(self);
 
   // self.exportPost = function(options){
   //   self._apos.db.collection('aposFormSubmissions', function(err, collection) {
