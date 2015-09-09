@@ -66,6 +66,29 @@ forms.Forms = function(options, callback) {
     ]
   });
 
+  // If somebody REALLY doesn't want to group their fields,
+  // take the hint, otherwise supply a default behavior
+  if (options.groupFields !== false) {
+    options.groupFields = options.groupFields ||
+    // We don't list the title field so it stays on top
+    [
+      {
+        name: 'basicsTab',
+        label: 'Basics',
+        fields: [
+          'title', 'slug', 'published', 'tags'
+        ]
+      },
+      {
+        name: 'contentTab',
+        label: 'Content',
+        fields: [
+          'body', 'submitLabel', 'thankYouLabel', 'thankYouBody', 'email'
+        ]
+      }
+    ];
+  }
+
   options.modules = (options.modules || []).concat([ { dir: __dirname, name: 'forms' } ]);
 
   snippets.Snippets.call(this, options, null);
