@@ -1,7 +1,6 @@
 <fieldset class="apos-forms-field" data-forms-fieldset-name="{{ item.label | e }}">
   <label class="apos-forms-label">{{ item.label | e }}</label>
   <select data-forms-field-name="{{ item.label | e }}" {% if item.required %}required{% endif %}>
-  	{{aposLog(item)}}
   	{% for choice in item.choices %}
 	  	<option value="{{ choice.value }}">{{ choice.value }}</option>
 	  {% endfor %}
