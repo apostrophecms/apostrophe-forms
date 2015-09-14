@@ -366,6 +366,7 @@ forms.Forms = function(options, callback) {
   self._app.post(self._action + '/submit/:id', function(req, res) {
     var form;
     var result = {};
+    var resultEmail = {};
     return async.series({
       getForm: function(callback) {
         return self.getOne(req, { _id: req.params.id }, {}, function(err, _form) {
@@ -382,11 +383,18 @@ forms.Forms = function(options, callback) {
       sanitizeAndStore: function(callback) {
         self.eachField(form, function(field) {
           var value = req.body[field.label];
-          result[field.label] = self.sanitizeField(field, value);
+          result[field.fieldId] = {
+            label: field.label,
+            value: self.sanitizeField(field, value)
+          };
+          resultEmail[field.label] = self.sanitizeField(field, value);
         });
-        
+
         result.submittedAt = new Date();
+        resultEmail.submittedAt = result.submittedAt;
+        
         result.formId = form._id;
+
         return self.submissions.insert(result, callback);
       },
       email: function(callback) {
@@ -400,7 +408,7 @@ forms.Forms = function(options, callback) {
           'Form submission: ' + form.title,
           'formSubmission',
           {
-            result: _.omit(result, 'formId', '_id'),
+            result: resultEmail,
             form: form
           },
           function(err) {
