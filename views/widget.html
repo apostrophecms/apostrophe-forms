@@ -3,7 +3,7 @@
 {# per widget. -Tom #}
 
 {% for form in item._snippets %}
-  <h4>{{ form.title | e }}</h4>
+  <h4 class='apos-forms-title'>{{ form.title | e }}</h4>
   <form class="apos-forms-form" method="POST" action="/apos-forms/submit/{{ form._id | e }}">
     {{ aposArea(form, 'body', { edit: false }) }}
     <input class="apos-forms-submit" type="submit" name="submit" value="{{ (form.submitLabel or __('Submit Form')) | e }}" />
