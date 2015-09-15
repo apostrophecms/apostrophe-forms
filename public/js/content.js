@@ -1,6 +1,9 @@
 apos.widgetPlayers.forms = function($el) {
   var $form = $el.find('form');
 
+  //add date picker to date field
+  apos.enhanceDate($('[data-forms-date]'));
+
   $form.on('submit', function() {
     var action = $form.attr('action');
     var result = {};
