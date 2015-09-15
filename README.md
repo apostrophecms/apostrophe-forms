@@ -6,6 +6,16 @@ To enable this module, just configure it in `app.js`.
 'apostrophe-forms': {}
 ```
 
+Or, optionally add in an email-from field option to the configuration object. To send an email from a service like Postmark, this field needs to be specified, and should be done anyways to make it less spammy.
+
+```javascript
+'apostrophe-forms': {
+	email: {
+    from: "First LastName <admin@email.com>"
+  }
+}
+```
+
 Then add `aposFormsMenu` to outerLayout:
 
 ```
