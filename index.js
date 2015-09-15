@@ -76,14 +76,21 @@ forms.Forms = function(options, callback) {
         name: 'basicsTab',
         label: 'Basics',
         fields: [
-          'title', 'slug', 'published', 'tags'
+          'title', 'email', 'slug', 'published', 'tags'
         ]
       },
       {
         name: 'contentTab',
-        label: 'Content',
+        label: 'Form Content',
         fields: [
-          'body', 'submitLabel', 'thankYouLabel', 'thankYouBody', 'email'
+          'body', 'submitLabel'
+        ]
+      },
+      {
+        name: 'thanksTab', //matt goold wuz here
+        label: 'Thankyou Message',
+        fields: [
+          'thankYouLabel', 'thankYouBody'
         ]
       }
     ];
