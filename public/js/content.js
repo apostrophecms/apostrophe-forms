@@ -52,7 +52,7 @@ apos.widgetPlayers.forms = function($el) {
 
 // anything might be required
 apos.on('sanitizeFormField', function($field, key, result, errors) {
-  if ($field.is('[required]')) {
+  if ($field.is('[apos-required]')) {
     if (!$field.val().toString().length) {
       errors.push({
         name: key,

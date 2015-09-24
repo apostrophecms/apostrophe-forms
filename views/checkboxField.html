@@ -1,4 +1,4 @@
 <fieldset class="apos-forms-field" data-forms-fieldset-name="{{ item.label | e }}">
-  <input type="checkbox" data-forms-field-name="{{ item.name | e }}" name="{{ item.name | e }}" value="{{ item.value | e }}" {% if item.required %}required{% endif %}>
+  <input type="checkbox" data-forms-field-name="{{ item.name | e }}" name="{{ item.name | e }}" value="{{ item.value | e }}" {% if item.required %}apos-required{% endif %}>
   	<label for="{{ item.value | e }}">{{ item.label | e }}</label>
 </fieldset>
