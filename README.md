@@ -45,6 +45,84 @@ Set the `controls` option when configuring the module. This code recreates the d
 
 Including non-form-field widgets is a great way to dress up a form with explanatory material.
 
+## Adding New Widget Types & Validation
+
+Override `widgets` or set the `addWidgets` option when configuring the module. This code recreates the default configuration for the text field widget:
+
+```javascript
+'apostrophe-forms': {
+  addWidgets: [
+    {
+      name: 'textField',
+      label: 'Text Field',
+      css: 'apostrophe-text-field',
+      schema: [
+        {
+          name: 'label',
+          label: 'Label',
+          type: 'string',
+          required: true
+        },
+        {
+          name: 'required',
+          label: 'Required',
+          type: 'boolean'
+        }
+      ]
+    }
+  ]
+}
+```
+
+To add form validation to the new widget type, there are a couple of event emitters in place. To validate the field result value, use the `sanitizeFormField` emitter, which is fired before array of results is created. This code recreates the checkbox value validation:
+
+```javascript
+  // checkboxes build arrays
+  apos.on('sanitizeFormField', function($field, key, result, errors) {
+    if ($field.attr('type') !== 'checkbox') {
+      return;
+    }
+    if (!_.has(result, key)) {
+      result[key] = [];
+    }
+    if ($field.prop('checked')) {
+      var val = $field.attr('value');
+      result[key].push(val);
+    }
+  });
+```
+
+After the results array has been created, error validation can be added with the  sanitizeForm` emitter. Again, this code recreates validation for the default checkboxes to ensure minimum and maximum conditions have been met:
+
+```javascript
+  // checkbox groups can have overall min and max
+  apos.on('sanitizeForm', function($form, result, errors) {
+    $form.find('[data-forms-checkboxes]').each(function() {
+      var $field = $(this);
+      var min = $field.attr('data-forms-checkbox-min');
+      var max = $field.attr('data-forms-checkbox-max');
+      var name = $field.attr('data-forms-field-name');
+      if(min > 0 || max > 0) {
+       var checked = 0;
+       checked = result[name].length;
+
+       if((min && (checked < min)) || (max && (checked > max))) {
+         var message;
+         if (checked < min) {
+           message = 'Please select at least ' + min + ' checkboxes.';
+         } else {
+           message = 'Please select no more than ' + max + ' checkboxes.';
+         }
+         errors.push({
+           name: name,
+           message: message
+         });
+       }
+      }
+    });
+  });
+```
+
 ## What happens when forms are submitted
 
 When a form is submitted the content is saved to the `aposFormSubmissions` collection, and if an email address was entered when creating the form, it is also delivered to that email address.
