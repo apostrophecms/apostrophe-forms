@@ -487,13 +487,13 @@ forms.Forms = function(options, callback) {
   };
 
   //csv exporter: /apos-forms/export
-  // require('./lib/exporter.js')(self);
+  //require('./lib/exporter.js')(self);
 
-  // self.exportPost = function(options){
-  //   self._apos.db.collection('aposFormSubmissions', function(err, collection) {
-
-  //   });
-  // };
+  self.exportPost = function(options){
+    self._apos.db.collection('aposFormSubmissions', function(err, collection) {
+      return callback(null);
+    });
+  };
 
   // busted-ass A2 0.5 bootstrap process fails if I
   // don't do this right here, so I'm doing my
