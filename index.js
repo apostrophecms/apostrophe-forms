@@ -17,7 +17,7 @@ forms.Forms = function(options, callback) {
   // Controls to be displayed.
   options.controls = options.controls || [
     // form field widgets
-    'textField', 'textareaField', 'selectField', 'radioField', 'checkboxField', 'checkboxesField', 'dateField', 'timeField',
+    'sectionBreak', 'textField', 'textareaField', 'selectField', 'radioField', 'checkboxField', 'checkboxesField', 'dateField', 'timeField',
     // text controls
     'style', 'bold', 'italic', 'createLink', 'unlink', 'insertUnorderedList', 'insertTable',
     // misc widgets
@@ -127,6 +127,19 @@ forms.Forms = function(options, callback) {
   self.widgets = {};
 
   options.widgets = options.widgets || [
+    {
+      name: 'sectionBreak',
+      label: 'Section Break',
+      css: 'apostrophe-section-break',
+      schema: [
+        {
+          name: 'break',
+          label: 'Include Section Break',
+          type: 'boolean',
+          def: 'true'
+        }
+      ]
+    },
     {
       name: 'textField',
       label: 'Text Field',
@@ -399,7 +412,7 @@ forms.Forms = function(options, callback) {
 
         result.submittedAt = new Date();
         resultEmail.submittedAt = result.submittedAt;
-        
+
         result.formId = form._id;
 
         return self.submissions.insert(result, callback);
@@ -505,4 +518,3 @@ forms.Forms = function(options, callback) {
   self.ensureSubmissionsCollection();
 
 };
-
