@@ -1,6 +1,6 @@
 {
   "name": "apostrophe-forms",
-  "version": "0.5.6",
+  "version": "0.5.7",
   "description": "Allow your users to build forms on the fly on their Apostrophe sites",
   "main": "index.js",
   "scripts": {
