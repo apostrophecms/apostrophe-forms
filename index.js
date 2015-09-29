@@ -487,7 +487,7 @@ forms.Forms = function(options, callback) {
   };
 
   //csv exporter: /apos-forms/export
-  //require('./lib/exporter.js')(self);
+  require('./lib/exporter.js')(self);
 
   self.exportPost = function(options){
     self._apos.db.collection('aposFormSubmissions', function(err, collection) {
