@@ -8,7 +8,6 @@ $(function() {
       label: info.label,
       editor: function(options) {
         var self = this;
-
         self.type = info.name;
         options.template = '.apos-' + info.css + '-editor';
 
@@ -57,6 +56,7 @@ $(function() {
           });
 
           self.$fields = aposSchemas.findSafe(self.$el, '[data-fields]');
+
           return aposSchemas.populateFields(self.$fields, info.schema, self.data, function() {
             apos.emit('widgetModalReady', self);
             return callback();
@@ -123,7 +123,43 @@ function AposForms(optionsArg) {
     instance: 'form',
     name: 'forms'
   };
+
   $.extend(options, optionsArg);
   AposSnippets.call(self, options);
+
+  self.afterPopulatingEditor = function($el, snippet, callback) {
+    //add form id to export form
+    var $exportForm = $el.find('[data-form-export]');
+    $exportForm.attr('data-form-export', snippet._id);
+
+    //enhance date selectors
+    $dateSelects = $el.find('[data-forms-dates]');
+    apos.enhanceDate($dateSelects);
+
+    $exportForm.on('submit', function(){
+      var self = $(this);
+
+      var query = "formId=" + self.attr('data-form-export');
+
+      //optional dates
+      var $startDate = self.find('fieldset [data-forms-field-name="startDate"]');
+      var $endDate = self.find('fieldset [data-forms-field-name="endDate"]');
+
+      if($startDate.val()){
+        query += "&startDate=" + $startDate.val();
+      }
+      if($endDate.val()){
+        query += "&endDate=" + $endDate.val();
+      }
+      
+      //to download csv file, $.jsonCall and $.ajax calls will not work, 
+      //must call via url
+      window.open('/apos-forms/export-form?' + query);
+      return false;
+    });
+
+    return callback();
+  };
 }
+
 

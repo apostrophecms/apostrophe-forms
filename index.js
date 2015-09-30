@@ -62,7 +62,7 @@ forms.Forms = function(options, callback) {
         name: 'email',
         label: 'Email Results To',
         type: 'string'
-      },
+      }
     ]
   });
 
@@ -486,7 +486,7 @@ forms.Forms = function(options, callback) {
     });
   };
 
-  //csv exporter: /apos-forms/export
+  //csv exporter: /apos-forms/export-form
   require('./lib/exporter.js')(self);
 
   self.exportPost = function(options){

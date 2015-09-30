@@ -1,0 +1,33 @@
+{# Overriding apostrophe-snippets new.html in order to be able to hard code in export form #}
+{%- extends 'baseModal.html' -%}
+{%- include 'snippetMacros.html' -%}
+
+{%- block modalClass -%}
+  {{ newClass }} apos-ui-modal-no-sidebar apos-ui-modal-has-tabs
+{%- endblock -%}
+
+{%- block modalControls -%}
+  {{ snippetNewControls() }}
+{%- endblock -%}
+
+{%- block modalLabel -%}
+  {{ __('New %s', __(instanceLabel) | e ) }}
+{%- endblock -%}
+
+{%- block modalBody -%}
+  <form>
+    {{ snippetAllFields(fields) }}
+  </form>
+  <form class='apos-form-exporter' data-form-export=""> {# form id is inserted via editor.js #}
+  	<label class="apos-forms-label">Export Form Submissions</label>
+  	<fieldset class="apos-forms-field" data-forms-fieldset-name="startDate">
+		  <label class="apos-forms-label">(Optional) Start Date</label>
+		  <input type="text" data-forms-dates data-forms-field-name="startDate" name='startDate'>
+		</fieldset>
+		<fieldset class="apos-forms-field" data-forms-fieldset-name="endDate">
+		  <label class="apos-forms-label">(Optional) End Date  </label>
+		  <input type="text" data-forms-dates data-forms-field-name="endDate" name='endDate'>
+		</fieldset>
+		<input class="apos-forms-submit apos-progress-btn apos-progress-btn--base" type="submit" name="submit" action="/apos-forms/export" method="get"/>
+	</form>
+{%- endblock -%}
