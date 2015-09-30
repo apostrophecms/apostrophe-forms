@@ -6,6 +6,11 @@
   <h4 class='apos-forms-title'>{{ form.title | e }}</h4>
   <form class="apos-forms-form" method="POST" action="/apos-forms/submit/{{ form._id | e }}">
     {{ aposArea(form, 'body', { edit: false }) }}
-    <input class="apos-forms-submit" type="submit" name="submit" value="{{ (form.submitLabel or __('Submit Form')) | e }}" />
+    <div class="apos-forms-arrows" data-forms-arrows>
+      <span class="apos-forms-arrow" data-forms-prev>Previous</span>
+      <span class="apos-forms-arrow" data-forms-next>Next</span>
+    </div>
+    <input class="apos-forms-submit" type="submit" name="submit" value="{{ (form.submitLabel or __('Submit Form')) | e }}" data-forms-submit/>
+
   </form>
 {% endfor %}
