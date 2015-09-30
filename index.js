@@ -101,6 +101,7 @@ forms.Forms = function(options, callback) {
   snippets.Snippets.call(this, options, null);
   self._apos.mixinModuleEmail(self);
 
+
   // Adjust the widget used to actually insert the form. We're
   // subclassing snippets here, so we use extendWidget to change
   // that over to a single-selection autocomplete widget. This
@@ -449,6 +450,7 @@ forms.Forms = function(options, callback) {
       if (err) {
         return res.send({ status: 'error' });
       }
+      console.log("Yes. This is all good.");
       return res.send({ status: 'ok', replacement: self.render('thankYou', { form: form, result: result }, req) });
     });
   });
