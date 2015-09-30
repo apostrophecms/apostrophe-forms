@@ -450,7 +450,7 @@ forms.Forms = function(options, callback) {
       if (err) {
         return res.send({ status: 'error' });
       }
-      console.log("Yes. This is all good.");
+      
       return res.send({ status: 'ok', replacement: self.render('thankYou', { form: form, result: result }, req) });
     });
   });
