@@ -17,7 +17,7 @@ forms.Forms = function(options, callback) {
   // Controls to be displayed.
   options.controls = options.controls || [
     // form field widgets
-    'sectionBreak', 'textField', 'textareaField', 'selectField', 'radioField', 'checkboxField', 'checkboxesField', 'dateField', 'timeField',
+    'sectionBreak', 'textField', 'integerField', 'textareaField', 'selectField', 'radioField', 'checkboxField', 'checkboxesField', 'dateField', 'timeField',
     // text controls
     'style', 'bold', 'italic', 'createLink', 'unlink', 'insertUnorderedList', 'insertTable',
     // misc widgets
@@ -144,6 +144,24 @@ forms.Forms = function(options, callback) {
     {
       name: 'textField',
       label: 'Text Field',
+      css: 'apostrophe-text-field',
+      schema: [
+        {
+          name: 'label',
+          label: 'Label',
+          type: 'string',
+          required: true
+        },
+        {
+          name: 'required',
+          label: 'Required',
+          type: 'boolean'
+        }
+      ]
+    },
+    {
+      name: 'integerField',
+      label: 'Integer Field',
       css: 'apostrophe-text-field',
       schema: [
         {

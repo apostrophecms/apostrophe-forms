@@ -34,7 +34,7 @@ Set the `controls` option when configuring the module. This code recreates the d
 'apostrophe-forms': {
   controls: [
     // form field widgets
-    'textField', 'textareaField', 'selectField', 'radioField', 'checkboxField', 'checkboxesField', 'dateField', 'timeField',
+    'textField', 'integerField', 'textareaField', 'selectField', 'radioField', 'checkboxField', 'checkboxesField', 'dateField', 'timeField',
     // text controls
     'style', 'bold', 'italic', 'createLink', 'unlink', 'insertUnorderedList', 'insertTable',
     // misc widgets

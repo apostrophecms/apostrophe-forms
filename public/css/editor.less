@@ -1,41 +1,57 @@
-//Modal editor exporter form
+/*
+	Styles specific to the editing modal	
+*/
+
+/*** FORM EXPORTER ***/
 .apos-form-exporter
 {
-	padding: 10px;
+	padding: 10px 10px 20px 10px;
 
+	//Top form label
 	> .apos-forms-label
 	{
-		padding-bottom: 10px;
-		border-bottom: 1px solid #ddd;
+		padding-top: 10px;
+		//border-top: 1px solid #ddd;
 		text-transform: uppercase;
 		font-size: 12px;
 	}
 
-	input
+	//Inputs
+	fieldset, input
 	{
-		margin-top: 10px;
-		margin-bottom: 10px;
+		margin-top: 0;
+		display: inline-block;
+		margin-left: 10px;
+		margin-right: 10px;
+	}
+
+	fieldset
+	{
+		input
+		{
+			padding: 10px;
+			font-family: cabin;
+			color: #333;
+		}
+
+		label
+		{
+			margin-left: 10px;
+			display: inline-block;
+		}
+	}
+
+	//submit button
+	input.apos-forms-submit
+	{
+		width: auto;
+		margin-left: 75px;
+		padding-left: 20px;
+		padding-right: 20px;
 
 		&:hover
 		{
 			cursor: pointer;
 		}
-	}
-	fieldset,input
-	{
-		margin-left: 10px;
-		margin-right: 10px;
-	}
-
-	fieldset[data-forms-fieldset-name='startDate']
-	{
-		margin-top: 20px;
-		margin-bottom: 10px;
-	}
-	fieldset input
-	{
-		padding: 10px;
-		font-family: cabin;
-		color: #333;
 	}
 }
