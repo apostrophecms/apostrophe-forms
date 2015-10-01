@@ -2,7 +2,7 @@
   {# check for a fields property on any of the choices, and add class if one exists #}
   {% set selectFields = 'apos-fieldset-select-show-fields' if aposContainsProperty(choices, 'showFields') else '' %}
   <fieldset class="apos-forms-field apos-fieldset apos-fieldset-selectize apos-fieldset-select apos-fieldset-{{ name | css }}{{ selectFields }}" data-name="{{ name }}">
-    <label>{{ item.label | e }}</label>
+    <label class='apos-forms-label'>{{ item.label | e }}</label>
       <div class="apos-select-wrapper apos-inline-input">
       {{ formSelectStandalone(name, choices) }}
     </div>
