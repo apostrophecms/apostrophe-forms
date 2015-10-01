@@ -1,8 +1,10 @@
 // styles for public view of forms
 
-//disable input for selectize dropdowns
 .apos-forms-field
 {
+  margin-top: 25px;
+
+  //disable input for selectize dropdowns
 	&.apos-fieldset-selectize>.apos-select-wrapper .selectize-control .selectize-input input[tabindex]
 	{
 		opacity: 0 !important;
@@ -357,52 +359,7 @@
 	}
 }
 
-// Styles for Form Content Tab in Edit Form Modal
-
-.apos-modal-tabs .apos-modal-tab[data-tab-id=contentTab]
-{
-	.apos-fieldset.apos-fieldset-body > label
-		{
-			display: none;
-		}
-}
-
-.apos-modal-tabs .apos-modal-tab .apos-fieldset .apos-area
-{
-	border: none;
-	box-shadow: none;
-}
-
-.apos-ui-modal .apos-modal-tab-content .apos-fieldset .apos-area
-{
-	padding: 0;
-}
-
-// New Styles for Form Content
-
-.apos-fieldset label
-{
-	display: none;
-}
-
-.apos-forms-field
-{
-	margin-top: 25px;
-}
-
-.apos-fieldset .apos-forms-field
-{
-	label
-	{
-		display: inline;
-	}
-}
-
-.apos-forms-label
-{
-	display: block;
-}
-
+// Submit Button
 .apos-forms-submit
 {
 	width: 182px;
@@ -411,5 +368,8 @@
 	border: 1px solid black;
 	border-radius: 5px;
 	background-color: lightgray;
-	cursor: pointer;
+  &:hover
+  {
+	  cursor: pointer;
+  }
 }
