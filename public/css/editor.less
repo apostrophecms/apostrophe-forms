@@ -1,57 +1,75 @@
 /*
-	Styles specific to the editing modal	
+	Styles specific to the editing modal
 */
 
-/*** FORM EXPORTER ***/
-.apos-form-exporter
+.apos-ui-modal-forms
 {
-	padding: 10px 10px 20px 10px;
-
-	//Top form label
-	> .apos-forms-label
+	/*** FORM EXPORTER ***/
+	.apos-form-exporter
 	{
-		padding-top: 10px;
-		//border-top: 1px solid #ddd;
-		text-transform: uppercase;
-		font-size: 12px;
-	}
+		padding: 10px 10px 20px 10px;
 
-	//Inputs
-	fieldset, input
-	{
-		margin-top: 0;
-		display: inline-block;
-		margin-left: 10px;
-		margin-right: 10px;
-	}
-
-	fieldset
-	{
-		input
+		//Top form label
+		> .apos-forms-label
 		{
-			padding: 10px;
-			font-family: cabin;
-			color: #333;
+			padding-top: 10px;
+			//border-top: 1px solid #ddd;
+			text-transform: uppercase;
+			font-size: 12px;
 		}
 
-		label
+		//Inputs
+		fieldset, input
 		{
-			margin-left: 10px;
+			margin-top: 0;
 			display: inline-block;
+			margin-left: 10px;
+			margin-right: 10px;
+		}
+
+		fieldset
+		{
+			input
+			{
+				padding: 10px;
+				font-family: cabin;
+				color: #333;
+			}
+
+			label
+			{
+				margin-left: 10px;
+				display: inline-block;
+			}
+		}
+
+		//submit button
+		input.apos-forms-submit
+		{
+			width: auto;
+			margin-left: 75px;
+			padding-left: 20px;
+			padding-right: 20px;
+
+			&:hover
+			{
+				cursor: pointer;
+			}
 		}
 	}
 
-	//submit button
-	input.apos-forms-submit
+	/*** CONTENT TAB ***/
+	.apos-modal-tab[data-tab-id=contentTab] .apos-fieldset
 	{
-		width: auto;
-		margin-left: 75px;
-		padding-left: 20px;
-		padding-right: 20px;
-
-		&:hover
-		{
-			cursor: pointer;
-		}
+			&.apos-fieldset-body > label
+			{
+				display: none;
+			}
+			.apos-area
+			{
+				border: none;
+				box-shadow: none;
+				padding: 0;
+			}
 	}
 }
