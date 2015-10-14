@@ -4,10 +4,12 @@ apos.widgetPlayers.forms = function($el) {
   //add date picker to date field
   apos.enhanceDate($form.find('[data-forms-date]'));
 
+  // Before we setup our submit event, let's get sections working.
   if ($form.find('[data-forms-section-break]').length > 0){
     initSections($form);
   }
 
+  //Handle the form submission event.
   $form.on('submit', function(e) {
     e.preventDefault();
 
@@ -87,9 +89,9 @@ apos.widgetPlayers.forms = function($el) {
     });
   });
 
-  apos.on('sanitizeForm', function($form, result, errors) {
-
-  });
+  // apos.on('sanitizeForm', function($form, result, errors) {
+  //
+  // });
 
 
   apos.on('previewTabReady', function(self) {
@@ -154,8 +156,14 @@ apos.widgetPlayers.forms = function($el) {
         var $wholeSection = $(this).add($additional);
         $wholeSection.wrapAll('<div class="apos-form-section" data-forms-section></div>');
       });
-      return callback();
+      return buildPager($sections, callback);
     };
+
+    function buildPager($sections, callback){
+      var $pager = $form.find('[data-forms-pager]');
+      $pager.text('1 of ' +  $sections.length);
+      return callback();
+    }
 
     //function to init and handle next/prev events.
     function addSectionListeners($sections){
@@ -189,7 +197,13 @@ apos.widgetPlayers.forms = function($el) {
           }
           $sections.toggleClass('active', false);
           $sections.eq(index).toggleClass('active', true);
+          setPager(index);
         });
+      }
+
+      function setPager(index){
+        var $pager = $form.find('[data-forms-pager]');
+        $pager.text(index + 1 +' of ' +  $sections.length);
       }
     };
   }

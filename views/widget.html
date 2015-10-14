@@ -6,6 +6,7 @@
   <h4 class='apos-forms-title'>{{ form.title | e }}</h4>
   <form class="apos-forms-form" method="POST" action="/apos-forms/submit/{{ form._id | e }}">
     {{ aposArea(form, 'body', { edit: false }) }}
+    <div class="apos-forms-pager" data-forms-pager></div>
     <div class="apos-forms-arrows" data-forms-arrows>
       <span class="apos-forms-arrow" data-forms-prev>Previous</span>
       <span class="apos-forms-arrow" data-forms-next>Next</span>
