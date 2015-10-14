@@ -12,6 +12,7 @@ apos.widgetPlayers.forms = function($el) {
   //Handle the form submission event.
   $form.on('submit', function(e) {
     e.preventDefault();
+
     var action = $form.attr('action');
     var result = {};
     var errors = [];
@@ -27,7 +28,7 @@ apos.widgetPlayers.forms = function($el) {
         if (data.status !== 'ok') {
           return false;
         }
-        console.log($el, data);
+
         $el.html(data.replacement);
         return;
       });
@@ -63,7 +64,6 @@ apos.widgetPlayers.forms = function($el) {
 
   // checkbox groups can have overall min and max
   apos.on('sanitizeForm', function($form, result, errors) {
-    console.log($form);
     $form.find('[data-forms-checkboxes]').each(function() {
       var $field = $(this);
       var min = $field.attr('data-forms-checkbox-min');

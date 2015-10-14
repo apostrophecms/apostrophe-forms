@@ -11,7 +11,7 @@
 
 {# Often useful in a custom fieldset with other controls #}
 {%- macro formSelectStandalone(name, choices, _attrs = {}) -%}
-  <select name="{{ name | e }}"
+  <select name="{{ name | e }}" data-forms-field-name="{{ name | e }}"
     {% for key, val in _attrs %}
       {{ key }}="{{ val | e }}"
     {% endfor %}
