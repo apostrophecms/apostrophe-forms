@@ -29,3 +29,12 @@
 
 
 {{ formSelect(item.label, item.label, item.choices, {limitText: limitText}) }}
+
+{# TODO get this javascript out of here
+  Selectize not firing after singleton added to form snippet
+
+<script>
+  $selectFields = $('.apos-fieldset-select');
+  $selectFields.find('select').selectize();
+</script>
+#}

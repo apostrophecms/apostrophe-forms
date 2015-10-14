@@ -92,6 +92,13 @@ apos.widgetPlayers.forms = function($el) {
 
   });
 
+
+  apos.on('previewTabReady', function(self) {
+    //instantiate selectize for dropdowns
+    var $selectFields = self.$el.find('.apos-fieldset-select');
+    $selectFields.find('select').selectize();
+  });
+
   function sanitizeFields($form, result, errors){
     $form.find('[data-forms-field-name]').each(function() {
       var $field = $(this);

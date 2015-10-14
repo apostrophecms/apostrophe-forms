@@ -25,6 +25,11 @@ $(function() {
         };
 
         self.preSave = function(callback) {
+          //instantiate selectize after adding dropdown to content
+          $selectFields = self.$el.find('.apos-fieldset-select');
+          $selectFields.find('select').selectize();
+
+          apos.enhanceDate($dateSelects);
           return self.debrief(callback);
         };
 
@@ -92,7 +97,7 @@ $(function() {
                     e.stopPropagation();
                   }
                 });
-
+                apos.emit('previewTabReady', self);
                 apos.enablePlayers(self.$previewTab);
                 return callback && callback();
               }

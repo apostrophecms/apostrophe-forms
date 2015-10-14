@@ -422,6 +422,12 @@ forms.Forms = function(options, callback) {
       sanitizeAndStore: function(callback) {
         self.eachField(form, function(field) {
           var value = req.body[field.label];
+
+          //enforce required values
+          if(field.required && value && !value.length){
+            return callback('fieldrequired');
+          }
+
           result[field.fieldId] = {
             label: field.label,
             value: self.sanitizeField(field, value)
