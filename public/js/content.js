@@ -143,29 +143,57 @@ apos.widgetPlayers.forms = function($el) {
 
     //Using our functions to get things started.
     buildSections($sections, function(){
-      $sections = $form.find('[data-forms-section]')
+      $sections = $form.find('[data-forms-section]');
+
+      // Check to see if any section is empty
+      // i.e. it only has one child: a section break.
+      $sections.each(function(){
+        if ($(this).children().length < 2){
+          return $(this).remove();
+        }
+      });
+
+      //Rebind once this has been re-calculated;
+      $sections = $form.find('[data-forms-section]');
+
       $sections.first().toggleClass('active');
       //Now add next/prev
-      addSectionListeners($sections);
+      buildPager($sections, function(){
+        addSectionListeners($sections);
+      });
     });
 
     //function to wrap sections of forms appropriately.
     function buildSections($sections, callback){
+
+      //Check to see if the first child is a section break.
+      //If not, insert one to create a first slide.
+      if (!$form.find('.apos-content').children().first().is('[data-type="sectionBreak"]')){
+        $form.find('.apos-content').prepend('<div class="apos-item apos-widget apos-apostrophe-section-break" data-type="sectionBreak"><div class="apos-forms-section-break" data-forms-section-break=""></div></div>');
+        //Rebind $sections.
+        $sections = $form.find('[data-type="sectionBreak"]');
+      }
+
+      // Loop through all sections and wrap them in a
+      // slide-like wrapper.
       $sections.each(function(){
         var $additional = $(this).nextUntil('[data-type="sectionBreak"], [data-forms-arrows]');
         var $wholeSection = $(this).add($additional);
         $wholeSection.wrapAll('<div class="apos-form-section" data-forms-section></div>');
       });
-      return buildPager($sections, callback);
+
+      //Initiate the pager building.
+      return callback();
     };
 
+    //Function for building pager.
     function buildPager($sections, callback){
       var $pager = $form.find('[data-forms-pager]');
       $pager.text('1 of ' +  $sections.length);
       return callback();
     }
 
-    //function to init and handle next/prev events.
+    //Function to init and handle next/prev events.
     function addSectionListeners($sections){
       var $next = $form.find('[data-forms-next]');
       var $prev = $form.find('[data-forms-prev]');
@@ -201,6 +229,7 @@ apos.widgetPlayers.forms = function($el) {
         });
       }
 
+      //Function to update pager.
       function setPager(index){
         var $pager = $form.find('[data-forms-pager]');
         $pager.text(index + 1 +' of ' +  $sections.length);
