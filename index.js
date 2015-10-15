@@ -136,8 +136,13 @@ forms.Forms = function(options, callback) {
         {
           name: 'break',
           label: 'Include Section Break',
-          type: 'boolean',
-          def: true
+          type: 'select',
+          choices: [
+            {
+              label: 'Yes',
+              value: true
+            }
+          ]
         }
       ]
     },
