@@ -137,7 +137,7 @@ forms.Forms = function(options, callback) {
           name: 'break',
           label: 'Include Section Break',
           type: 'boolean',
-          def: 'true'
+          def: true
         }
       ]
     },
@@ -474,7 +474,7 @@ forms.Forms = function(options, callback) {
       if (err) {
         return res.send({ status: 'error' });
       }
-      
+
       return res.send({ status: 'ok', replacement: self.render('thankYou', { form: form, result: result }, req) });
     });
   });
