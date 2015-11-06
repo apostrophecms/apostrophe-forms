@@ -23,6 +23,12 @@ forms.Forms = function(options, callback) {
     // misc widgets
     'slideshow', 'video'
   ];
+  if (options.removeWidgets) {
+    options.controls = _.filter(options.controls, function(field) {
+      return !_.contains(options.removeWidgets, field);
+    });
+  }
+
 
   options.addFields = [
     {
@@ -96,9 +102,13 @@ forms.Forms = function(options, callback) {
           'thankYouLabel', 'thankYouBody'
         ]
       }
-    ].concat(options.addGroupFields || [])
+    ]
   }
-
+  if (options.removeGroupFields) {
+    options.groupFields = _.filter(options.groupFields, function(field) {
+      return !_.contains(options.removeGroupFields, field.name);
+    }).concat(options.addGroupFields || []);
+  }
 
   options.modules = (options.modules || []).concat([ { dir: __dirname, name: 'forms' } ]);
 

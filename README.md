@@ -45,6 +45,14 @@ Set the `controls` option when configuring the module. This code recreates the d
 
 Including non-form-field widgets is a great way to dress up a form with explanatory material.
 
+
+To `remove widgets` from the controls without overriding the entire controls option, use the removeWidgets configuration:
+
+```javascript
+'apostrophe-forms': {
+  removeWidgets: ['video']
+}
+
 ## Adding New Widget Types & Validation
 
 Override `widgets` or set the `addWidgets` option when configuring the module. This code recreates the default configuration for the text field widget:
@@ -167,6 +175,13 @@ There are three default field groups: `basicsTab, contentTab, thanksTab`. Add cu
 ```
 
 
+To remove or override the default group fields use the `removeGroupFields` configuration:
+
+```javascript
+  'apostrophe-forms': {
+    removeGroupFields: ['contentTab']
+  }
+```
 
 ## What happens when forms are submitted
 
