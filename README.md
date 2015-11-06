@@ -52,6 +52,7 @@ To `remove widgets` from the controls without overriding the entire controls opt
 'apostrophe-forms': {
   removeWidgets: ['video']
 }
+```
 
 ## Adding New Widget Types & Validation
 
