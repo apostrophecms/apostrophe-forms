@@ -22,10 +22,10 @@ forms.Forms = function(options, callback) {
     'style', 'bold', 'italic', 'createLink', 'unlink', 'insertUnorderedList', 'insertTable',
     // misc widgets
     'slideshow', 'video'
-  ];
-  if (options.removeWidgets) {
+  ].concat(options.addControls || []);
+  if (options.removeControls) {
     options.controls = _.filter(options.controls, function(field) {
-      return !_.contains(options.removeWidgets, field);
+      return !_.contains(options.removeControl, field);
     });
   }
 
@@ -60,7 +60,6 @@ forms.Forms = function(options, callback) {
       label: 'Email Results To',
       type: 'string'
     }
-
   ].concat(options.addFields || []);
 
   _.defaults(options, {
@@ -104,11 +103,12 @@ forms.Forms = function(options, callback) {
       }
     ]
   }
-  if (options.removeGroupFields) {
+  if (options.removeGroups) {
     options.groupFields = _.filter(options.groupFields, function(field) {
-      return !_.contains(options.removeGroupFields, field.name);
-    }).concat(options.addGroupFields || []);
+      return !_.contains(options.removeGroups, field.name);
+    });
   }
+  options.groupFields = options.groupFields.concat(options.addGroups || []);
 
   options.modules = (options.modules || []).concat([ { dir: __dirname, name: 'forms' } ]);
 

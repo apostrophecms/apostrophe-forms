@@ -46,11 +46,12 @@ Set the `controls` option when configuring the module. This code recreates the d
 Including non-form-field widgets is a great way to dress up a form with explanatory material.
 
 
-To `remove widgets` from the controls without overriding the entire controls option, use the removeWidgets configuration:
+To `add or remove controls` without overriding the entire option, use the addControls and removeControls configuration:
 
 ```javascript
 'apostrophe-forms': {
-  removeWidgets: ['video']
+  removeControls: ['video'],
+  addControls: ['customWidgetType']
 }
 ```
 
@@ -159,11 +160,11 @@ Passing in a default field to the `addFields` array, such as `thankYouLabel` wil
 
 ## Adding custom group fields
 
-There are three default field groups: `basicsTab, contentTab, thanksTab`. Add custom custom groups by setting the `addGroupFields` option in app.js: 
+There are three default field groups: `basicsTab, contentTab, thanksTab`. Add custom custom groups by setting the `addGroups` option in app.js: 
 
 ```javascript
   'apostrophe-forms': {
-    addGroupFields: [
+    addGroups: [
       {
         name: 'projectTab',
         label: 'Project Content',
@@ -176,11 +177,11 @@ There are three default field groups: `basicsTab, contentTab, thanksTab`. Add cu
 ```
 
 
-To remove or override the default group fields use the `removeGroupFields` configuration:
+To remove or override the default group fields use the `removeGroups` configuration:
 
 ```javascript
   'apostrophe-forms': {
-    removeGroupFields: ['contentTab']
+    removeGroups: ['contentTab']
   }
 ```
 
