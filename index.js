@@ -24,6 +24,39 @@ forms.Forms = function(options, callback) {
     'slideshow', 'video'
   ];
 
+  options.addFields = [
+    {
+      name: 'body',
+      label: 'Form Content',
+      type: 'area',
+      options: {
+        controls: options.controls
+      }
+    },
+    {
+      name: 'submitLabel',
+      label: 'Label for Submit Button',
+      type: 'string'
+    },
+    {
+      name: 'thankYouLabel',
+      label: 'Thank You Message (title)',
+      type: 'string'
+    },
+    {
+      name: 'thankYouBody',
+      label: 'Thank You Message (body)',
+      type: 'string',
+      textarea: true
+    },
+    {
+      name: 'email',
+      label: 'Email Results To',
+      type: 'string'
+    }
+
+  ].concat(options.addFields || []);
+
   _.defaults(options, {
     name: 'forms',
     label: 'Forms',
@@ -33,37 +66,7 @@ forms.Forms = function(options, callback) {
     removeFields: [
       'hideTitle', 'thumbnail'
     ],
-    addFields: [
-      {
-        name: 'body',
-        label: 'Form Content',
-        type: 'area',
-        options: {
-          controls: options.controls
-        }
-      },
-      {
-        name: 'submitLabel',
-        label: 'Label for Submit Button',
-        type: 'string'
-      },
-      {
-        name: 'thankYouLabel',
-        label: 'Thank You Message (title)',
-        type: 'string'
-      },
-      {
-        name: 'thankYouBody',
-        label: 'Thank You Message (body)',
-        type: 'string',
-        textarea: true
-      },
-      {
-        name: 'email',
-        label: 'Email Results To',
-        type: 'string'
-      }
-    ]
+    addFields: options.addFields
   });
 
   // If somebody REALLY doesn't want to group their fields,
@@ -93,8 +96,9 @@ forms.Forms = function(options, callback) {
           'thankYouLabel', 'thankYouBody'
         ]
       }
-    ];
+    ].concat(options.addGroupFields || [])
   }
+
 
   options.modules = (options.modules || []).concat([ { dir: __dirname, name: 'forms' } ]);
 

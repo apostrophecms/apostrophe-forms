@@ -123,6 +123,51 @@ After the results array has been created, error validation can be added with the
   });
 ```
 
+## Adding custom fields
+
+Add or remove fields at the project level by passing in objects to the `addFields` or `removeFields` options array.
+
+```javascript
+  'apostrophe-forms': {
+    addFields: [
+      {
+        name: 'projectField',
+        label: 'Project Level Field',
+        type: 'string'
+      },
+      {
+        name: 'thankYouLabel',
+        label: 'Project-level Thank you Message',
+        type: 'string'
+      },
+    ],
+    removeFields: ['thankYouBody']
+  }
+```
+
+Passing in a default field to the `addFields` array, such as `thankYouLabel` will override it at the project level.
+
+
+## Adding custom group fields
+
+There are three default field groups: `basicsTab, contentTab, thanksTab`. Add custom custom groups by setting the `addGroupFields` option in app.js: 
+
+```javascript
+  'apostrophe-forms': {
+    addGroupFields: [
+      {
+        name: 'projectTab',
+        label: 'Project Content',
+        fields: [
+          'projectField'
+        ]
+      }
+    ]
+  }
+```
+
+
+
 ## What happens when forms are submitted
 
 When a form is submitted the content is saved to the `aposFormSubmissions` collection, and if an email address was entered when creating the form, it is also delivered to that email address.
