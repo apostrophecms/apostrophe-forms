@@ -173,7 +173,7 @@ forms.Forms = function(options, callback) {
         },
         {
           name: 'required',
-          label: 'Required',
+          label: 'Required for User Submission',
           type: 'boolean'
         }
       ]
@@ -191,7 +191,7 @@ forms.Forms = function(options, callback) {
         },
         {
           name: 'required',
-          label: 'Required',
+          label: 'Required for User Submission',
           type: 'boolean'
         }
       ]
@@ -209,7 +209,7 @@ forms.Forms = function(options, callback) {
         },
         {
           name: 'required',
-          label: 'Required',
+          label: 'Required for User Submission',
           type: 'boolean'
         }
       ]
@@ -227,7 +227,7 @@ forms.Forms = function(options, callback) {
         },
         {
           name: 'required',
-          label: 'Required',
+          label: 'Required for User Submission',
           type: 'boolean'
         },
         {
@@ -264,7 +264,7 @@ forms.Forms = function(options, callback) {
         },
         {
           name: 'required',
-          label: 'Must Check to Complete Form',
+          label: 'Must Check to Complete Form?',
           type: 'boolean'
         }
       ]
@@ -315,6 +315,11 @@ forms.Forms = function(options, callback) {
           label: 'Label',
           type: 'string',
           required: true
+        },
+        {
+          name: 'required',
+          label: 'Required for User Submission',
+          type: 'boolean'
         }
       ]
     },
@@ -328,6 +333,11 @@ forms.Forms = function(options, callback) {
           label: 'Label',
           type: 'string',
           required: true
+        },
+        {
+          name: 'required',
+          label: 'Required for User Submission',
+          type: 'boolean'
         }
       ]
     }
