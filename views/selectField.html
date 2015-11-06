@@ -3,9 +3,10 @@
   {% set selectFields = 'apos-fieldset-select-show-fields' if aposContainsProperty(choices, 'showFields') else '' %}
   <fieldset class="apos-forms-field apos-fieldset apos-fieldset-selectize apos-fieldset-select apos-fieldset-{{ name | css }}{{ selectFields }}" data-name="{{ name }}">
     <label class='apos-forms-label'>{{ item.label | e }}</label>
-      <div class="apos-select-wrapper apos-inline-input">
+    <div class="apos-select-wrapper apos-inline-input">
       {{ formSelectStandalone(name, choices) }}
     </div>
+    {% if item.help %}<div class='apos-forms-field-help-text'>{{ item.help }}{% endif %}
   </fieldset>
 {%- endmacro -%}
 

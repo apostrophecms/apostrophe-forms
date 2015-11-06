@@ -344,6 +344,16 @@ forms.Forms = function(options, callback) {
     //TODO add datetime
   ].concat(options.addWidgets || []);
 
+  //add help text to schema if specified
+  if(options.helpText){
+    _.each(options.widgets, function(options) {
+      var helpText = { name: 'help', label: 'Help Text (optional)', type: 'string' };
+      if(options.name != 'sectionBreak'){
+        options.schema.push(helpText);
+      }
+    });
+  }
+
   // widgetEditors.html will spit out a frontend DOM template for editing
   // each widget type we register
   self.pushAsset('template', 'formFieldWidgetEditors', { when: 'user', data: options });

@@ -158,6 +158,45 @@ Add or remove fields at the project level by passing in objects to the `addField
 Passing in a default field to the `addFields` array, such as `thankYouLabel` will override it at the project level.
 
 
+## Adding helper text to widget field schemas
+
+By default, there is no `helpText` schema in each widget field. By configuring help text in app.js:
+
+```javascript
+  'apostrophe-forms': {
+    helpText: true
+  }
+```
+
+Every widget schema now has an optional help field added to it. For instance, the default textField schema now looks like:
+
+```javascript
+  {
+    name: 'textField',
+    label: 'Text Field',
+    css: 'apostrophe-text-field',
+    schema: [
+      {
+        name: 'label',
+        label: 'Label',
+        type: 'string',
+        required: true
+      },
+      {
+        name: 'required',
+        label: 'Required for User Submission',
+        type: 'boolean'
+      },
+      {
+        name: 'help',
+        label: 'Help Text (optional)',
+        type: 'string'
+      }
+    ]
+  }
+```
+
+
 ## Adding custom group fields
 
 There are three default field groups: `basicsTab, contentTab, thanksTab`. Add custom custom groups by setting the `addGroups` option in app.js: 
