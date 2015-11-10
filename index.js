@@ -25,7 +25,7 @@ forms.Forms = function(options, callback) {
   ].concat(options.addControls || []);
   if (options.removeControls) {
     options.controls = _.filter(options.controls, function(field) {
-      return !_.contains(options.removeControl, field);
+      return !_.contains(options.removeControls, field);
     });
   }
 
