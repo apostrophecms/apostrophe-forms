@@ -35,19 +35,6 @@ apos.widgetPlayers.forms = function($el) {
     });
   });
 
-  //Make sure all functionality is scoped to this function...
-  // anything might be required
-  apos.on('sanitizeFormField', function($field, key, result, errors) {
-    if ($field.is('[apos-required]')) {
-      if (!$field.val().toString().length) {
-        errors.push({
-          name: key,
-          message: 'required'
-        });
-      }
-    }
-  });
-
   // checkboxes build arrays
   apos.on('sanitizeFormField', function($field, key, result, errors) {
     if ($field.attr('type') !== 'checkbox') {
@@ -62,13 +49,31 @@ apos.widgetPlayers.forms = function($el) {
     }
   });
 
+  //Make sure all functionality is scoped to this function...
+  // anything might be required
+  apos.on('sanitizeFormField', function($field, key, result, errors) {
+    if ($field.is('[apos-required]')) {
+      if ($field.attr('type') == 'checkbox' && !result[key].length) {
+        errors.push({
+            name: key,
+            message: 'required'
+          });
+      } else if(!$field.val().toString().length){
+        errors.push({
+          name: key,
+          message: 'required'
+        });
+      }
+    }
+  });
+
   // checkbox groups can have overall min and max
   apos.on('sanitizeForm', function($form, result, errors) {
     $form.find('[data-forms-checkboxes]').each(function() {
       var $field = $(this);
       var min = $field.attr('data-forms-checkbox-min');
       var max = $field.attr('data-forms-checkbox-max');
-      var name = $field.attr('data-forms-field-name');
+      var name = $field.attr('data-forms-fieldset-name');
       if(min > 0 || max > 0) {
        var checked = 0;
        checked = result[name].length;
@@ -89,9 +94,6 @@ apos.widgetPlayers.forms = function($el) {
     });
   });
 
-  // apos.on('sanitizeForm', function($form, result, errors) {
-  //
-  // });
 
 
   apos.on('previewTabReady', function(self) {

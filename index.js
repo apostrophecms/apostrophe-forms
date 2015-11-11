@@ -543,7 +543,7 @@ forms.Forms = function(options, callback) {
   // thus very useful
 
   self.sanitizeField = function(field, value) {
-    if (field.type === 'checkboxesField') {
+    if (field.type === 'checkboxesField' || field.type === 'checkboxField') {
       return _.map(Array.isArray(value) ? value : [], function(item) {
         return self._apos.sanitizeString(item);
       });
