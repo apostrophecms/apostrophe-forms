@@ -65,6 +65,7 @@ forms.Forms = function(options, callback) {
   _.defaults(options, {
     name: 'forms',
     label: 'Forms',
+    icon: 'icon-envelope-alt',
     instance: 'form',
     instanceLabel: 'Form',
     menuName: 'aposFormsMenu',
