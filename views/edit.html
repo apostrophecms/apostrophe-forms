@@ -1,0 +1,29 @@
+{%- extends 'new.html' -%}
+
+{%- block modalClass -%}
+  {{super() }} {{editClass}}
+{%- endblock -%}
+
+{%- block modalControls -%}
+  {{ snippetEditControls() }}
+{%- endblock -%}
+
+{%- block modalLabel -%}
+  {{ __('Edit %s', __(instanceLabel) ) }}
+{%- endblock -%}
+
+{% block modalBody %}
+  {{ super() }}
+  <form class='apos-form-exporter' data-form-export=""> {# form id is inserted via editor.js #}
+    <label class="apos-forms-label">Export Form Submissions</label>
+    <fieldset class="apos-forms-field" data-forms-fieldset-name="startDate">
+      <label class="apos-forms-label">Start Date (Optional)</label>
+      <input type="text" data-forms-dates data-forms-field-name="startDate" name='startDate'>
+    </fieldset>
+    <fieldset class="apos-forms-field" data-forms-fieldset-name="endDate">
+      <label class="apos-forms-label">End Date (Optional) </label>
+      <input type="text" data-forms-dates data-forms-field-name="endDate" name='endDate'>
+    </fieldset>
+    <input class="apos-forms-submit apos-progress-btn apos-progress-btn--base" value='Export' type="submit" name="submit" action="/apos-forms/export" method="get"/>
+  </form>
+{% endblock %}

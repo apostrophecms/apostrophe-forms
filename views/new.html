@@ -1,4 +1,6 @@
-{# Overriding apostrophe-snippets new.html in order to be able to hard code in export form #}
+{# This override is still needed because of apos-ui-modal-forms, even though the export form moved #}
+{# to edit.html. -Tom #}
+
 {%- extends 'baseModal.html' -%}
 {%- include 'snippetMacros.html' -%}
 
@@ -18,16 +20,4 @@
   <form>
     {{ snippetAllFields(fields) }}
   </form>
-  <form class='apos-form-exporter' data-form-export=""> {# form id is inserted via editor.js #}
-  	<label class="apos-forms-label">Export Form Submissions</label>
-  	<fieldset class="apos-forms-field" data-forms-fieldset-name="startDate">
-		  <label class="apos-forms-label">Start Date (Optional)</label>
-		  <input type="text" data-forms-dates data-forms-field-name="startDate" name='startDate'>
-		</fieldset>
-		<fieldset class="apos-forms-field" data-forms-fieldset-name="endDate">
-		  <label class="apos-forms-label">End Date (Optional) </label>
-		  <input type="text" data-forms-dates data-forms-field-name="endDate" name='endDate'>
-		</fieldset>
-		<input class="apos-forms-submit apos-progress-btn apos-progress-btn--base" value='Export' type="submit" name="submit" action="/apos-forms/export" method="get"/>
-	</form>
 {%- endblock -%}
