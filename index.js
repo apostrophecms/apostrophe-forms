@@ -113,6 +113,12 @@ forms.Forms = function(options, callback) {
 
   options.modules = (options.modules || []).concat([ { dir: __dirname, name: 'forms' } ]);
 
+  // This takes an array of objects that have a label and a name value.
+  // i.e. [ label: 'IP Address', name: 'ipAddress' ]
+  // They'll be added to the exported CSV. This allows you to display fields
+  // that might not be in the form itself.
+  self.addExportColumns = options.addExportColumns || [];
+
   snippets.Snippets.call(this, options, null);
   self._apos.mixinModuleEmail(self);
 
