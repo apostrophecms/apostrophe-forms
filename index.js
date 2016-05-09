@@ -480,7 +480,14 @@ forms.Forms = function(options, callback) {
 
         result.formId = form._id;
 
-        return self.submissions.insert(result, callback);
+        // Adding an asynchronous hook here to make changes to a form submission
+        // before it is stored - Jimmy
+        self.beforeStore(req, result, function(err) {
+          if (err) {
+            return callback(err);
+          }
+          return self.submissions.insert(result, callback);
+        });
       },
       email: function(callback) {
         if (!form.email) {
@@ -518,6 +525,10 @@ forms.Forms = function(options, callback) {
       return res.send({ status: 'ok', replacement: self.render('thankYou', { form: form, result: result }, req) });
     });
   });
+
+  self.beforeStore = function(req, result, callback) {
+    return setImmediate(callback);
+  };
 
   // A convenient method to override to do something special when a
   // form has been submitted
