@@ -1,0 +1,5 @@
+{% set form = data.widget._form %}
+<form action="">
+  {{ apos.area(form, 'formInputs') }}
+  <button type="submit">{{ form.submitLabel or 'Submit' }}</button>
+</form>

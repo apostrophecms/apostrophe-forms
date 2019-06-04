@@ -1,12 +1,85 @@
 module.exports = {
   name: 'apostrophe-forms',
+  label: 'Form',
+  extend: 'apostrophe-pieces',
   moogBundle: {
     directory: 'lib/modules',
     modules: [
-      'apostrophe-forms-base-field'
+      'apostrophe-forms-widgets',
+      'apostrophe-forms-base-widgets'
     ]
   },
-  construct: function (self, options) {
+  beforeConstruct: function (self, options) {
+    options.addFields = [
+      {
+        name: 'title',
+        label: 'Form Name',
+        type: 'string',
+        sortify: true,
+        required: true
+      },
+      {
+        name: 'formInputs',
+        label: 'Form Contents',
+        type: 'area',
+        contextual: false,
+        options: {
+          widgets: {
+            'apostrophe-forms-base': {},
+            'apostrophe-rich-text': {
+              toolbar: [
+                'Styles', 'Bold', 'Italic', 'Link', 'Anchor', 'Unlink',
+                'NumberedList', 'BulletedList'
+              ]
+            }
+          }
+        }
+      },
+      {
+        name: 'submitLabel',
+        label: 'Submit Button Label',
+        type: 'string'
+      },
+      {
+        name: 'email',
+        type: 'email',
+        label: 'Email Address for Results'
+      },
+      {
+        name: 'thankYouHeading',
+        label: 'Thank You Message Title',
+        type: 'string'
+      },
+      {
+        name: 'thankYouBody',
+        label: 'Thank You Message Content',
+        type: 'area',
+        options: {
+          widgets: {
+            'apostrophe-rich-text': {
+              toolbar: [
+                'Styles', 'Bold', 'Italic', 'Link', 'Anchor', 'Unlink',
+                'NumberedList', 'BulletedList'
+              ]
+            }
+          }
+        }
+      }
+    ].concat(options.addFields || []);
 
+    options.arrangeFields = (options.arrangeFields || []).concat([
+      {
+        name: 'form',
+        label: 'Form',
+        fields: ['formInputs', 'submitLabel']
+      },
+      {
+        name: 'afterSubmit',
+        label: 'After-Submission',
+        fields: ['email', 'thankYouHeading', 'thankYouBody']
+      }
+    ]);
+  },
+  construct: function(self, options) {
   }
 };
