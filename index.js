@@ -6,7 +6,8 @@ module.exports = {
     directory: 'lib/modules',
     modules: [
       'apostrophe-forms-widgets',
-      'apostrophe-forms-base-widgets'
+      'apostrophe-forms-base-widgets',
+      'apostrophe-forms-text-widgets'
     ]
   },
   beforeConstruct: function (self, options) {
@@ -25,7 +26,7 @@ module.exports = {
         contextual: false,
         options: {
           widgets: {
-            'apostrophe-forms-base': {},
+            'apostrophe-forms-text': {},
             'apostrophe-rich-text': {
               toolbar: [
                 'Styles', 'Bold', 'Italic', 'Link', 'Anchor', 'Unlink',
@@ -81,5 +82,11 @@ module.exports = {
     ]);
   },
   construct: function(self, options) {
+    // Route to accept the submitted form.
+    self.route('get', 'submit', (req, res) => {
+      console.log(Object.keys(req));
+      console.log(req.data);
+      // Sanitize data
+    });
   }
 };
