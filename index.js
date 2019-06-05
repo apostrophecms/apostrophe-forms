@@ -6,8 +6,8 @@ module.exports = {
     directory: 'lib/modules',
     modules: [
       'apostrophe-forms-widgets',
-      'apostrophe-forms-base-widgets',
-      'apostrophe-forms-text-widgets'
+      'apostrophe-forms-base-field-widgets',
+      'apostrophe-forms-text-field-widgets'
     ]
   },
   beforeConstruct: function (self, options) {
@@ -93,9 +93,16 @@ module.exports = {
       try {
         // Recursively walk the area and its sub-areas so we find
         // fields nested in two-column widgets and the like
+
+        // walk is not an async function so build an array of them to start
+        const areas = [];
         self.apos.areas.walk({
           formContents: form.formContents
         }, function(area) {
+          areas.push(area);
+        });
+
+        for (area of areas) {
           const widgets = area.items || [];
           for (const widget of widgets) {
             const manager = self.apos.areas.getManager(widget.type);
@@ -103,12 +110,12 @@ module.exports = {
               await manager.sanitizeFormField(req, widget, input, output);
             }
           }
-        });
+        }
       } catch (e) {
         return next(e);
       }
       console.log('Sanitized data: ', output);
-      return next(true);
+      return next(null);
     });
   }
 };
