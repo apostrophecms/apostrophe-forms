@@ -20,13 +20,13 @@ module.exports = {
         required: true
       },
       {
-        name: 'formInputs',
+        name: 'formContents',
         label: 'Form Contents',
         type: 'area',
         contextual: false,
         options: {
-          widgets: {
-            'apostrophe-forms-text': {},
+          widgets: options.formWidgets || {
+            'apostrophe-forms-text-field': {},
             'apostrophe-rich-text': {
               toolbar: [
                 'Styles', 'Bold', 'Italic', 'Link', 'Anchor', 'Unlink',
@@ -56,7 +56,7 @@ module.exports = {
         label: 'Thank You Message Content',
         type: 'area',
         options: {
-          widgets: {
+          widgets: options.thankYouWidgets || {
             'apostrophe-rich-text': {
               toolbar: [
                 'Styles', 'Bold', 'Italic', 'Link', 'Anchor', 'Unlink',
@@ -72,7 +72,7 @@ module.exports = {
       {
         name: 'form',
         label: 'Form',
-        fields: ['formInputs', 'submitLabel']
+        fields: ['formContents', 'submitLabel']
       },
       {
         name: 'afterSubmit',
