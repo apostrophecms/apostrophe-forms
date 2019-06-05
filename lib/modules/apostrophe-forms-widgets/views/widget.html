@@ -1,5 +1,5 @@
 {% set form = data.widget._form %}
-<form data-apos-form action="">
+<form data-apos-form="{{ data.widget._form._id }}" action="">
   {{ apos.area(form, 'formContents', {
     edit: false
   }) }}

@@ -72,21 +72,43 @@ module.exports = {
       {
         name: 'form',
         label: 'Form',
-        fields: ['formContents', 'submitLabel']
+        fields: [ 'formContents', 'submitLabel' ]
       },
       {
         name: 'afterSubmit',
         label: 'After-Submission',
-        fields: ['email', 'thankYouHeading', 'thankYouBody']
+        fields: [ 'email', 'thankYouHeading', 'thankYouBody' ]
       }
     ]);
   },
   construct: function(self, options) {
     // Route to accept the submitted form.
-    self.route('get', 'submit', (req, res) => {
-      console.log(Object.keys(req));
-      console.log(req.data);
-      // Sanitize data
+    self.apiRoute('post', 'submit', async (req, res, next) => {
+      const input = req.body;
+      const form = self.find(req, { _id: self.apos.launder.id(req.body._id) }).toObject();
+      if (!form) {
+        return next('notfound');
+      }
+      const output = {};
+      try {
+        // Recursively walk the area and its sub-areas so we find
+        // fields nested in two-column widgets and the like
+        self.apos.areas.walk({
+          formContents: form.formContents
+        }, function(area) {
+          const widgets = area.items || [];
+          for (const widget of widgets) {
+            const manager = self.apos.areas.getManager(widget.type);
+            if (manager && manager.sanitizeFormField) {
+              await manager.sanitizeFormField(req, widget, input, output);
+            }
+          }
+        });
+      } catch (e) {
+        return next(e);
+      }
+      console.log('Sanitized data: ', output);
+      return next(true);
     });
   }
 };
