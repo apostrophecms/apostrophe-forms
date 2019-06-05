@@ -1,111 +1,36 @@
 {
   "name": "apostrophe-forms",
-  "version": "0.5.21",
-  "description": "Allow your users to build forms on the fly on their Apostrophe sites",
+  "version": "2.0.0-alpha",
+  "description": "Build forms for ApostropheCMS in a simple user interface.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "eslint ."
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/punkave/apostrophe-forms.git"
+    "url": "git+https://github.com/apostrophecms/apostrophe-forms.git"
   },
   "keywords": [
-    "forms",
     "apostrophe",
-    "cms",
-    "form",
-    "builder",
-    "a2"
+    "apostrophecms",
+    "apostrophe-cms",
+    "forms",
+    "form builder"
   ],
-  "author": {
-    "name": "P'unk Avenue LLC"
-  },
+  "author": "P'unk Avenue LLC",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/punkave/apostrophe-forms/issues"
+    "url": "https://github.com/apostrophecms/apostrophe-forms/issues"
   },
-  "homepage": "https://github.com/punkave/apostrophe-forms",
-  "dependencies": {
-    "apostrophe-snippets": "^0.5.82",
-    "async": "^1.2.1",
-    "csv-stringify": "0.0.8",
-    "es6-promise": "^3.0.2",
-    "lodash": "^3.10.1",
-    "moment": "^2.13.0"
+  "homepage": "https://github.com/apostrophecms/apostrophe-forms#readme",
+  "devDependencies": {
+    "eslint": "^4.15.0",
+    "eslint-config-punkave": "^1.0.10",
+    "eslint-config-standard": "^11.0.0-beta.0",
+    "eslint-plugin-import": "^2.8.0",
+    "eslint-plugin-node": "^5.2.1",
+    "eslint-plugin-promise": "^3.6.0",
+    "eslint-plugin-standard": "^3.0.1"
   },
-  "gitHead": "865ccc20ecb0130d9952654113f0a1231ad82326",
-  "_id": "apostrophe-forms@0.5.10",
-  "_shasum": "d63727db7844c6ff1a821751e9953df6e5bdb6fc",
-  "_from": "apostrophe-forms@*",
-  "_npmVersion": "2.3.0",
-  "_nodeVersion": "0.10.36",
-  "_npmUser": {
-    "name": "suhmantha1",
-    "email": "sam@punkave.com"
-  },
-  "maintainers": [
-    {
-      "name": "alexgilbert",
-      "email": "alex@punkave.com"
-    },
-    {
-      "name": "benirose",
-      "email": "ben@punkave.com"
-    },
-    {
-      "name": "boutell",
-      "email": "boutell@boutell.com"
-    },
-    {
-      "name": "colpanik",
-      "email": "kerry@punkave.com"
-    },
-    {
-      "name": "dkh202",
-      "email": "danielkhunter@gmail.com"
-    },
-    {
-      "name": "jimmyh",
-      "email": "jimmy@punkave.com"
-    },
-    {
-      "name": "joshuatrii",
-      "email": "jan@joshuatrii.com"
-    },
-    {
-      "name": "jsumnersmith",
-      "email": "joel@punkave.com"
-    },
-    {
-      "name": "kyjoya",
-      "email": "kyleejacker@gmail.com"
-    },
-    {
-      "name": "kylestetz",
-      "email": "kylestetz@gmail.com"
-    },
-    {
-      "name": "livhaas",
-      "email": "olivia@punkave.com"
-    },
-    {
-      "name": "mcoppola",
-      "email": "coppola@punkave.com"
-    },
-    {
-      "name": "stuartromanek",
-      "email": "stuart@punkave.com"
-    },
-    {
-      "name": "suhmantha1",
-      "email": "sam@punkave.com"
-    }
-  ],
-  "dist": {
-    "shasum": "d63727db7844c6ff1a821751e9953df6e5bdb6fc",
-    "tarball": "http://registry.npmjs.org/apostrophe-forms/-/apostrophe-forms-0.5.10.tgz"
-  },
-  "directories": {},
-  "_resolved": "https://registry.npmjs.org/apostrophe-forms/-/apostrophe-forms-0.5.10.tgz"
+  "dependencies": {}
 }
