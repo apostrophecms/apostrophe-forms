@@ -1,7 +1,0 @@
-The form "{{ form.title }}" has been submitted.
-
-Here is the information that was submitted.
-
-{% for key, val in result %}
-{{ key }}: {{ val }}
-{% endfor %}
