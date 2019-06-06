@@ -10,6 +10,7 @@ module.exports = {
       'apostrophe-forms-text-field-widgets'
     ]
   },
+
   beforeConstruct: function (self, options) {
     options.addFields = [
       {
@@ -20,7 +21,7 @@ module.exports = {
         required: true
       },
       {
-        name: 'formContents',
+        name: 'contents',
         label: 'Form Contents',
         type: 'area',
         contextual: false,
@@ -72,7 +73,7 @@ module.exports = {
       {
         name: 'form',
         label: 'Form',
-        fields: [ 'formContents', 'submitLabel' ]
+        fields: [ 'contents', 'submitLabel' ]
       },
       {
         name: 'afterSubmit',
@@ -81,11 +82,32 @@ module.exports = {
       }
     ]);
   },
+
+  afterConstruct: async function(self, callback) {
+    try {
+      await self.ensureCollection();
+    } catch (e) {
+      return callback(e);
+    }
+    return callback(null);
+  },
+
   construct: function(self, options) {
+    self.ensureCollection = async function() {
+      self.db = self.apos.db.collection('aposFormSubmissions');
+      await self.db.ensureIndex({
+        formId: 1,
+        createdAt: 1
+      });
+      await self.db.ensureIndex({
+        formId: 1,
+        createdAt: -1
+      });
+    };
     // Route to accept the submitted form.
     self.apiRoute('post', 'submit', async (req, res, next) => {
       const input = req.body;
-      const form = self.find(req, { _id: self.apos.launder.id(req.body._id) }).toObject();
+      const form = await self.find(req, { _id: self.apos.launder.id(req.body._id) }).toObject();
       if (!form) {
         return next('notfound');
       }
@@ -101,21 +123,52 @@ module.exports = {
         }, function(area) {
           areas.push(area);
         });
-
-        for (area of areas) {
+        for (const area of areas) {
           const widgets = area.items || [];
           for (const widget of widgets) {
-            const manager = self.apos.areas.getManager(widget.type);
+            const manager = self.apos.areas.getWidgetManager(widget.type);
             if (manager && manager.sanitizeFormField) {
               await manager.sanitizeFormField(req, widget, input, output);
             }
           }
         }
+        await self.emit('submission', req, form, output);
       } catch (e) {
         return next(e);
       }
-      console.log('Sanitized data: ', output);
       return next(null);
     });
+
+    self.on('submission', 'emailSubmission', async function(req, form, data) {
+      if (!form.email) {
+        return;
+      }
+      return self.email(req, 'emailSubmission', {
+        form: form,
+        input: data
+      },
+      {
+        from: form.email,
+        to: form.email,
+        subject: form.title
+      });
+    });
+
+    self.on('submission', 'saveSubmission', async function(req, form, data) {
+      if (self.options.save === false) {
+        return;
+      }
+      return self.db.insert({
+        createdAt: new Date(),
+        formId: form._id,
+        data: data
+      });
+    });
+
+    var superPushAssets = self.pushAssets;
+    self.pushAssets = function() {
+      superPushAssets();
+      self.pushAsset('stylesheet', 'lean', { when: 'lean' });
+    };
   }
 };
