@@ -28,6 +28,7 @@ module.exports = {
         options: {
           widgets: options.formWidgets || {
             'apostrophe-forms-text-field': {},
+            'apostrophe-forms-file-field': {},
             'apostrophe-rich-text': {
               toolbar: [
                 'Styles', 'Bold', 'Italic', 'Link', 'Anchor', 'Unlink',
