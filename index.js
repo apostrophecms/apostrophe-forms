@@ -7,7 +7,8 @@ module.exports = {
     modules: [
       'apostrophe-forms-widgets',
       'apostrophe-forms-base-field-widgets',
-      'apostrophe-forms-text-field-widgets'
+      'apostrophe-forms-text-field-widgets',
+      'apostrophe-forms-file-field-widgets'
     ]
   },
 
