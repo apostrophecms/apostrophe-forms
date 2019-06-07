@@ -121,7 +121,7 @@ module.exports = {
         // walk is not an async function so build an array of them to start
         const areas = [];
         self.apos.areas.walk({
-          formContents: form.formContents
+          contents: form.contents
         }, function(area) {
           areas.push(area);
         });
