@@ -13,8 +13,15 @@ modules: {
   'apostrophe-forms-widgets': {},
   // TODO: enabling every field widget module is going to get tedious, can something be done?
   'apostrophe-forms-text-field-widgets': {},
+  'apostrophe-forms-file-field-widgets': {},
   'apostrophe-email': {
     // see the email HOWTO for required configuration
+  },
+  'apostrophe-permissions': {
+    construct: function(self, options) {
+      // Needed if you want file fields to work on public pages
+      self.addPublic([ 'edit-attachment' ]);
+    }
   }
 }
 ```
