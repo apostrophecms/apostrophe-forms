@@ -1,0 +1,6 @@
+{# ids must be unique doc-wide #}
+{% set id = apos.utils.generateId() %}
+<label for="{{ id }}" style="padding: 20px 0; display: block;">
+  {{ data.widget.fieldLabel}}:
+  <input type="text" id="{{ id }}" name="{{ data.widget.fieldName}}">
+</label>

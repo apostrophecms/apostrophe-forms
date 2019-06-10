@@ -1,7 +1,21 @@
 {% set form = data.widget._form %}
-<form data-apos-form action="">
-  {{ apos.area(form, 'formInputs', {
-    edit: false
-  }) }}
-  <button type="submit">{{ form.submitLabel or 'Submit' }}</button>
-</form>
+{% if form %}
+  <form data-apos-forms-form="{{ form._id }}" action="">
+    {{ apos.area(form, 'contents', {
+      edit: false
+    }) }}
+    <button type="submit">{{ form.submitLabel or 'Submit' }}</button>
+  </form>
+  <div class="apos-forms-hidden" data-apos-forms-submit-error>
+    An error occurred submitting the form. Please try again.
+  </div>
+  <div class="apos-forms-hidden" data-apos-forms-spinner>Submitting...</div>
+  <div class="apos-forms-hidden" data-apos-forms-thank-you class="apos-forms-submission-thank-you">
+    {% if form.thankYouHeading %}
+      <h3>{{ form.thankYouHeading }}</h3>
+    {% endif %}
+    {{ apos.area(form, 'thankYouBody', {
+      edit: false
+    }) }}
+  </div>
+{% endif %}
