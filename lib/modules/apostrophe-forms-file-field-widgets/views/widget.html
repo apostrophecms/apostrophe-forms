@@ -1,8 +1,9 @@
 {# ids must be unique doc-wide #}
 {% set id = apos.utils.generateId() %}
+{% set widget = data.widget %}
 <label for="{{ id }}" style="padding: 20px 0; display: block;">
-  {{ data.widget.fieldLabel}}:
-  <input type="file" id="{{ id }}" name="{{ data.widget.fieldName}}">
+  {{ widget.fieldLabel}}{% if widget.required %} {{ __("(Required)") }}{% endif %}:
+  <input type="file" id="{{ id }}" name="{{ widget.fieldName}}" {% if widget.required %}required{% endif %}>
   <div class="apos-forms-hidden" data-apos-forms-file-spinner>Uploading...</div>
   <div class="apos-forms-hidden" data-apos-forms-file-error>An error occurred uploading the file. It may be too large or of an inappropriate type.</div>
 </label>

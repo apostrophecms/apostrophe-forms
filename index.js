@@ -109,7 +109,9 @@ module.exports = {
     // Route to accept the submitted form.
     self.apiRoute('post', 'submit', async (req, res, next) => {
       const input = req.body;
-      const form = await self.find(req, { _id: self.apos.launder.id(req.body._id) }).toObject();
+      const form = await self.find(req, {
+        _id: self.apos.launder.id(req.body._id)
+      }).toObject();
       if (!form) {
         return next('notfound');
       }
@@ -130,10 +132,18 @@ module.exports = {
           for (const widget of widgets) {
             const manager = self.apos.areas.getWidgetManager(widget.type);
             if (manager && manager.sanitizeFormField) {
+              await manager.checkRequired(req, widget, input);
               await manager.sanitizeFormField(req, widget, input, output);
             }
           }
         }
+
+        if (req.formErrors && req.formErrors.length > 0) {
+          return next('error', null, {
+            formErrors: req.formErrors
+          });
+        }
+
         await self.emit('submission', req, form, output);
       } catch (e) {
         return next(e);
