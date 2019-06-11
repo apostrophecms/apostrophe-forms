@@ -4,7 +4,7 @@
   <legend>{{ data.widget.fieldLabel}}</legend>
   {% for option in data.widget.options %}
     {% set optionId = id + apos.utils.slugify(option.optionValue) %}
-    <input type="radio" id="{{ optionId }}" name="{{ data.widget.fieldName}}" value="{{ option.optionValue }}">
+    <input type="checkbox" id="{{ optionId }}" name="{{ data.widget.fieldName}}" value="{{ option.optionValue }}">
     <label for="{{ optionId }}">{{ option.optionLabel }}</label>
   {% endfor %}
 </fieldset>
