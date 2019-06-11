@@ -1,0 +1,10 @@
+{# ids must be unique doc-wide #}
+{% set id = apos.utils.generateId() %}
+<label for="{{ id }}" style="padding: 20px 0; display: block;">
+  {{ data.widget.fieldLabel}}:
+  <select id="{{ id }}" name="{{ data.widget.fieldName}}">
+    {% for option in data.widget.options %}
+      <option value="{{ option.optionValue }}">{{ option.optionLabel }}</option>
+    {% endfor %}
+  </select>
+</label>
