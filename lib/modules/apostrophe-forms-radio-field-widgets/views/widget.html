@@ -1,0 +1,23 @@
+{# ids must be unique doc-wide #}
+{% set id = apos.utils.generateId() %}
+<fieldset style="padding: 20px 0; display: block;">
+  <legend>{{ data.widget.fieldLabel}}</legend>
+  {% for option in data.widget.options %}
+    {% set optionId = id + apos.utils.slugify(option.optionValue) %}
+    <input type="radio" id="{{ optionId }}" name="{{ data.widget.fieldName}}" value="{{ option.optionValue }}">
+    <label for="{{ optionId }}">{{ option.optionLabel }}</label>
+  {% endfor %}
+</fieldset>
+
+
+
+{# ids must be unique doc-wide #}
+{# {% set id = apos.utils.generateId() %}
+<label for="{{ id }}" style="padding: 20px 0; display: block;">
+  {{ data.widget.fieldLabel}}:
+  <select id="{{ id }}" name="{{ data.widget.fieldName}}">
+    {% for option in data.widget.options %}
+      <option value="{{ option.optionValue }}">{{ option.optionLabel }}</option>
+    {% endfor %}
+  </select>
+</label> #}
