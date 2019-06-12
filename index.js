@@ -10,7 +10,7 @@ module.exports = {
       'apostrophe-forms-text-field-widgets',
       'apostrophe-forms-select-field-widgets',
       'apostrophe-forms-radio-field-widgets', // Extends apos-forms-select-field
-      'apostrophe-forms-checkbox-field-widgets',
+      'apostrophe-forms-checkboxes-field-widgets',
       'apostrophe-forms-file-field-widgets'
     ]
   },
@@ -35,7 +35,7 @@ module.exports = {
             'apostrophe-forms-file-field': {},
             'apostrophe-forms-select-field': {},
             'apostrophe-forms-radio-field': {},
-            'apostrophe-forms-checkbox-field': {},
+            'apostrophe-forms-checkboxes-field': {},
             'apostrophe-rich-text': {
               toolbar: [
                 'Styles', 'Bold', 'Italic', 'Link', 'Anchor', 'Unlink',
