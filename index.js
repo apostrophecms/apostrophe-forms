@@ -8,6 +8,7 @@ module.exports = {
       'apostrophe-forms-widgets',
       'apostrophe-forms-base-field-widgets',
       'apostrophe-forms-text-field-widgets',
+      'apostrophe-forms-textarea-field-widgets',
       'apostrophe-forms-file-field-widgets'
     ]
   },
@@ -29,6 +30,7 @@ module.exports = {
         options: {
           widgets: options.formWidgets || {
             'apostrophe-forms-text-field': {},
+            'apostrophe-forms-textarea-field': {},
             'apostrophe-forms-file-field': {},
             'apostrophe-rich-text': {
               toolbar: [
