@@ -138,7 +138,7 @@ module.exports = {
           for (const widget of widgets) {
             const manager = self.apos.areas.getWidgetManager(widget.type);
             if (manager && manager.sanitizeFormField) {
-              await manager.sanitizeFormField(req, widget, input, output);
+              await manager.sanitizeFormField(req, form, widget, input, output);
             }
           }
         }
