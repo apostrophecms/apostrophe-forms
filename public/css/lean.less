@@ -1,6 +1,9 @@
 .apos-forms-hidden {
   display: none;
 }
+// TODO: refactor to remove apos-forms-visible. We can't depend on the parent
+// having the right display property. `initial` could work better, but simply
+// hiding and unhiding is safer. The `hidden` HTML attribute could work as well.
 .apos-forms-visible {
   display: inherit;
 }

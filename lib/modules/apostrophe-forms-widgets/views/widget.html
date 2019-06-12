@@ -6,11 +6,11 @@
     }) }}
     <button type="submit">{{ form.submitLabel or 'Submit' }}</button>
   </form>
-  <div class="apos-forms-hidden" data-apos-forms-submit-error>
+  <p role="alert" class="apos-forms-hidden apos-forms-error" data-apos-forms-submit-error>
     An error occurred submitting the form. Please try again.
-  </div>
-  <div class="apos-forms-hidden" data-apos-forms-spinner>Submitting...</div>
-  <div class="apos-forms-hidden" data-apos-forms-thank-you class="apos-forms-submission-thank-you">
+  </p>
+  <p class="apos-forms-hidden" data-apos-forms-spinner>Submitting...</p>
+  <div role="alert" class="apos-forms-hidden" data-apos-forms-thank-you class="apos-forms-submission-thank-you">
     {% if form.thankYouHeading %}
       <h3>{{ form.thankYouHeading }}</h3>
     {% endif %}

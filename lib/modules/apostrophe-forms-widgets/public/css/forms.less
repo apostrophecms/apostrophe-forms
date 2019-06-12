@@ -1,6 +1,24 @@
 // Colors
 @apos-red: #EA433A;
+// Spacing
+@apos-form-spacing: 10px;
+
+.apos-forms-label {
+  display: block;
+
+  &-message {
+    padding-left: @apos-form-spacing;
+  }
+}
+
+.apos-forms-input {
+  margin-bottom: @apos-form-spacing;
+}
+
+.apos-forms-input-error {
+  outline: 1px solid @apos-red;
+}
 
 .apos-forms-error {
-  outline: 1px solid @apos-red;
+  color: @apos-red;
 }
