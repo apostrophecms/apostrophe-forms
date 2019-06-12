@@ -3,8 +3,8 @@
 <fieldset style="padding: 20px 0; display: block;">
   <legend>{{ data.widget.fieldLabel}}</legend>
   {% for option in data.widget.options %}
-    {% set optionId = id + apos.utils.slugify(option.optionValue) %}
-    <input type="checkbox" id="{{ optionId }}" name="{{ data.widget.fieldName}}" value="{{ option.optionValue }}">
-    <label for="{{ optionId }}">{{ option.optionLabel }}</label>
+    {% set optionId = id + apos.utils.slugify(option.value) %}
+    <input type="checkbox" id="{{ optionId }}" name="{{ data.widget.fieldName}}" value="{{ option.value }}">
+    <label for="{{ optionId }}">{{ option.label }}</label>
   {% endfor %}
 </fieldset>

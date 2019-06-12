@@ -4,7 +4,7 @@
   {{ data.widget.fieldLabel}}:
   <select id="{{ id }}" name="{{ data.widget.fieldName}}">
     {% for option in data.widget.options %}
-      <option value="{{ option.optionValue }}">{{ option.optionLabel }}</option>
+      <option value="{{ option.value }}">{{ option.label }}</option>
     {% endfor %}
   </select>
 </label>
