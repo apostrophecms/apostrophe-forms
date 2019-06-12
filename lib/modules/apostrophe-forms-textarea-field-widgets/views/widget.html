@@ -1,6 +1,9 @@
 {# ids must be unique doc-wide #}
 {% set id = apos.utils.generateId() %}
-<label for="{{ id }}" style="padding: 20px 0; display: block;">
-  {{ data.widget.fieldLabel}}:
-  <textarea id="{{ id }}" name="{{ data.widget.fieldName}}"></textarea>
+{% set widget = data.widget %}
+<label for="{{ id }}" class="apos-forms-label">
+  {{ widget.fieldLabel}}
+  {% if not widget.required %} {{ __("(Optional)") }}{% endif %}
+  <span class="apos-forms-label-message" data-apos-input-message="{{ widget.fieldName}}" hidden></span>
 </label>
+<textarea class="apos-forms-input" id="{{ id }}" name="{{ widget.fieldName}}" {% if widget.required %}required{% endif %}></textarea>

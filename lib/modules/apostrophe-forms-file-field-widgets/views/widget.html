@@ -8,4 +8,4 @@
   <span class="apos-forms-label-message" data-apos-forms-file-spinner hidden>Uploading...</span>
   <span class="apos-forms-error apos-forms-label-message" data-apos-forms-file-error role="alert" hidden>An error occurred uploading the file. It may be too large or of an inappropriate type.</span>
 </label>
-<input class="apos-forms-input" type="file" id="{{ id }}" name="{{ widget.fieldName}}" {% if widget.required %}{% endif %}>
+<input class="apos-forms-input" type="file" id="{{ id }}" name="{{ widget.fieldName}}" {% if widget.required %}required{% endif %}>

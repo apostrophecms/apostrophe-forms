@@ -129,20 +129,31 @@ module.exports = {
         }, function(area) {
           areas.push(area);
         });
+
+        const formErrors = [];
+
         for (const area of areas) {
           const widgets = area.items || [];
           for (const widget of widgets) {
             const manager = self.apos.areas.getWidgetManager(widget.type);
             if (manager && manager.sanitizeFormField) {
-              await manager.checkRequired(req, widget, input);
-              await manager.sanitizeFormField(req, widget, input, output);
+              try {
+                await manager.checkRequired(req, widget, input);
+                await manager.sanitizeFormField(req, widget, input, output);
+              } catch (err) {
+                if (err.fieldError) {
+                  formErrors.push(err.fieldError);
+                } else {
+                  throw err;
+                }
+              }
             }
           }
         }
 
-        if (req.formErrors && req.formErrors.length > 0) {
+        if (formErrors.length > 0) {
           return next('error', null, {
-            formErrors: req.formErrors
+            formErrors
           });
         }
 
