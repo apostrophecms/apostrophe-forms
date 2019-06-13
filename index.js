@@ -1,3 +1,5 @@
+const request = require('request-promise');
+
 module.exports = {
   name: 'apostrophe-forms',
   label: 'Form',
@@ -70,6 +72,34 @@ module.exports = {
             }
           }
         }
+      },
+      {
+        name: 'recaptcha',
+        label: 'Enable reCAPTCHA',
+        htmlHelp: 'This enables Google\'s user verification, reCAPTCHA and requires unique keys <a href="https://www.google.com/recaptcha/" target="_blank">from registering your application</a>.',
+        type: 'boolean',
+        choices: [
+          {
+            label: 'Yes',
+            value: true,
+            showFields: [
+              'recaptchaSiteKey',
+              'recaptchaSecretKey'
+            ]
+          }
+        ]
+      },
+      {
+        name: 'recaptchaSiteKey',
+        label: 'reCAPTCHA Site Key',
+        type: 'string',
+        required: true
+      },
+      {
+        name: 'recaptchaSecretKey',
+        label: 'reCAPTCHA Secret Key',
+        type: 'string',
+        required: true
       }
     ].concat(options.addFields || []);
 
@@ -83,6 +113,15 @@ module.exports = {
         name: 'afterSubmit',
         label: 'After-Submission',
         fields: [ 'email', 'thankYouHeading', 'thankYouBody' ]
+      },
+      {
+        name: 'recaptcha',
+        label: 'reCAPTCHA',
+        fields: [
+          'recaptcha',
+          'recaptchaSiteKey',
+          'recaptchaSecretKey'
+        ]
       }
     ]);
   },
@@ -111,14 +150,32 @@ module.exports = {
     // Route to accept the submitted form.
     self.apiRoute('post', 'submit', async (req, res, next) => {
       const input = req.body;
+      const output = {};
+      const formErrors = [];
+
       const form = await self.find(req, {
         _id: self.apos.launder.id(req.body._id)
       }).toObject();
       if (!form) {
         return next('notfound');
       }
-      const output = {};
+
       try {
+        if (form.recaptcha) {
+          const recaptchaResponse = JSON.parse(await request({
+            method: 'POST',
+            uri: `https://www.google.com/recaptcha/api/siteverify?secret=${form.recaptchaSecretKey}&response=${input.recaptcha}`
+          }));
+
+          if (!recaptchaResponse.success) {
+            formErrors.push({
+              global: true,
+              error: 'recaptcha',
+              errorMessage: 'reCAPTCHA failed.'
+            });
+          }
+        }
+
         // Recursively walk the area and its sub-areas so we find
         // fields nested in two-column widgets and the like
 
@@ -129,8 +186,6 @@ module.exports = {
         }, function(area) {
           areas.push(area);
         });
-
-        const formErrors = [];
 
         for (const area of areas) {
           const widgets = area.items || [];

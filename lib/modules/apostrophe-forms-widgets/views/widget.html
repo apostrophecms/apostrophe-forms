@@ -4,11 +4,25 @@
     {{ apos.area(form, 'contents', {
       edit: false
     }) }}
+    {% if form.recaptcha %}
+      <div class="g-recaptcha" data-sitekey="{{ form.recaptchaSiteKey}}"
+        data-callback="setToken"
+      ></div>
+      <input type="hidden" data-apos-recaptcha value="">
+      <noscript>
+        <p>{{ __('NOTE: The form above requires Javascript enabled in the browser for submission.') }}</p>
+      </noscript>
+    {% endif %}
     <button type="submit">{{ form.submitLabel or 'Submit' }}</button>
   </form>
   <p role="alert" class="apos-forms-hidden apos-forms-error" data-apos-forms-submit-error>
-    An error occurred submitting the form. Please try again.
+    {{ __("An error occurred submitting the form. Please try again.") }}
   </p>
+  {% if form.recaptcha %}
+    <p role="alert" class="apos-forms-hidden apos-forms-error" data-apos-forms-recaptcha-error>
+      {{ __("Please complete the reCAPTCHA validation.") }}
+    </p>
+  {% endif %}
   <p class="apos-forms-hidden" data-apos-forms-spinner>Submitting...</p>
   <div role="alert" class="apos-forms-hidden" data-apos-forms-thank-you class="apos-forms-submission-thank-you">
     {% if form.thankYouHeading %}
@@ -18,4 +32,7 @@
       edit: false
     }) }}
   </div>
+{% endif %}
+{% if form.recaptcha %}
+  <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 {% endif %}
