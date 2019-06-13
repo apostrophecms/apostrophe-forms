@@ -1,10 +1,13 @@
 {# ids must be unique doc-wide #}
 {% set id = apos.utils.generateId() %}
-<fieldset style="padding: 20px 0; display: block;">
-  <legend>{{ data.widget.fieldLabel}}</legend>
-  {% for option in data.widget.options %}
+{% set widget = data.widget %}
+<fieldset class="apos-forms-fieldset">
+  <legend>{{ widget.fieldLabel}}</legend>
+  {% if not widget.required %} {{ __("(Optional)") }}{% endif %}
+  {% for option in widget.options %}
     {% set optionId = id + apos.utils.slugify(option.value) %}
-    <input type="radio" id="{{ optionId }}" name="{{ data.widget.fieldName}}" value="{{ option.value }}">
+    <input type="radio" id="{{ optionId }}" name="{{ widget.fieldName}}" value="{{ option.value }}">
     <label for="{{ optionId }}">{{ option.label }}</label>
   {% endfor %}
+  <p data-apos-input-message="{{ widget.fieldName}}" hidden></p>
 </fieldset>
