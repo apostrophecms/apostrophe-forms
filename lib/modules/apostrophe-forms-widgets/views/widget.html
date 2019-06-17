@@ -1,11 +1,14 @@
+{% set widget = data.widget %}
 {% set form = data.widget._form %}
 {% if form %}
   <form data-apos-forms-form="{{ form._id }}" action="">
     {{ apos.area(form, 'contents', {
       edit: false
     }) }}
-    {% if form.recaptcha %}
-      <div class="g-recaptcha" data-sitekey="{{ form.recaptchaSiteKey}}"
+
+    {% set recaptchaSite = apos.modules['apostrophe-forms'].getOption('recaptchaSite') %}
+    {% if recaptchaSite %}
+      <div class="g-recaptcha" data-sitekey="{{ recaptchaSite }}"
         data-callback="setToken"
       ></div>
       <input type="hidden" data-apos-recaptcha value="">
@@ -18,7 +21,8 @@
   <p role="alert" class="apos-forms-hidden apos-forms-error" data-apos-forms-submit-error>
     {{ __("An error occurred submitting the form. Please try again.") }}
   </p>
-  {% if form.recaptcha %}
+
+  {% if recaptchaSite %}
     <p role="alert" class="apos-forms-hidden apos-forms-error" data-apos-forms-recaptcha-error>
       {{ __("Please complete the reCAPTCHA validation.") }}
     </p>
@@ -33,6 +37,6 @@
     }) }}
   </div>
 {% endif %}
-{% if form.recaptcha %}
+{% if recaptchaSite %}
   <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 {% endif %}

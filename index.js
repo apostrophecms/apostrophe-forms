@@ -72,34 +72,6 @@ module.exports = {
             }
           }
         }
-      },
-      {
-        name: 'recaptcha',
-        label: 'Enable reCAPTCHA',
-        htmlHelp: 'This enables Google\'s user verification, reCAPTCHA and requires unique keys <a href="https://www.google.com/recaptcha/" target="_blank">from registering your application</a>.',
-        type: 'boolean',
-        choices: [
-          {
-            label: 'Yes',
-            value: true,
-            showFields: [
-              'recaptchaSiteKey',
-              'recaptchaSecretKey'
-            ]
-          }
-        ]
-      },
-      {
-        name: 'recaptchaSiteKey',
-        label: 'reCAPTCHA Site Key',
-        type: 'string',
-        required: true
-      },
-      {
-        name: 'recaptchaSecretKey',
-        label: 'reCAPTCHA Secret Key',
-        type: 'string',
-        required: true
       }
     ].concat(options.addFields || []);
 
@@ -113,15 +85,6 @@ module.exports = {
         name: 'afterSubmit',
         label: 'After-Submission',
         fields: [ 'email', 'thankYouHeading', 'thankYouBody' ]
-      },
-      {
-        name: 'recaptcha',
-        label: 'reCAPTCHA',
-        fields: [
-          'recaptcha',
-          'recaptchaSiteKey',
-          'recaptchaSecretKey'
-        ]
       }
     ]);
   },
@@ -160,11 +123,17 @@ module.exports = {
         return next('notfound');
       }
 
+      const recaptchaSecret = self.getOption(req, 'recaptchaSecret');
+      const recaptchaSite = self.getOption(req, 'recaptchaSite');
+
+      console.log('recaptchaSite>>>>', recaptchaSite);
+      console.log('recaptchaSecret>>>>', recaptchaSecret);
+
       try {
-        if (form.recaptcha) {
+        if (recaptchaSecret && recaptchaSite) {
           const recaptchaResponse = JSON.parse(await request({
             method: 'POST',
-            uri: `https://www.google.com/recaptcha/api/siteverify?secret=${form.recaptchaSecretKey}&response=${input.recaptcha}`
+            uri: `https://www.google.com/recaptcha/api/siteverify?secret=${recaptchaSecret}&response=${input.recaptcha}`
           }));
 
           if (!recaptchaResponse.success) {
