@@ -8,7 +8,7 @@
 </label>
 <select class="apos-forms-input" id="{{ id }}" name="{{ widget.fieldName}}" {% if widget.required %}required{% endif %}>
   <option value="">{{ __("") }}</option>
-  {% for option in widget.options %}
-    <option value="{{ option.value }}">{{ option.label }}</option>
+  {% for choice in widget.choices %}
+    <option value="{{ choice.value }}">{{ choice.label }}</option>
   {% endfor %}
 </select>
