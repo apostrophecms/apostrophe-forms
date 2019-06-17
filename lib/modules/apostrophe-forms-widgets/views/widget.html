@@ -1,7 +1,7 @@
 {% set widget = data.widget %}
 {% set form = data.widget._form %}
 {% if form %}
-  <form data-apos-forms-form="{{ form._id }}">
+  <form data-apos-forms-form="{{ form._id }}" autocomplete="off">
     {{ apos.area(form, 'contents', {
       edit: false
     }) }}
@@ -20,6 +20,7 @@
   </form>
   <p role="alert" class="apos-forms-hidden apos-forms-error" data-apos-forms-submit-error>
     {{ __("An error occurred submitting the form. Please try again.") }}
+    <span data-apos-forms-global-error></span>
   </p>
 
   {% if recaptchaSite %}

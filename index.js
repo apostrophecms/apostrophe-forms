@@ -130,22 +130,9 @@ module.exports = {
         return next('notfound');
       }
 
-      const recaptchaSecret = self.getOption(req, 'recaptchaSecret');
-
       try {
         if (input.recaptcha) {
-          const recaptchaResponse = JSON.parse(await request({
-            method: 'POST',
-            uri: `https://www.google.com/recaptcha/api/siteverify?secret=${recaptchaSecret}&response=${input.recaptcha}`
-          }));
-
-          if (!recaptchaResponse.success) {
-            formErrors.push({
-              global: true,
-              error: 'recaptcha',
-              errorMessage: 'reCAPTCHA failed.'
-            });
-          }
+          await self.checkRecaptcha(req, input, formErrors);
         }
 
         // Recursively walk the area and its sub-areas so we find
@@ -188,8 +175,35 @@ module.exports = {
       } catch (e) {
         return next(e);
       }
+
       return next(null);
     });
+
+    self.checkRecaptcha = async function (req, input, formErrors) {
+      const recaptchaSecret = self.getOption(req, 'recaptchaSecret');
+
+      try {
+        const url = 'https://www.google.com/recaptcha/api/siteverify';
+        const recaptchaResponse = JSON.parse(await request({
+          method: 'POST',
+          uri: `${url}?secret=${recaptchaSecret}&response=${input.recaptcha}`
+        }));
+
+        if (!recaptchaResponse.success) {
+          formErrors.push({
+            global: true,
+            error: 'recaptcha',
+            errorMessage: 'There was a problem validating your reCAPTCHA verfication submission.'
+          });
+        }
+      } catch (e) {
+        formErrors.push({
+          global: true,
+          error: 'recaptcha',
+          errorMessage: 'The reCAPTCHA verification system may be down or incorrectly configured. Please try again later or notify the site owner.'
+        });
+      }
+    };
 
     self.on('submission', 'emailSubmission', async function(req, form, data) {
       if (!form.email) {
