@@ -112,14 +112,16 @@ module.exports = {
     };
     // Route to accept the submitted form.
     self.apiRoute('post', 'submit', async (req, res, next) => {
-
-      if (self.apos.modules['apostrophe-override-options']) {
-        self.apos.modules['apostrophe-override-options'].calculateOverrides(req);
-      }
-
       const input = req.body;
       const output = {};
       const formErrors = [];
+      const overrideOptions = self.apos.modules['apostrophe-override-options'];
+
+      if (overrideOptions) {
+        // Make sure we can get reCAPTCHA configurations from the global object
+        // with self.getOption if needed.
+        overrideOptions.calculateOverrides(req);
+      }
 
       const form = await self.find(req, {
         _id: self.apos.launder.id(req.body._id)
@@ -129,13 +131,9 @@ module.exports = {
       }
 
       const recaptchaSecret = self.getOption(req, 'recaptchaSecret');
-      const recaptchaSite = self.getOption(req, 'recaptchaSite');
-
-      console.log('recaptchaSite>>>>', recaptchaSite);
-      console.log('recaptchaSecret>>>>', recaptchaSecret);
 
       try {
-        if (recaptchaSecret && recaptchaSite) {
+        if (input.recaptcha) {
           const recaptchaResponse = JSON.parse(await request({
             method: 'POST',
             uri: `https://www.google.com/recaptcha/api/siteverify?secret=${recaptchaSecret}&response=${input.recaptcha}`
