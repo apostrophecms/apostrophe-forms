@@ -14,8 +14,10 @@
     {% if form.thankYouHeading %}
       <h3>{{ form.thankYouHeading }}</h3>
     {% endif %}
-    {{ apos.area(form, 'thankYouBody', {
-      edit: false
-    }) }}
+    {% if not apos.areas.isEmpty(form, 'thankYouBody') %}
+      {{ apos.area(form, 'thankYouBody', {
+        edit: false
+      }) }}
+    {% endif %}
   </div>
 {% endif %}
