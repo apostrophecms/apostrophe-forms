@@ -112,6 +112,11 @@ module.exports = {
     };
     // Route to accept the submitted form.
     self.apiRoute('post', 'submit', async (req, res, next) => {
+
+      if (self.apos.modules['apostrophe-override-options']) {
+        self.apos.modules['apostrophe-override-options'].calculateOverrides(req);
+      }
+
       const input = req.body;
       const output = {};
       const formErrors = [];
