@@ -3,7 +3,8 @@
 {% set widget = data.widget %}
 <label for="{{ id }}" class="apos-forms-label">
   {{ widget.fieldLabel}}
-  {% if not widget.required %} {{ __("(Optional)") }}{% endif %}
+  {% if widget.required %} {{ __("(Required)") }}{% endif %}
   <span class="apos-forms-label-message" data-apos-input-message="{{ widget.fieldName}}" hidden></span>
 </label>
-<input type="checkbox" id="{{ id }}" name="{{ widget.fieldName}}" value="{{ choice.value }}">
+<input type="checkbox" id="{{ id }}" name="{{ widget.fieldName}}"
+  {% if widget.checked %}checked{% endif %}>
