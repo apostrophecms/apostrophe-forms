@@ -8,10 +8,7 @@
 
     {% set recaptchaSite = apos.modules['apostrophe-forms'].getOption('recaptchaSite') %}
     {% if recaptchaSite %}
-      <div class="g-recaptcha" data-sitekey="{{ recaptchaSite }}"
-        data-callback="setToken"
-      ></div>
-      <input type="hidden" data-apos-recaptcha value="">
+      <div id="aposRecaptcha{{widget._id}}" data-apos-recaptcha-slot="{{widget._id}}" data-apos-recaptcha-sitekey="{{ form.recaptchaSiteKey}}"></div>
       <noscript>
         <p>{{ __('NOTE: The form above requires Javascript enabled in the browser for submission.') }}</p>
       </noscript>
