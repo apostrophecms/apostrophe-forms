@@ -30,3 +30,5 @@ modules: {
 TODO: document how to specify more form area widgets, including non-field widgets.
 
 TODO: talk about how submissions are saved to a collection and the event you can listen to in order to handle them in a custom way. Also the `save: false` option to prevent saving to the collection.
+
+TODO: Document recaptcha process: https://www.google.com/recaptcha/

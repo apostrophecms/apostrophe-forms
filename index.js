@@ -1,3 +1,5 @@
+const request = require('request-promise');
+
 module.exports = {
   name: 'apostrophe-forms',
   label: 'Form',
@@ -111,14 +113,28 @@ module.exports = {
     // Route to accept the submitted form.
     self.apiRoute('post', 'submit', async (req, res, next) => {
       const input = req.body;
+      const output = {};
+      const formErrors = [];
+      const overrideOptions = self.apos.modules['apostrophe-override-options'];
+
+      if (overrideOptions) {
+        // Make sure we can get reCAPTCHA configurations from the global object
+        // with self.getOption if needed.
+        overrideOptions.calculateOverrides(req);
+      }
+
       const form = await self.find(req, {
         _id: self.apos.launder.id(req.body._id)
       }).toObject();
       if (!form) {
         return next('notfound');
       }
-      const output = {};
+
       try {
+        if (input.recaptcha) {
+          await self.checkRecaptcha(req, input, formErrors);
+        }
+
         // Recursively walk the area and its sub-areas so we find
         // fields nested in two-column widgets and the like
 
@@ -129,8 +145,6 @@ module.exports = {
         }, function(area) {
           areas.push(area);
         });
-
-        const formErrors = [];
 
         for (const area of areas) {
           const widgets = area.items || [];
@@ -161,8 +175,35 @@ module.exports = {
       } catch (e) {
         return next(e);
       }
+
       return next(null);
     });
+
+    self.checkRecaptcha = async function (req, input, formErrors) {
+      const recaptchaSecret = self.getOption(req, 'recaptchaSecret');
+
+      try {
+        const url = 'https://www.google.com/recaptcha/api/siteverify';
+        const recaptchaResponse = JSON.parse(await request({
+          method: 'POST',
+          uri: `${url}?secret=${recaptchaSecret}&response=${input.recaptcha}`
+        }));
+
+        if (!recaptchaResponse.success) {
+          formErrors.push({
+            global: true,
+            error: 'recaptcha',
+            errorMessage: 'There was a problem validating your reCAPTCHA verfication submission.'
+          });
+        }
+      } catch (e) {
+        formErrors.push({
+          global: true,
+          error: 'recaptcha',
+          errorMessage: 'The reCAPTCHA verification system may be down or incorrectly configured. Please try again later or notify the site owner.'
+        });
+      }
+    };
 
     self.on('submission', 'emailSubmission', async function(req, form, data) {
       if (!form.email) {
