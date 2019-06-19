@@ -1,0 +1,14 @@
+{# ids must be unique doc-wide #}
+{% set id = apos.utils.generateId() %}
+{% set widget = data.widget %}
+<label for="{{ id }}" class="apos-forms-label">
+  {{ widget.fieldLabel}}
+  {% if not widget.required %} {{ __("(Optional)") }}{% endif %}
+  <span class="apos-forms-label-message" data-apos-input-message="{{ widget.fieldName}}" hidden></span>
+</label>
+<select class="apos-forms-input" id="{{ id }}" name="{{ widget.fieldName}}" {% if widget.required %}required{% endif %}>
+  <option value="">{{ __("") }}</option>
+  {% for choice in widget.choices %}
+    <option value="{{ choice.value }}">{{ choice.label }}</option>
+  {% endfor %}
+</select>
