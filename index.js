@@ -10,6 +10,9 @@ module.exports = {
       'apostrophe-forms-widgets',
       'apostrophe-forms-base-field-widgets',
       'apostrophe-forms-text-field-widgets',
+      'apostrophe-forms-select-field-widgets',
+      'apostrophe-forms-radio-field-widgets', // Extends apos-forms-select-field
+      'apostrophe-forms-checkboxes-field-widgets',
       'apostrophe-forms-textarea-field-widgets',
       'apostrophe-forms-file-field-widgets'
     ]
@@ -34,6 +37,9 @@ module.exports = {
             'apostrophe-forms-text-field': {},
             'apostrophe-forms-textarea-field': {},
             'apostrophe-forms-file-field': {},
+            'apostrophe-forms-select-field': {},
+            'apostrophe-forms-radio-field': {},
+            'apostrophe-forms-checkboxes-field': {},
             'apostrophe-rich-text': {
               toolbar: [
                 'Styles', 'Bold', 'Italic', 'Link', 'Anchor', 'Unlink',
@@ -151,9 +157,10 @@ module.exports = {
           for (const widget of widgets) {
             const manager = self.apos.areas.getWidgetManager(widget.type);
             if (manager && manager.sanitizeFormField) {
+
               try {
-                await manager.checkRequired(req, widget, input);
-                await manager.sanitizeFormField(req, widget, input, output);
+                manager.checkRequired(req, form, widget, input);
+                await manager.sanitizeFormField(req, form, widget, input, output);
               } catch (err) {
                 if (err.fieldError) {
                   formErrors.push(err.fieldError);
