@@ -1,0 +1,4 @@
+{# ids must be unique doc-wide #}
+{% set id = apos.utils.generateId() %}
+{% set widget = data.widget %}
+<input type="hidden" id="{{ id }}" name="{{ widget.fieldName }}"/>
