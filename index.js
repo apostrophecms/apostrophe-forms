@@ -145,7 +145,7 @@ module.exports = {
             if (manager && manager.sanitizeFormField) {
 
               try {
-                await manager.checkRequired(req, widget, input);
+                manager.checkRequired(req, form, widget, input);
                 await manager.sanitizeFormField(req, form, widget, input, output);
               } catch (err) {
                 if (err.fieldError) {
