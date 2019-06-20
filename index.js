@@ -57,9 +57,18 @@ module.exports = {
         type: 'string'
       },
       {
-        name: 'email',
-        type: 'email',
-        label: 'Email Address for Results'
+        name: 'emails',
+        label: 'Email Address(es) for Results',
+        type: 'array',
+        titleField: 'email',
+        schema: [
+          {
+            name: 'email',
+            type: 'email',
+            required: true,
+            label: 'Email Address for Results'
+          }
+        ]
       },
       {
         name: 'thankYouHeading',
@@ -92,7 +101,7 @@ module.exports = {
       {
         name: 'afterSubmit',
         label: 'After-Submission',
-        fields: [ 'email', 'thankYouHeading', 'thankYouBody' ]
+        fields: [ 'emails', 'thankYouHeading', 'thankYouBody' ]
       }
     ]);
   },
@@ -215,7 +224,7 @@ module.exports = {
     };
 
     self.on('submission', 'emailSubmission', async function(req, form, data) {
-      if (!form.email) {
+      if (!form.emails || form.emails.length === 0) {
         return;
       }
       return self.email(req, 'emailSubmission', {
@@ -224,7 +233,7 @@ module.exports = {
       },
       {
         from: form.email,
-        to: form.email,
+        to: form.emails.map(email => email.email).join(','),
         subject: form.title
       });
     });
