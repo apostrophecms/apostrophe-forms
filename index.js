@@ -1,3 +1,5 @@
+const request = require('request-promise');
+
 module.exports = {
   name: 'apostrophe-forms',
   label: 'Form',
@@ -8,6 +10,9 @@ module.exports = {
       'apostrophe-forms-widgets',
       'apostrophe-forms-base-field-widgets',
       'apostrophe-forms-text-field-widgets',
+      'apostrophe-forms-select-field-widgets',
+      'apostrophe-forms-radio-field-widgets', // Extends apos-forms-select-field
+      'apostrophe-forms-checkboxes-field-widgets',
       'apostrophe-forms-textarea-field-widgets',
       'apostrophe-forms-file-field-widgets'
     ]
@@ -32,6 +37,9 @@ module.exports = {
             'apostrophe-forms-text-field': {},
             'apostrophe-forms-textarea-field': {},
             'apostrophe-forms-file-field': {},
+            'apostrophe-forms-select-field': {},
+            'apostrophe-forms-radio-field': {},
+            'apostrophe-forms-checkboxes-field': {},
             'apostrophe-rich-text': {
               toolbar: [
                 'Styles', 'Bold', 'Italic', 'Link', 'Anchor', 'Unlink',
@@ -47,9 +55,18 @@ module.exports = {
         type: 'string'
       },
       {
-        name: 'email',
-        type: 'email',
-        label: 'Email Address for Results'
+        name: 'emails',
+        label: 'Email Address(es) for Results',
+        type: 'array',
+        titleField: 'email',
+        schema: [
+          {
+            name: 'email',
+            type: 'email',
+            required: true,
+            label: 'Email Address for Results'
+          }
+        ]
       },
       {
         name: 'thankYouHeading',
@@ -82,7 +99,7 @@ module.exports = {
       {
         name: 'afterSubmit',
         label: 'After-Submission',
-        fields: [ 'email', 'thankYouHeading', 'thankYouBody' ]
+        fields: [ 'emails', 'thankYouHeading', 'thankYouBody' ]
       }
     ]);
   },
@@ -111,14 +128,28 @@ module.exports = {
     // Route to accept the submitted form.
     self.apiRoute('post', 'submit', async (req, res, next) => {
       const input = req.body;
+      const output = {};
+      const formErrors = [];
+      const overrideOptions = self.apos.modules['apostrophe-override-options'];
+
+      if (overrideOptions) {
+        // Make sure we can get reCAPTCHA configurations from the global object
+        // with self.getOption if needed.
+        overrideOptions.calculateOverrides(req);
+      }
+
       const form = await self.find(req, {
         _id: self.apos.launder.id(req.body._id)
       }).toObject();
       if (!form) {
         return next('notfound');
       }
-      const output = {};
+
       try {
+        if (input.recaptcha) {
+          await self.checkRecaptcha(req, input, formErrors);
+        }
+
         // Recursively walk the area and its sub-areas so we find
         // fields nested in two-column widgets and the like
 
@@ -130,16 +161,15 @@ module.exports = {
           areas.push(area);
         });
 
-        const formErrors = [];
-
         for (const area of areas) {
           const widgets = area.items || [];
           for (const widget of widgets) {
             const manager = self.apos.areas.getWidgetManager(widget.type);
             if (manager && manager.sanitizeFormField) {
+
               try {
-                await manager.checkRequired(req, widget, input);
-                await manager.sanitizeFormField(req, widget, input, output);
+                manager.checkRequired(req, form, widget, input);
+                await manager.sanitizeFormField(req, form, widget, input, output);
               } catch (err) {
                 if (err.fieldError) {
                   formErrors.push(err.fieldError);
@@ -161,11 +191,38 @@ module.exports = {
       } catch (e) {
         return next(e);
       }
+
       return next(null);
     });
 
+    self.checkRecaptcha = async function (req, input, formErrors) {
+      const recaptchaSecret = self.getOption(req, 'recaptchaSecret');
+
+      try {
+        const url = 'https://www.google.com/recaptcha/api/siteverify';
+        const recaptchaResponse = JSON.parse(await request({
+          method: 'POST',
+          uri: `${url}?secret=${recaptchaSecret}&response=${input.recaptcha}`
+        }));
+
+        if (!recaptchaResponse.success) {
+          formErrors.push({
+            global: true,
+            error: 'recaptcha',
+            errorMessage: 'There was a problem validating your reCAPTCHA verfication submission.'
+          });
+        }
+      } catch (e) {
+        formErrors.push({
+          global: true,
+          error: 'recaptcha',
+          errorMessage: 'The reCAPTCHA verification system may be down or incorrectly configured. Please try again later or notify the site owner.'
+        });
+      }
+    };
+
     self.on('submission', 'emailSubmission', async function(req, form, data) {
-      if (!form.email) {
+      if (!form.emails || form.emails.length === 0) {
         return;
       }
       return self.email(req, 'emailSubmission', {
@@ -174,7 +231,7 @@ module.exports = {
       },
       {
         from: form.email,
-        to: form.email,
+        to: form.emails.map(email => email.email).join(','),
         subject: form.title
       });
     });

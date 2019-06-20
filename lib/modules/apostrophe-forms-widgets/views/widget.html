@@ -1,14 +1,30 @@
+{% set widget = data.widget %}
 {% set form = data.widget._form %}
 {% if form %}
-  <form data-apos-forms-form="{{ form._id }}" action="">
+  <form data-apos-forms-form="{{ form._id }}" autocomplete="off">
     {{ apos.area(form, 'contents', {
       edit: false
     }) }}
+
+    {% set recaptchaSite = apos.modules['apostrophe-forms'].getOption('recaptchaSite') %}
+    {% if recaptchaSite %}
+      <div id="aposRecaptcha{{widget._id}}" data-apos-recaptcha-slot="{{widget._id}}" data-apos-recaptcha-sitekey="{{ recaptchaSite }}"></div>
+      <noscript>
+        <p>{{ __('NOTE: The form above requires Javascript enabled in the browser for submission.') }}</p>
+      </noscript>
+    {% endif %}
     <button type="submit">{{ form.submitLabel or 'Submit' }}</button>
   </form>
   <p role="alert" class="apos-forms-hidden apos-forms-error" data-apos-forms-submit-error>
-    An error occurred submitting the form. Please try again.
+    {{ __("An error occurred submitting the form. Please try again.") }}
+    <span data-apos-forms-global-error></span>
   </p>
+
+  {% if recaptchaSite %}
+    <p role="alert" class="apos-forms-hidden apos-forms-error" data-apos-forms-recaptcha-error>
+      {{ __("Please complete the reCAPTCHA validation.") }}
+    </p>
+  {% endif %}
   <p class="apos-forms-hidden" data-apos-forms-spinner>Submitting...</p>
   <div role="alert" class="apos-forms-hidden" data-apos-forms-thank-you class="apos-forms-submission-thank-you">
     {% if form.thankYouHeading %}
