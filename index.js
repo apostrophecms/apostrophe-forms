@@ -55,20 +55,6 @@ module.exports = {
         type: 'string'
       },
       {
-        name: 'emails',
-        label: 'Email Address(es) for Results',
-        type: 'array',
-        titleField: 'email',
-        schema: [
-          {
-            name: 'email',
-            type: 'email',
-            required: true,
-            label: 'Email Address for Results'
-          }
-        ]
-      },
-      {
         name: 'thankYouHeading',
         label: 'Thank You Message Title',
         type: 'string'
@@ -127,7 +113,27 @@ module.exports = {
         type: 'integer',
         min: 1
       }
-    ].concat(options.addFields || []);
+    ].concat(options.emailSubmissions !== false ? [
+      {
+        name: 'emails',
+        label: 'Email Address(es) for Results',
+        type: 'array',
+        titleField: 'email',
+        schema: [
+          {
+            name: 'email',
+            type: 'email',
+            required: true,
+            label: 'Email Address for Results'
+          }
+        ]
+      }
+    ] : []).concat(options.addFields || []);
+
+    const afterSubmitFields = [
+      'thankYouHeading',
+      'thankYouBody'
+    ].concat(options.emailSubmissions !== false ? ['emails'] : []);
 
     options.arrangeFields = (options.arrangeFields || []).concat([
       {
@@ -138,7 +144,7 @@ module.exports = {
       {
         name: 'afterSubmit',
         label: 'After-Submission',
-        fields: [ 'emails', 'thankYouHeading', 'thankYouBody' ]
+        fields: afterSubmitFields
       },
       {
         name: 'advanced',
@@ -276,7 +282,8 @@ module.exports = {
     };
 
     self.on('submission', 'emailSubmission', async function(req, form, data) {
-      if (!form.emails || form.emails.length === 0) {
+      if (self.options.emailSubmissions === false ||
+        !form.emails || form.emails.length === 0) {
         return;
       }
       return self.email(req, 'emailSubmission', {
@@ -291,7 +298,7 @@ module.exports = {
     });
 
     self.on('submission', 'saveSubmission', async function(req, form, data) {
-      if (self.options.save === false) {
+      if (self.options.saveSubmissions === false) {
         return;
       }
       return self.db.insert({
