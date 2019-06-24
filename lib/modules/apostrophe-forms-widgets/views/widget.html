@@ -1,7 +1,7 @@
 {% set widget = data.widget %}
 {% set form = data.widget._form %}
 {% if form %}
-  <form data-apos-forms-form="{{ form._id }}" autocomplete="off">
+  <form data-apos-forms-form="{{ form._id }}" autocomplete="off" {% if form.enableQueryParams %}data-apos-forms-params{% endif %}>
     {{ apos.area(form, 'contents', {
       edit: false
     }) }}

@@ -7,3 +7,14 @@
 .apos-forms-visible {
   display: inherit;
 }
+
+.apos-modal-body [data-apos-widget="apostrophe-forms-params-field"] {
+  padding: 10px;
+  // outline: 1px solid #00BF9A;
+  -webkit-box-shadow: 0 0 5px 6px fade(#00BF9A, 30%);
+  -moz-box-shadow: 0 0 5px 6px fade(#00BF9A, 30%);
+  box-shadow: 0 0 5px 6px fade(#00BF9A, 30%);
+  &::before {
+    content: 'Hidden query parameters field'
+  }
+}

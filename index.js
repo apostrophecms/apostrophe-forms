@@ -73,6 +73,45 @@ module.exports = {
             }
           }
         }
+      },
+      {
+        name: 'enableQueryParams',
+        label: 'Enable Query Parameter Capture',
+        type: 'boolean',
+        htmlHelp: 'If enabled, <em>all</em> query parameters (the key/value pairs in a <a href="https://en.wikipedia.org/wiki/Query_string" target="_blank">query string</a>) will be collected when the form is submitted. You may also set list of specific parameter keys that you wish to collect.',
+        choices: [
+          {
+            label: 'Yes',
+            value: true,
+            showFields: [
+              'queryParamList',
+              'queryParamLimit'
+            ]
+          }
+        ]
+      },
+      {
+        name: 'queryParamList',
+        label: 'Query Parameter Keys',
+        type: 'array',
+        titleField: 'key',
+        help: 'Create an array item for each query parameter value you wish to capture.',
+        schema: [
+          {
+            type: 'string',
+            name: 'key',
+            label: 'Key',
+            help: '',
+            require: true
+          }
+        ]
+      },
+      {
+        name: 'queryParamLimit',
+        label: 'Limit Saved Parameter Value Length (characters)',
+        help: 'Enter a whole number to limit the length of the value saved.',
+        type: 'integer',
+        min: 1
       }
     ].concat(options.emailSubmissions !== false ? [
       {
@@ -106,6 +145,15 @@ module.exports = {
         name: 'afterSubmit',
         label: 'After-Submission',
         fields: afterSubmitFields
+      },
+      {
+        name: 'advanced',
+        label: 'Advanced',
+        fields: [
+          'enableQueryParams',
+          'queryParamList',
+          'queryParamLimit'
+        ]
       }
     ]);
   },
@@ -120,6 +168,8 @@ module.exports = {
   },
 
   construct: function(self, options) {
+    require('./lib/query-parameters.js')(self, options);
+
     self.ensureCollection = async function() {
       self.db = self.apos.db.collection('aposFormSubmissions');
       await self.db.ensureIndex({
@@ -191,6 +241,10 @@ module.exports = {
           return next('error', null, {
             formErrors
           });
+        }
+
+        if (form.enableQueryParams) {
+          self.processQueryParams(req, form, input, output);
         }
 
         await self.emit('submission', req, form, output);
