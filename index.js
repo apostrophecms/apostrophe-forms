@@ -14,7 +14,8 @@ module.exports = {
       'apostrophe-forms-radio-field-widgets', // Extends apos-forms-select-field
       'apostrophe-forms-checkboxes-field-widgets',
       'apostrophe-forms-textarea-field-widgets',
-      'apostrophe-forms-file-field-widgets'
+      'apostrophe-forms-file-field-widgets',
+      'apostrophe-forms-boolean-field-widgets'
     ]
   },
 
@@ -37,6 +38,7 @@ module.exports = {
             'apostrophe-forms-text-field': {},
             'apostrophe-forms-textarea-field': {},
             'apostrophe-forms-file-field': {},
+            'apostrophe-forms-boolean-field': {},
             'apostrophe-forms-select-field': {},
             'apostrophe-forms-radio-field': {},
             'apostrophe-forms-checkboxes-field': {},

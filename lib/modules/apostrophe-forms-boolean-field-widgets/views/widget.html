@@ -1,0 +1,10 @@
+{# ids must be unique doc-wide #}
+{% set id = apos.utils.generateId() %}
+{% set widget = data.widget %}
+<label for="{{ id }}" class="apos-forms-label">
+  {{ widget.fieldLabel}}
+  {% if widget.required %} {{ __("(Required)") }}{% endif %}
+  <span class="apos-forms-label-message" data-apos-input-message="{{ widget.fieldName}}" hidden></span>
+</label>
+<input type="checkbox" id="{{ id }}" name="{{ widget.fieldName}}"
+  {% if widget.checked %}checked{% endif %}>
