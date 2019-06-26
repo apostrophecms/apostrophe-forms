@@ -63,3 +63,13 @@ Form submission triggers a `'submission'` event that you can listen for and hand
 ### Email
 
 If `apostrophe-email` is configured, submissions can be sent to multiple email addresses as well. In the "After-Submission" tab, enter a comma-separated list of email addresses to the "Email Address(es) for Results" field. If not using this feature, set the `emailSubmissions: false` on the `apostrophe-forms` module to hide the related field on forms.
+
+### Styling
+
+Starter styles for user-facing forms are included in a forms.less file. These offer some spacing as well as styling for error states. If you do not want to use these, the `disableBaseStyles: true` option to `apostrophe-forms-widgets`. This file can also be used to identify the error state classes that you should style in your project.
+
+```
+'apostrophe-forms-widgets': {
+  disableBaseStyles: true
+},
+```
