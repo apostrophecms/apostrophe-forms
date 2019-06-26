@@ -4,7 +4,6 @@
 
 TODO:
 - [ ] document how to specify more form area widgets, including non-field widgets.
-- [ ] Document recaptcha process: https://www.google.com/recaptcha/
 
 ## Stability: alpha
 
@@ -68,8 +67,57 @@ If `apostrophe-email` is configured, submissions can be sent to multiple email a
 
 Starter styles for user-facing forms are included in a forms.less file. These offer some spacing as well as styling for error states. If you do not want to use these, the `disableBaseStyles: true` option to `apostrophe-forms-widgets`. This file can also be used to identify the error state classes that you should style in your project.
 
-```
+```javascript
 'apostrophe-forms-widgets': {
   disableBaseStyles: true
 },
 ```
+
+### Using reCAPTCHA for user validation
+
+Google's reCAPTCHA is built in as an option. You will first need to [set up a reCAPTCHA site up on their website](https://www.google.com/recaptcha/) using the *version two option*. Make sure your domains are configured (using "localhost" for local development) and make note of the **site key** and **secret key**. Those should be added as options to `apostrophe-forms`:
+
+```javascript
+// in app.js
+modules: {
+  // ...,
+  'apostrophe-forms': {
+    recaptchaSecret: 'YOUR SECRET KEY',
+    recaptchaSite: 'YOUR SITE KEY'
+  },
+  // ...,
+```
+
+To make these options configurable by end-users, you can use `apostrophe-override-options` to make global fields set these for you. This would look something like:
+
+```javascript
+// in app.js
+modules: {
+  'apostrophe-override-options': {},
+```
+
+```javascript
+// in lib/modules/apostrophe-global/index.js
+module.exports = {
+  addFields: [
+    {
+      name: 'recaptchaSecret',
+      label: 'reCAPTCHA Secret',
+      type: 'string'
+    },
+    {
+      name: 'recaptchaSite',
+      label: 'reCAPTCHA Site',
+      type: 'string'
+    }
+  ],
+  overrideOptions: {
+    editable: {
+      'apos.apostrophe-forms.recaptchaSite': 'recaptchaSite',
+      'apos.apostrophe-forms.recaptchaSecret': 'recaptchaSecret'
+    }
+  }
+};
+```
+
+The reCAPTCHA field will then be present on all fields. There is an open issue to improve this to allow form-level disabling.
