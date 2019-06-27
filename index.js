@@ -97,23 +97,23 @@ module.exports = {
         label: 'Query Parameter Keys',
         type: 'array',
         titleField: 'key',
+        required: true,
         help: 'Create an array item for each query parameter value you wish to capture.',
         schema: [
           {
             type: 'string',
             name: 'key',
             label: 'Key',
-            help: '',
-            require: true
+            required: true
+          },
+          {
+            type: 'integer',
+            name: 'lengthLimit',
+            label: 'Limit Saved Parameter Value Length (characters)',
+            help: 'Enter a whole number to limit the length of the value saved.',
+            min: 1
           }
         ]
-      },
-      {
-        name: 'queryParamLimit',
-        label: 'Limit Saved Parameter Value Length (characters)',
-        help: 'Enter a whole number to limit the length of the value saved.',
-        type: 'integer',
-        min: 1
       }
     ].concat(options.emailSubmissions !== false ? [
       {
@@ -288,6 +288,14 @@ module.exports = {
         !form.emails || form.emails.length === 0) {
         return;
       }
+
+      for (const key in data) {
+        // Add some space to array lists.
+        if (Array.isArray(data[key])) {
+          data[key] = data[key].join(', ');
+        }
+      }
+
       return self.email(req, 'emailSubmission', {
         form: form,
         input: data
