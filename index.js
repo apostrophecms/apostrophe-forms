@@ -219,9 +219,14 @@ module.exports = {
           areas.push(area);
         });
 
+        const fieldNames = [];
+
         for (const area of areas) {
           const widgets = area.items || [];
           for (const widget of widgets) {
+            // Capture field names.
+            fieldNames.push(widget.fieldName);
+
             const manager = self.apos.areas.getWidgetManager(widget.type);
             if (manager && manager.sanitizeFormField) {
 
@@ -246,7 +251,7 @@ module.exports = {
         }
 
         if (form.enableQueryParams) {
-          self.processQueryParams(req, form, input, output);
+          self.processQueryParams(req, form, input, output, fieldNames);
         }
 
         await self.emit('submission', req, form, output);
