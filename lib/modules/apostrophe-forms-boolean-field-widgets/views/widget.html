@@ -6,5 +6,5 @@
   {% if widget.required %} {{ __("(Required)") }}{% endif %}
   <span class="apos-forms-label-message" data-apos-input-message="{{ widget.fieldName}}" hidden></span>
 </label>
-<input type="checkbox" id="{{ id }}" name="{{ widget.fieldName}}"
-  {% if widget.checked %}checked{% endif %}>
+<input type="checkbox" id="{{ id }}" class="apos-forms-input"
+  name="{{ widget.fieldName}}" {% if widget.checked %}checked{% endif %}>

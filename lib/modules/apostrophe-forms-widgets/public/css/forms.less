@@ -1,24 +1,25 @@
 // Colors
-@apos-red: #EA433A;
+@apos-forms-red: #EA433A;
 // Spacing
-@apos-form-spacing: 10px;
+@apos-forms-spacing: 20px;
 
 .apos-forms-label {
   display: block;
 
   &-message {
-    padding-left: @apos-form-spacing;
+    padding-left: @apos-forms-spacing;
   }
 }
 
-.apos-forms-input {
-  margin-bottom: @apos-form-spacing;
+.apos-forms-input,
+.apos-forms-fieldset {
+  margin-bottom: @apos-forms-spacing;
 }
 
 .apos-forms-input-error {
-  outline: 1px solid @apos-red;
+  outline: 1px solid @apos-forms-red;
 }
 
 .apos-forms-error {
-  color: @apos-red;
+  color: @apos-forms-red;
 }
