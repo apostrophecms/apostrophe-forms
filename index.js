@@ -97,23 +97,23 @@ module.exports = {
         label: 'Query Parameter Keys',
         type: 'array',
         titleField: 'key',
+        required: true,
         help: 'Create an array item for each query parameter value you wish to capture.',
         schema: [
           {
             type: 'string',
             name: 'key',
             label: 'Key',
-            help: '',
-            require: true
+            required: true
+          },
+          {
+            type: 'integer',
+            name: 'lengthLimit',
+            label: 'Limit Saved Parameter Value Length (characters)',
+            help: 'Enter a whole number to limit the length of the value saved.',
+            min: 1
           }
         ]
-      },
-      {
-        name: 'queryParamLimit',
-        label: 'Limit Saved Parameter Value Length (characters)',
-        help: 'Enter a whole number to limit the length of the value saved.',
-        type: 'integer',
-        min: 1
       }
     ].concat(options.emailSubmissions !== false ? [
       {
@@ -219,9 +219,14 @@ module.exports = {
           areas.push(area);
         });
 
+        const fieldNames = [];
+
         for (const area of areas) {
           const widgets = area.items || [];
           for (const widget of widgets) {
+            // Capture field names.
+            fieldNames.push(widget.fieldName);
+
             const manager = self.apos.areas.getWidgetManager(widget.type);
             if (manager && manager.sanitizeFormField) {
 
@@ -246,7 +251,7 @@ module.exports = {
         }
 
         if (form.enableQueryParams) {
-          self.processQueryParams(req, form, input, output);
+          self.processQueryParams(req, form, input, output, fieldNames);
         }
 
         await self.emit('submission', req, form, output);
@@ -288,6 +293,14 @@ module.exports = {
         !form.emails || form.emails.length === 0) {
         return;
       }
+
+      for (const key in data) {
+        // Add some space to array lists.
+        if (Array.isArray(data[key])) {
+          data[key] = data[key].join(', ');
+        }
+      }
+
       return self.email(req, 'emailSubmission', {
         form: form,
         input: data

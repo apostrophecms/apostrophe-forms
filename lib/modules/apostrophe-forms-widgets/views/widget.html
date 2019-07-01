@@ -1,7 +1,18 @@
 {% set widget = data.widget %}
 {% set form = data.widget._form %}
 {% if form %}
-  <form data-apos-forms-form="{{ form._id }}" autocomplete="off" {% if form.enableQueryParams %}data-apos-forms-params{% endif %}>
+  {% set params = false %}
+  {% if form.queryParamList %}
+    {% set params = '' %}
+    {% for param in form.queryParamList %}
+      {% if loop.last %}
+        {% set params = params + param.key %}
+      {% else %}
+        {% set params = params + param.key + ',' %}
+      {% endif %}
+    {% endfor %}
+  {% endif %}
+  <form data-apos-forms-form="{{ form._id }}" autocomplete="off" {% if form.enableQueryParams %}data-apos-forms-params='{{params}}'{% endif %}>
     {{ apos.area(form, 'contents', {
       edit: false
     }) }}
