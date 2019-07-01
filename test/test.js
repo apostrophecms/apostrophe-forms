@@ -71,6 +71,116 @@ describe('Forms module', function () {
     });
   });
 
+  // Create a form
+  const form1 = {
+    '_id': 'form1',
+    'published': true,
+    'type': 'apostrophe-forms',
+    'title': 'First test form',
+    'slug': 'test-form-one',
+    'contents': {
+      'type': 'area',
+      'items': [
+        {
+          '_id': 'dogNameId',
+          'fieldLabel': 'Dog name',
+          'fieldName': 'DogName',
+          'required': true,
+          'type': 'apostrophe-forms-text-field'
+        },
+        {
+          '_id': 'dogTraitsId',
+          'fieldLabel': 'Check all that apply',
+          'fieldName': 'DogTraits',
+          'required': true,
+          'type': 'apostrophe-forms-checkboxes-field',
+          'choices': [
+            {
+              'label': 'Runs fast',
+              'value': 'Runs fast'
+            },
+            {
+              'label': 'It\'s a dog',
+              'value': 'It\'s a dog'
+            },
+            {
+              'label': 'Likes treats',
+              'value': 'Likes treats'
+            }
+          ]
+        },
+        {
+          '_id': 'dogBreedId',
+          'fieldLabel': 'Dog breed',
+          'fieldName': 'DogBreed',
+          'required': false,
+          'type': 'apostrophe-forms-radio-field',
+          'choices': [
+            {
+              'label': 'Irish Wolfhound',
+              'value': 'Irish Wolfhound'
+            },
+            {
+              'label': 'Cesky Terrier',
+              'value': 'Cesky Terrier'
+            },
+            {
+              'label': 'Dachshund',
+              'value': 'Dachshund'
+            },
+            {
+              'label': 'Pumi',
+              'value': 'Pumi'
+            }
+          ]
+        },
+        {
+          '_id': 'dogPhotoId',
+          'fieldLabel': 'Photo of your dog',
+          'fieldName': 'DogPhoto',
+          'required': false,
+          'type': 'apostrophe-forms-file-field'
+        },
+        {
+          '_id': 'agreeId',
+          'fieldLabel': 'Opt-in to participate',
+          'fieldName': 'agree',
+          'required': true,
+          'checked': false,
+          'type': 'apostrophe-forms-boolean-field'
+        }
+      ]
+    },
+    'enableQueryParams': true,
+    'queryParamList': [
+      {
+        'id': 'source',
+        'key': 'source'
+      },
+      {
+        'id': 'memberId',
+        'key': 'member-id',
+        'lengthLimit': 6
+      }
+    ]
+  };
+
+  it('should create a form', function () {
+    const req = apos.tasks.getReq();
+
+    return apos.docs.db.insert(form1)
+      .then(function () {
+        return apos.docs.getManager('apostrophe-forms').find(req, {}).toObject();
+      })
+      .then(function (form) {
+        assert(form);
+        assert(form.title === 'First test form');
+      })
+      .catch(function (err) {
+        assert(!err);
+      });
+  });
+
   // Submitting gets 200 response
   // Submission is stored in the db
   // Submission is not stored in the db if disabled.
