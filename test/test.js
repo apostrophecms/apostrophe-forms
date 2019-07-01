@@ -63,14 +63,22 @@ describe('Forms module', function () {
   });
 
   // Submissions collection exists.
-  // Submissions collection does not exist if disabled.
+  it('should have a default collection for submissions', function (done) {
+    apos.db.collection('aposFormSubmissions', function (err, collection) {
+      assert(!err);
+      assert(collection.namespace === 'test.aposFormSubmissions');
+      done();
+    });
+  });
+
   // Submitting gets 200 response
   // Submission is stored in the db
+  // Submission is not stored in the db if disabled.
   // Get form errors returned from malformed data.
   // Email sending?
   // Captures query parameters
   // reCAPTCHA https://developers.google.com/recaptcha/docs/faq#id-like-to-run-automated-tests-with-recaptcha-what-should-i-do
   // Fail submission if reCAPTHCA token is wrong.
 
-  //
+  // Individual tests for sanitizeFormField methods on field widgets.
 });
