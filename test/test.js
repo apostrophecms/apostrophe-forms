@@ -1,4 +1,5 @@
 const assert = require('assert');
+const axios = require('axios');
 
 describe('Forms module', function () {
 
@@ -11,13 +12,16 @@ describe('Forms module', function () {
   });
 
   // Existance
+
   it('should be a property of the apos object', function (done) {
     apos = require('apostrophe')({
       testModule: true,
-      baseUrl: 'http://localhost:4000',
       modules: {
         'apostrophe-express': {
           port: 4242,
+          csrf: {
+            exceptions: ['/modules/apostrophe-forms/submit']
+          },
           session: {
             secret: 'test-the-forms'
           }
@@ -165,6 +169,8 @@ describe('Forms module', function () {
     ]
   };
 
+  let savedForm1;
+
   it('should create a form', function () {
     const req = apos.tasks.getReq();
 
@@ -173,6 +179,7 @@ describe('Forms module', function () {
         return apos.docs.getManager('apostrophe-forms').find(req, {}).toObject();
       })
       .then(function (form) {
+        savedForm1 = form;
         assert(form);
         assert(form.title === 'First test form');
       })
@@ -182,7 +189,46 @@ describe('Forms module', function () {
   });
 
   // Submitting gets 200 response
+  const submission1 = {
+    'DogName': 'Jasper',
+    'DogTraits': [
+      'Runs fast',
+      'Likes treats'
+    ],
+    'DogBreed': 'Irish Wolfhound',
+    'DogToy': 'Frisbee',
+    'LifeStory': 'Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit. Donec ullamcorper nulla non metus auctor fringilla.',
+    'agree': true,
+    'queryParams': {
+      'member-id': '123456789',
+      'source': 'newspaper'
+    }
+  };
+
+  it('should accept a valid submission', async function () {
+    submission1._id = savedForm1._id;
+
+    const response = await axios({
+      method: 'post',
+      url: `http://localhost:4242/modules/apostrophe-forms/submit`,
+      data: submission1
+    });
+
+    assert(response.status === 200);
+  });
+
   // Submission is stored in the db
+  it('can find the form submission in the database', function (done) {
+    apos.db.collection('aposFormSubmissions').findOne({
+      'data.DogName': 'Jasper'
+    }, function (err, doc) {
+      assert(!err);
+      assert(doc.data.DogBreed === 'Irish Wolfhound');
+
+      return done();
+    });
+  });
+
   // Submission is not stored in the db if disabled.
   // Get form errors returned from malformed data.
   // Email sending?
