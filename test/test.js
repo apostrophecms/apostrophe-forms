@@ -1,6 +1,7 @@
 const assert = require('assert');
 const axios = require('axios');
 const testUtil = require('apostrophe/test-lib/util');
+const fileUtils = require('./lib/file-utils');
 describe('Forms module', function () {
 
   let apos;
@@ -23,6 +24,14 @@ describe('Forms module', function () {
     'apostrophe-forms-boolean-field-widgets': {}
   };
 
+  let textWidgets;
+  let textareaWidgets;
+  let selectWidgets;
+  let radioWidgets;
+  let checkboxesWidgets;
+  let fileWidgets;
+  let booleanWidgets;
+
   it('should be a property of the apos object', function (done) {
     apos = require('apostrophe')({
       testModule: true,
@@ -42,23 +51,23 @@ describe('Forms module', function () {
       afterInit: function (callback) {
         const forms = apos.modules['apostrophe-forms'];
         const widgets = apos.modules['apostrophe-forms-widgets'];
-        const text = apos.modules['apostrophe-forms-text-field-widgets'];
-        const textarea = apos.modules['apostrophe-forms-textarea-field-widgets'];
-        const select = apos.modules['apostrophe-forms-select-field-widgets'];
-        const radio = apos.modules['apostrophe-forms-radio-field-widgets'];
-        const checkboxes = apos.modules['apostrophe-forms-checkboxes-field-widgets'];
-        const file = apos.modules['apostrophe-forms-file-field-widgets'];
-        const boolean = apos.modules['apostrophe-forms-boolean-field-widgets'];
+        textWidgets = apos.modules['apostrophe-forms-text-field-widgets'];
+        textareaWidgets = apos.modules['apostrophe-forms-textarea-field-widgets'];
+        selectWidgets = apos.modules['apostrophe-forms-select-field-widgets'];
+        radioWidgets = apos.modules['apostrophe-forms-radio-field-widgets'];
+        checkboxesWidgets = apos.modules['apostrophe-forms-checkboxes-field-widgets'];
+        fileWidgets = apos.modules['apostrophe-forms-file-field-widgets'];
+        booleanWidgets = apos.modules['apostrophe-forms-boolean-field-widgets'];
 
         assert(forms.__meta.name === 'apostrophe-forms');
         assert(widgets.__meta.name === 'apostrophe-forms-widgets');
-        assert(text.__meta.name === 'apostrophe-forms-text-field-widgets');
-        assert(textarea.__meta.name === 'apostrophe-forms-textarea-field-widgets');
-        assert(select.__meta.name === 'apostrophe-forms-select-field-widgets');
-        assert(radio.__meta.name === 'apostrophe-forms-radio-field-widgets');
-        assert(checkboxes.__meta.name === 'apostrophe-forms-checkboxes-field-widgets');
-        assert(file.__meta.name === 'apostrophe-forms-file-field-widgets');
-        assert(boolean.__meta.name === 'apostrophe-forms-boolean-field-widgets');
+        assert(textWidgets.__meta.name === 'apostrophe-forms-text-field-widgets');
+        assert(textareaWidgets.__meta.name === 'apostrophe-forms-textarea-field-widgets');
+        assert(selectWidgets.__meta.name === 'apostrophe-forms-select-field-widgets');
+        assert(radioWidgets.__meta.name === 'apostrophe-forms-radio-field-widgets');
+        assert(checkboxesWidgets.__meta.name === 'apostrophe-forms-checkboxes-field-widgets');
+        assert(fileWidgets.__meta.name === 'apostrophe-forms-file-field-widgets');
+        assert(booleanWidgets.__meta.name === 'apostrophe-forms-boolean-field-widgets');
 
         return callback(null);
       },
@@ -434,4 +443,174 @@ describe('Forms module', function () {
   });
 
   // Individual tests for sanitizeFormField methods on field widgets.
+  it('sanitizes text widget input', function (done) {
+    const widget = { fieldName: 'textField' };
+    const output1 = {};
+    const input1 = { textField: 'A valid string.' };
+
+    textWidgets.sanitizeFormField(null, null, widget, input1, output1);
+
+    assert(output1.textField === 'A valid string.');
+
+    const input2 = { textField: 127 };
+    const output2 = {};
+
+    textWidgets.sanitizeFormField(null, null, widget, input2, output2);
+
+    assert(output2.textField === '127');
+
+    const input3 = { textField: null };
+    const output3 = {};
+
+    textWidgets.sanitizeFormField(null, null, widget, input3, output3);
+
+    assert(output3.textField === '');
+
+    done();
+  });
+
+  it('sanitizes textArea widget input', function (done) {
+    const widget = { fieldName: 'textAreaField' };
+    const longText = 'Nullam id dolor id nibh ultricies vehicula ut id elit. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Aenean lacinia bibendum nulla sed consectetur.';
+    const input1 = { textAreaField: longText };
+    const output1 = {};
+
+    textareaWidgets.sanitizeFormField(null, null, widget, input1, output1);
+    assert(output1.textAreaField === longText);
+
+    const input2 = { textAreaField: [127, 0] };
+    const output2 = {};
+
+    textareaWidgets.sanitizeFormField(null, null, widget, input2, output2);
+
+    assert(!output2.textAreaField);
+
+    done();
+  });
+
+  it('sanitizes select widget input', function (done) {
+    const widget = {
+      fieldName: 'selectField',
+      choices: [
+        { value: 'first' },
+        { value: 'second' },
+        { value: 'third' },
+        { value: 'fourth' }
+      ]
+    };
+    const input1 = { selectField: 'second' };
+    const output1 = {};
+
+    selectWidgets.sanitizeFormField(null, null, widget, input1, output1);
+
+    assert(output1.selectField === 'second');
+
+    const input2 = { selectField: 'ninetieth' };
+    const output2 = {};
+
+    selectWidgets.sanitizeFormField(null, null, widget, input2, output2);
+
+    assert(!output2.selectField);
+    done();
+  });
+
+  it('sanitizes radio widget input', function (done) {
+    const widget = {
+      fieldName: 'radioField',
+      choices: [
+        { value: 'first' },
+        { value: 'second' },
+        { value: 'third' },
+        { value: 'fourth' }
+      ]
+    };
+    const input1 = { radioField: 'second' };
+    const output1 = {};
+
+    radioWidgets.sanitizeFormField(null, null, widget, input1, output1);
+
+    assert(output1.radioField === 'second');
+
+    const input2 = { radioField: 'ninetieth' };
+    const output2 = {};
+
+    radioWidgets.sanitizeFormField(null, null, widget, input2, output2);
+
+    assert(!output2.radioField);
+    done();
+  });
+
+  it('sanitizes checkbox widget input', function (done) {
+    const widget = {
+      fieldName: 'checkboxField',
+      choices: [
+        { value: 'first' },
+        { value: 'second' },
+        { value: 'third' },
+        { value: 'fourth' }
+      ]
+    };
+    const input1 = { checkboxField: ['second', 'fourth', 'seventeenth'] };
+    const output1 = {};
+
+    checkboxesWidgets.sanitizeFormField(null, null, widget, input1, output1);
+
+    assert(output1.checkboxField.length === 2);
+    assert(output1.checkboxField[0] === 'second');
+    assert(output1.checkboxField[1] === 'fourth');
+
+    done();
+  });
+
+  let fileId;
+
+  it('should upload a test file using the attachments api', function (done) {
+    return fileUtils.insert('upload-test.txt', apos, function (result) {
+      fileId = result._id;
+      done();
+    });
+  });
+
+  it('sanitizes file widget input', async function () {
+    const widget = { fieldName: 'fileField' };
+    const output1 = {};
+    const input1 = { fileField: [fileId] };
+
+    await fileWidgets.sanitizeFormField(null, null, widget, input1, output1);
+
+    assert(output1.fileField[0] === `/uploads/attachments/${fileId}-upload-test.txt`);
+
+    const input2 = { fileField: '8675309' };
+    const output2 = {};
+
+    await fileWidgets.sanitizeFormField(null, null, widget, input2, output2);
+
+    assert(Array.isArray(output2.fileField));
+    assert(output2.fileField.length === 0);
+  });
+
+  const uploadTarget = `${__dirname}/public/uploads/`;
+
+  it('should clear uploads material if any', function (done) {
+    fileUtils.wipeIt(uploadTarget, apos, done);
+  });
+
+  it('sanitizes boolean widget input', function (done) {
+    const widget = { fieldName: 'booleanField' };
+    const output1 = {};
+    const input1 = { booleanField: true };
+
+    booleanWidgets.sanitizeFormField(null, null, widget, input1, output1);
+
+    assert(output1.booleanField === true);
+
+    const input2 = { booleanField: false };
+    const output2 = {};
+
+    booleanWidgets.sanitizeFormField(null, null, widget, input2, output2);
+
+    assert(output2.booleanField === false);
+
+    done();
+  });
 });
