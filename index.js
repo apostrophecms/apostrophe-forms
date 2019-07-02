@@ -86,8 +86,7 @@ module.exports = {
             label: 'Yes',
             value: true,
             showFields: [
-              'queryParamList',
-              'queryParamLimit'
+              'queryParamList'
             ]
           }
         ]
@@ -153,8 +152,7 @@ module.exports = {
         label: 'Advanced',
         fields: [
           'enableQueryParams',
-          'queryParamList',
-          'queryParamLimit'
+          'queryParamList'
         ]
       }
     ]);

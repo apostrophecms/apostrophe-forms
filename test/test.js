@@ -1,6 +1,6 @@
 const assert = require('assert');
 const axios = require('axios');
-
+const testUtil = require('apostrophe/test-lib/util');
 describe('Forms module', function () {
 
   let apos;
@@ -8,10 +8,20 @@ describe('Forms module', function () {
   this.timeout(25000);
 
   after(function (done) {
-    require('apostrophe/test-lib/util').destroy(apos, done);
+    testUtil.destroy(apos, done);
   });
 
   // Existance
+  const formWidgets = {
+    'apostrophe-forms-widgets': {},
+    'apostrophe-forms-text-field-widgets': {},
+    'apostrophe-forms-textarea-field-widgets': {},
+    'apostrophe-forms-select-field-widgets': {},
+    'apostrophe-forms-radio-field-widgets': {},
+    'apostrophe-forms-checkboxes-field-widgets': {},
+    'apostrophe-forms-file-field-widgets': {},
+    'apostrophe-forms-boolean-field-widgets': {}
+  };
 
   it('should be a property of the apos object', function (done) {
     apos = require('apostrophe')({
@@ -27,14 +37,7 @@ describe('Forms module', function () {
           }
         },
         'apostrophe-forms': {},
-        'apostrophe-forms-widgets': {},
-        'apostrophe-forms-text-field-widgets': {},
-        'apostrophe-forms-textarea-field-widgets': {},
-        'apostrophe-forms-select-field-widgets': {},
-        'apostrophe-forms-radio-field-widgets': {},
-        'apostrophe-forms-checkboxes-field-widgets': {},
-        'apostrophe-forms-file-field-widgets': {},
-        'apostrophe-forms-boolean-field-widgets': {}
+        ...formWidgets
       },
       afterInit: function (callback) {
         const forms = apos.modules['apostrophe-forms'];
@@ -230,6 +233,81 @@ describe('Forms module', function () {
   });
 
   // Submission is not stored in the db if disabled.
+  let apos2;
+  const form2 = { ...form1 };
+  form2.slug = 'test-form-two';
+  form2._id = 'form2';
+  let savedForm2;
+  let submission2 = { ...submission1 };
+
+  it('should be a property of the apos2 object', function (done) {
+    apos2 = require('apostrophe')({
+      shortName: 'test2',
+      baseUrl: 'http://localhost:5000',
+      modules: {
+        'apostrophe-express': {
+          port: 5000,
+          csrf: {
+            exceptions: ['/modules/apostrophe-forms/submit']
+          },
+          session: {
+            secret: 'test-the-forms-more'
+          }
+        },
+        'apostrophe-forms': {
+          saveSubmissions: false
+        },
+        ...formWidgets
+      },
+      afterInit: function (callback) {
+        const forms = apos.modules['apostrophe-forms'];
+
+        assert(forms.__meta.name === 'apostrophe-forms');
+
+        return callback(null);
+      },
+      afterListen: function (err) {
+        assert(!err);
+        done();
+      }
+    });
+  });
+
+  it('should not save in the database if disabled', async function () {
+    const req = apos2.tasks.getReq();
+
+    await apos2.docs.db.insert(form2)
+      .then(function () {
+        return apos2.docs.getManager('apostrophe-forms').find(req, {}).toObject();
+      })
+      .then(function (form) {
+        savedForm2 = form;
+      })
+      .catch(function (err) {
+        assert(!err);
+      });
+
+    submission2._id = savedForm2._id;
+
+    const response = await axios({
+      method: 'post',
+      url: `http://localhost:5000/modules/apostrophe-forms/submit`,
+      data: submission2
+    });
+
+    assert(response.status === 200);
+
+    const doc = await apos2.db.collection('aposFormSubmissions').findOne({
+      'data.DogName': 'Jasper'
+    });
+
+    assert(!doc);
+  });
+
+  it('destroys the second instance', function (done) {
+    testUtil.destroy(apos2, done);
+  });
+
   // Get form errors returned from malformed data.
   // Email sending?
   // Captures query parameters
