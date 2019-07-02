@@ -204,7 +204,8 @@ describe('Forms module', function () {
     'agree': true,
     'queryParams': {
       'member-id': '123456789',
-      'source': 'newspaper'
+      'source': 'newspaper',
+      'malicious': 'evil'
     }
   };
 
@@ -241,6 +242,7 @@ describe('Forms module', function () {
       assert(!err);
       assert(doc.data['member-id'] === '123456');
       assert(doc.data['source'] === 'newspaper');
+      assert(doc.data['malicious'] === undefined);
 
       return done();
     });
