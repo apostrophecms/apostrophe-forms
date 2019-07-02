@@ -233,6 +233,19 @@ describe('Forms module', function () {
     });
   });
 
+  // Submission captures and limits query parameters
+  it('can find query parameter data saved and limited', function (done) {
+    apos.db.collection('aposFormSubmissions').findOne({
+      'data.DogName': 'Jasper'
+    }, function (err, doc) {
+      assert(!err);
+      assert(doc.data['member-id'] === '123456');
+      assert(doc.data['source'] === 'newspaper');
+
+      return done();
+    });
+  });
+
   // Submission is not stored in the db if disabled.
   let apos2;
   const form2 = { ...form1 };
@@ -330,8 +343,6 @@ describe('Forms module', function () {
     assert(response.data.formErrors[1].error === 'required');
   });
 
-  // Email sending?
-  // Captures query parameters
   // reCAPTCHA https://developers.google.com/recaptcha/docs/faq#id-like-to-run-automated-tests-with-recaptcha-what-should-i-do
   // Fail submission if reCAPTHCA token is wrong.
 
