@@ -218,6 +218,7 @@ describe('Forms module', function () {
     });
 
     assert(response.status === 200);
+    assert(response.data.status === 'ok');
   });
 
   // Submission is stored in the db
@@ -308,7 +309,27 @@ describe('Forms module', function () {
     testUtil.destroy(apos2, done);
   });
 
-  // Get form errors returned from malformed data.
+  // Get form errors returned from missing required data.
+  const submission3 = {
+    'agree': true
+  };
+
+  it('should return errors for missing data', async function () {
+    submission3._id = savedForm1._id;
+
+    const response = await axios({
+      method: 'post',
+      url: `http://localhost:4242/modules/apostrophe-forms/submit`,
+      data: submission3
+    });
+
+    assert(response.status === 200);
+    assert(response.data.status === 'error');
+    assert(response.data.formErrors.length === 2);
+    assert(response.data.formErrors[0].error === 'required');
+    assert(response.data.formErrors[1].error === 'required');
+  });
+
   // Email sending?
   // Captures query parameters
   // reCAPTCHA https://developers.google.com/recaptcha/docs/faq#id-like-to-run-automated-tests-with-recaptcha-what-should-i-do
