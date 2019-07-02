@@ -345,8 +345,93 @@ describe('Forms module', function () {
     assert(response.data.formErrors[1].error === 'required');
   });
 
-  // reCAPTCHA https://developers.google.com/recaptcha/docs/faq#id-like-to-run-automated-tests-with-recaptcha-what-should-i-do
-  // Fail submission if reCAPTHCA token is wrong.
+  // Test basic reCAPTCHA requirements.
+  let apos3;
+  let savedForm3;
+  let submission4 = { ...submission1 };
+
+  it('should be a property of the apos3 object', function (done) {
+    apos3 = require('apostrophe')({
+      shortName: 'test3',
+      baseUrl: 'http://localhost:6000',
+      modules: {
+        'apostrophe-express': {
+          port: 6000,
+          csrf: {
+            exceptions: ['/modules/apostrophe-forms/submit']
+          },
+          session: {
+            secret: 'test-the-forms-again'
+          }
+        },
+        'apostrophe-forms': {
+          // reCAPTCHA test keys https://developers.google.com/recaptcha/docs/faq#id-like-to-run-automated-tests-with-recaptcha-what-should-i-do
+          recaptchaSite: '6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI',
+          recaptchaSecret: '6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe'
+        },
+        ...formWidgets
+      },
+      afterInit: function (callback) {
+        const forms = apos.modules['apostrophe-forms'];
+
+        assert(forms.__meta.name === 'apostrophe-forms');
+
+        return callback(null);
+      },
+      afterListen: function (err) {
+        assert(!err);
+        done();
+      }
+    });
+  });
+
+  it('should return a form error if missing required reCAPTHCA token', async function () {
+    const req = apos3.tasks.getReq();
+
+    await apos3.docs.db.insert(form1)
+      .then(function () {
+        return apos3.docs.getManager('apostrophe-forms').find(req, {})
+          .toObject();
+      })
+      .then(function (form) {
+        savedForm3 = form;
+      })
+      .catch(function (err) {
+        console.log(err);
+        assert(!err);
+      });
+
+    submission4._id = savedForm3._id;
+
+    const response = await axios({
+      method: 'post',
+      url: `http://localhost:6000/modules/apostrophe-forms/submit`,
+      data: submission4
+    });
+
+    assert(response.status === 200);
+    assert(response.data.status === 'error');
+    assert(response.data.formErrors[0].error === 'recaptcha');
+    assert(response.data.formErrors[0].global === true);
+  });
+
+  it('should submit successfully with a reCAPTCHA token', async function () {
+    submission4.recaptcha = 'validRecaptchaToken';
+
+    const response = await axios({
+      method: 'post',
+      url: `http://localhost:6000/modules/apostrophe-forms/submit`,
+      data: submission4
+    });
+
+    assert(response.status === 200);
+    assert(response.data.status === 'ok');
+    assert(!response.data.formErrors);
+  });
+
+  it('destroys the third instance', function (done) {
+    testUtil.destroy(apos3, done);
+  });
 
   // Individual tests for sanitizeFormField methods on field widgets.
 });
