@@ -202,7 +202,7 @@ module.exports = {
       }
 
       try {
-        if (input.recaptcha) {
+        if (options.recaptchaSecret) {
           await self.checkRecaptcha(req, input, formErrors);
         }
 
@@ -262,6 +262,14 @@ module.exports = {
 
     self.checkRecaptcha = async function (req, input, formErrors) {
       const recaptchaSecret = self.getOption(req, 'recaptchaSecret');
+
+      if (!input.recaptcha) {
+        formErrors.push({
+          global: true,
+          error: 'recaptcha',
+          errorMessage: 'There was a problem submitting your reCAPTCHA verfication.'
+        });
+      }
 
       try {
         const url = 'https://www.google.com/recaptcha/api/siteverify';
