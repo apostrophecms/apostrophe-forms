@@ -1,6 +1,6 @@
 {
   "name": "apostrophe-forms",
-  "version": "2.0.0",
+  "version": "1.0.0",
   "description": "Build forms for ApostropheCMS in a simple user interface.",
   "main": "index.js",
   "scripts": {
@@ -38,5 +38,8 @@
   "dependencies": {
     "request": "^2.88.0",
     "request-promise": "^4.2.4"
+  },
+  "peerDependencies": {
+    "apostrophe": "2.x"
   }
 }
