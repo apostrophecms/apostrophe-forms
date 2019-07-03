@@ -1,6 +1,8 @@
 package-lock.json
 test/public/modules/*
 test/public/css/master-*
+test/locales
+test/data/temp
 npm-debug.log
 *.DS_Store
 *.npmignore
