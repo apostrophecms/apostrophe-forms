@@ -96,7 +96,6 @@ module.exports = {
         label: 'Query Parameter Keys',
         type: 'array',
         titleField: 'key',
-        required: true,
         help: 'Create an array item for each query parameter value you wish to capture.',
         schema: [
           {
@@ -248,7 +247,7 @@ module.exports = {
           });
         }
 
-        if (form.enableQueryParams) {
+        if (form.enableQueryParams && form.queryParamList.length > 0) {
           self.processQueryParams(req, form, input, output, fieldNames);
         }
 
