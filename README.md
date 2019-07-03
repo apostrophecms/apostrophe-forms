@@ -2,10 +2,6 @@
 
 `npm i apostrophe-forms`
 
-## Stability: alpha
-
-This is a work in progress, porting the old 0.5 version to ApostropheCMS 2.x. Currently everything works according to a new, extensible pattern using the lean frontend library.
-
 ## Configuration
 
 Enable the modules in your `app.js` file as with other modules:
