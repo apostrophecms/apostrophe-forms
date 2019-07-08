@@ -294,11 +294,6 @@ module.exports = {
     };
 
     self.on('submission', 'emailSubmission', async function(req, form, data) {
-      if (self.options.emailSubmissions === false ||
-        !form.emails || form.emails.length === 0) {
-        return;
-      }
-
       for (const key in data) {
         // Add some space to array lists.
         if (Array.isArray(data[key])) {
@@ -306,6 +301,19 @@ module.exports = {
         }
       }
 
+      if (self.options.confirmationEmail === true && req.user.email) {
+        await self.email(req, 'emailConfirmation', {},
+        {
+          from: form.email,
+          to: req.user.email,
+          subject: form.title
+        });
+      }
+
+      if (self.options.emailSubmissions === false ||
+        !form.emails || form.emails.length === 0) {
+        return;
+      }
       return self.email(req, 'emailSubmission', {
         form: form,
         input: data
