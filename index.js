@@ -171,11 +171,11 @@ module.exports = {
 
     self.ensureCollection = async function() {
       self.db = self.apos.db.collection('aposFormSubmissions');
-      await self.db.ensureIndex({
+      await self.db.createIndex({
         formId: 1,
         createdAt: 1
       });
-      await self.db.ensureIndex({
+      await self.db.createIndex({
         formId: 1,
         createdAt: -1
       });
