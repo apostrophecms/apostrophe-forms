@@ -77,6 +77,33 @@ module.exports = {
         }
       },
       {
+        name: 'hasConfirmationEmail',
+        label: 'Do you want to send a confirmation email?',
+        type: 'boolean',
+        choices: [
+          {
+            value: true,
+            showFields: [
+              'confirmationEmails'
+            ]
+          }
+        ]
+      },
+      {
+        name: 'confirmationEmails',
+        label: 'Email Address(es) for Confirmation',
+        type: 'array',
+        titleField: 'email',
+        schema: [
+          {
+            name: 'email',
+            type: 'email',
+            required: true,
+            label: 'Email Address for Confirmation'
+          }
+        ]
+      },
+      {
         name: 'enableQueryParams',
         label: 'Enable Query Parameter Capture',
         type: 'boolean',
@@ -132,7 +159,10 @@ module.exports = {
 
     const afterSubmitFields = [
       'thankYouHeading',
-      'thankYouBody'
+      'thankYouBody',
+      'hasConfirmationEmail',
+      'confirmationEmails'
+
     ].concat(options.emailSubmissions !== false ? ['emails'] : []);
 
     options.arrangeFields = (options.arrangeFields || []).concat([
@@ -294,6 +324,11 @@ module.exports = {
     };
 
     self.on('submission', 'emailSubmission', async function(req, form, data) {
+      if (self.options.emailSubmissions === false ||
+        !form.emails || form.emails.length === 0) {
+        return;
+      }
+
       for (const key in data) {
         // Add some space to array lists.
         if (Array.isArray(data[key])) {
@@ -301,22 +336,24 @@ module.exports = {
         }
       }
 
-      if (self.options.confirmationEmail === true && req.user.email) {
-        await self.email(req, 'emailConfirmation', {},
-        {
-          from: form.email,
-          to: req.user.email,
-          subject: form.title
-        });
-      }
-
-      if (self.options.emailSubmissions === false ||
-        !form.emails || form.emails.length === 0) {
-        return;
-      }
       return self.email(req, 'emailSubmission', {
         form: form,
         input: data
+      },
+      {
+        from: form.email,
+        to: form.emails.map(email => email.email).join(','),
+        subject: form.title
+      });
+    });
+
+    self.on('submission', 'emailConfirmation', async function(req, form) {
+      if (form.hasConfirmationEmail === false ||
+        !form.confirmationEmails || form.confirmationEmails.length === 0) {
+        return;
+      }
+      return self.email(req, 'emailConfirmation', {
+        form: form
       },
       {
         from: form.email,
