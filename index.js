@@ -220,12 +220,17 @@ module.exports = {
         });
 
         const fieldNames = [];
+        const conditionals = {};
 
         for (const area of areas) {
           const widgets = area.items || [];
           for (const widget of widgets) {
             // Capture field names.
             fieldNames.push(widget.fieldName);
+
+            if (widget.type === 'apostrophe-forms-conditional') {
+              trackConditionals(conditionals, widget);
+            }
 
             const manager = self.apos.areas.getWidgetManager(widget.type);
             if (manager && manager.sanitizeFormField) {
@@ -253,6 +258,8 @@ module.exports = {
         if (form.enableQueryParams && form.queryParamList.length > 0) {
           self.processQueryParams(req, form, input, output, fieldNames);
         }
+
+        cleanConditionals(conditionals, output);
 
         await self.emit('submission', req, form, output);
       } catch (e) {
@@ -336,5 +343,40 @@ module.exports = {
       superPushAssets();
       self.pushAsset('stylesheet', 'lean', { when: 'lean' });
     };
+
+    function trackConditionals(conditionals, widget) {
+      const fieldName = widget.fieldName;
+      const fieldValue = widget.fieldValue;
+
+      conditionals[fieldName] = conditionals[fieldName] || {};
+
+      conditionals[fieldName][fieldValue] = conditionals[fieldName][fieldValue] || [];
+
+      widget.contents.items.forEach(item => {
+        conditionals[fieldName][fieldValue].push(item.fieldName);
+      });
+
+      // If there aren't any fields in the conditional group, don't bother
+      // tracking it.
+      if (conditionals[fieldName][fieldValue].length === 0) {
+        delete conditionals[fieldName][fieldValue];
+      }
+    }
+
+    function cleanConditionals(conditionals, output) {
+      // Check each field that controls a conditional group.
+      for (const name in conditionals) {
+        // For each value that a conditional group is looking for, check if the
+        // value matches in the output and, if not, remove the output properties
+        // for the conditional fields.
+        for (const value in conditionals[name]) {
+          if (output[name] !== value) {
+            conditionals[name][value].forEach(field => {
+              delete output[field];
+            });
+          }
+        }
+      }
+    }
   }
 };
