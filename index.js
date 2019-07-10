@@ -15,7 +15,8 @@ module.exports = {
       'apostrophe-forms-checkboxes-field-widgets',
       'apostrophe-forms-textarea-field-widgets',
       'apostrophe-forms-file-field-widgets',
-      'apostrophe-forms-boolean-field-widgets'
+      'apostrophe-forms-boolean-field-widgets',
+      'apostrophe-forms-conditional-widgets'
     ]
   },
 
@@ -42,6 +43,7 @@ module.exports = {
             'apostrophe-forms-select-field': {},
             'apostrophe-forms-radio-field': {},
             'apostrophe-forms-checkboxes-field': {},
+            'apostrophe-forms-conditional': {},
             'apostrophe-rich-text': {
               toolbar: [
                 'Styles', 'Bold', 'Italic', 'Link', 'Anchor', 'Unlink',
@@ -180,6 +182,7 @@ module.exports = {
         createdAt: -1
       });
     };
+
     // Route to accept the submitted form.
     self.apiRoute('post', 'submit', async (req, res, next) => {
       const input = req.body;
