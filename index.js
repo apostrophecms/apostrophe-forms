@@ -221,20 +221,33 @@ module.exports = {
 
         const fieldNames = [];
         const conditionals = {};
+        const skipFields = [];
 
+        // Populate the conditionals object fully to clear disabled values
+        // before starting sanitization.
         for (const area of areas) {
           const widgets = area.items || [];
           for (const widget of widgets) {
-            // Capture field names.
+            // Capture field names for the params check list.
             fieldNames.push(widget.fieldName);
 
             if (widget.type === 'apostrophe-forms-conditional') {
               trackConditionals(conditionals, widget);
             }
+          }
+        }
 
+        // console.log('📥', input);
+        collectToSkip(input, conditionals, skipFields);
+
+        for (const area of areas) {
+          const widgets = area.items || [];
+          for (const widget of widgets) {
             const manager = self.apos.areas.getWidgetManager(widget.type);
-            if (manager && manager.sanitizeFormField) {
-
+            if (
+              manager && manager.sanitizeFormField &&
+              !skipFields.includes(widget.fieldName)
+            ) {
               try {
                 manager.checkRequired(req, form, widget, input);
                 await manager.sanitizeFormField(req, form, widget, input, output);
@@ -258,8 +271,7 @@ module.exports = {
         if (form.enableQueryParams && form.queryParamList.length > 0) {
           self.processQueryParams(req, form, input, output, fieldNames);
         }
-
-        cleanConditionals(conditionals, output);
+        // console.log('📤', output);
 
         await self.emit('submission', req, form, output);
       } catch (e) {
@@ -345,38 +357,38 @@ module.exports = {
     };
 
     function trackConditionals(conditionals = {}, widget) {
-      const fieldName = widget.fieldName;
-      const fieldValue = widget.fieldValue;
+      const conditionName = widget.conditionName;
+      const conditionValue = widget.conditionValue;
 
       if (!widget || !widget.contents || !widget.contents.items) {
         return;
       }
 
-      conditionals[fieldName] = conditionals[fieldName] || {};
+      conditionals[conditionName] = conditionals[conditionName] || {};
 
-      conditionals[fieldName][fieldValue] = conditionals[fieldName][fieldValue] || [];
+      conditionals[conditionName][conditionValue] = conditionals[conditionName][conditionValue] || [];
 
       widget.contents.items.forEach(item => {
-        conditionals[fieldName][fieldValue].push(item.fieldName);
+        conditionals[conditionName][conditionValue].push(item.fieldName);
       });
 
       // If there aren't any fields in the conditional group, don't bother
       // tracking it.
-      if (conditionals[fieldName][fieldValue].length === 0) {
-        delete conditionals[fieldName][fieldValue];
+      if (conditionals[conditionName][conditionValue].length === 0) {
+        delete conditionals[conditionName][conditionValue];
       }
     }
 
-    function cleanConditionals(conditionals, output) {
+    function collectToSkip(input, conditionals, skipFields) {
       // Check each field that controls a conditional group.
       for (const name in conditionals) {
         // For each value that a conditional group is looking for, check if the
         // value matches in the output and, if not, remove the output properties
         // for the conditional fields.
         for (const value in conditionals[name]) {
-          if (output[name] !== value) {
+          if (input[name] !== value) {
             conditionals[name][value].forEach(field => {
-              delete output[field];
+              skipFields.push(field);
             });
           }
         }
