@@ -24,11 +24,10 @@
   color: @apos-forms-red;
 }
 
-.apos-forms-conditional {
+.apos-forms-conditional[disabled] {
   display: none;
 
-  .apos-modal-content &,
-  &.apos-is-visible {
+  .apos-modal-content & {
     display: block;
   }
 }
