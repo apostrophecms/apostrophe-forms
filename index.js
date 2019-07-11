@@ -344,9 +344,13 @@ module.exports = {
       self.pushAsset('stylesheet', 'lean', { when: 'lean' });
     };
 
-    function trackConditionals(conditionals, widget) {
+    function trackConditionals(conditionals = {}, widget) {
       const fieldName = widget.fieldName;
       const fieldValue = widget.fieldValue;
+
+      if (!widget || !widget.contents || !widget.contents.items) {
+        return;
+      }
 
       conditionals[fieldName] = conditionals[fieldName] || {};
 
