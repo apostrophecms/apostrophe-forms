@@ -237,7 +237,6 @@ module.exports = {
           }
         }
 
-        // console.log('📥', input);
         collectToSkip(input, conditionals, skipFields);
 
         for (const area of areas) {
@@ -271,7 +270,6 @@ module.exports = {
         if (form.enableQueryParams && form.queryParamList.length > 0) {
           self.processQueryParams(req, form, input, output, fieldNames);
         }
-        // console.log('📤', output);
 
         await self.emit('submission', req, form, output);
       } catch (e) {
@@ -385,7 +383,10 @@ module.exports = {
         // For each value that a conditional group is looking for, check if the
         // value matches in the output and, if not, remove the output properties
         // for the conditional fields.
-        for (const value in conditionals[name]) {
+        for (let value in conditionals[name]) {
+          if (input[name] === true && value === 'on') {
+            value = true;
+          }
           if (input[name] !== value) {
             conditionals[name][value].forEach(field => {
               skipFields.push(field);
