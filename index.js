@@ -384,6 +384,7 @@ module.exports = {
         // value matches in the output and, if not, remove the output properties
         // for the conditional fields.
         for (let value in conditionals[name]) {
+          // Booleans are tracked as true/false, but their field values are 'on'. TEMP?
           if (input[name] === true && value === 'on') {
             value = true;
           }
