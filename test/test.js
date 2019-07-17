@@ -639,6 +639,4 @@ describe('Forms module', function () {
 
     done();
   });
-
-  //
 });
