@@ -21,9 +21,11 @@ describe('Forms module', function () {
     'apostrophe-forms-radio-field-widgets': {},
     'apostrophe-forms-checkboxes-field-widgets': {},
     'apostrophe-forms-file-field-widgets': {},
-    'apostrophe-forms-boolean-field-widgets': {}
+    'apostrophe-forms-boolean-field-widgets': {},
+    'apostrophe-forms-conditional-widgets': {}
   };
 
+  let forms;
   let textWidgets;
   let textareaWidgets;
   let selectWidgets;
@@ -31,6 +33,7 @@ describe('Forms module', function () {
   let checkboxesWidgets;
   let fileWidgets;
   let booleanWidgets;
+  let conditionalWidgets;
 
   it('should be a property of the apos object', function (done) {
     apos = require('apostrophe')({
@@ -49,7 +52,7 @@ describe('Forms module', function () {
         ...formWidgets
       },
       afterInit: function (callback) {
-        const forms = apos.modules['apostrophe-forms'];
+        forms = apos.modules['apostrophe-forms'];
         const widgets = apos.modules['apostrophe-forms-widgets'];
         textWidgets = apos.modules['apostrophe-forms-text-field-widgets'];
         textareaWidgets = apos.modules['apostrophe-forms-textarea-field-widgets'];
@@ -58,6 +61,7 @@ describe('Forms module', function () {
         checkboxesWidgets = apos.modules['apostrophe-forms-checkboxes-field-widgets'];
         fileWidgets = apos.modules['apostrophe-forms-file-field-widgets'];
         booleanWidgets = apos.modules['apostrophe-forms-boolean-field-widgets'];
+        conditionalWidgets = apos.modules['apostrophe-forms-conditional-widgets'];
 
         assert(forms.__meta.name === 'apostrophe-forms');
         assert(widgets.__meta.name === 'apostrophe-forms-widgets');
@@ -68,6 +72,7 @@ describe('Forms module', function () {
         assert(checkboxesWidgets.__meta.name === 'apostrophe-forms-checkboxes-field-widgets');
         assert(fileWidgets.__meta.name === 'apostrophe-forms-file-field-widgets');
         assert(booleanWidgets.__meta.name === 'apostrophe-forms-boolean-field-widgets');
+        assert(conditionalWidgets.__meta.name === 'apostrophe-forms-conditional-widgets');
 
         return callback(null);
       },
@@ -198,6 +203,27 @@ describe('Forms module', function () {
       .catch(function (err) {
         assert(!err);
       });
+  });
+
+  it('should have the same widgets in conditional widget areas', function () {
+    const formWidgets = forms.schema.find(field => {
+      return field.name === 'contents';
+    }).options.widgets;
+
+    // Main form widgets has the conditional widget as an option.
+    assert(formWidgets['apostrophe-forms-conditional']);
+
+    delete formWidgets['apostrophe-forms-conditional'];
+
+    const condWidgets = conditionalWidgets.schema.find(field => {
+      return field.name === 'contents';
+    }).options.widgets;
+
+    assert(Object.keys(formWidgets).length === Object.keys(condWidgets).length);
+
+    for (const widget in condWidgets) {
+      assert(formWidgets[widget]);
+    }
   });
 
   // Submitting gets 200 response
