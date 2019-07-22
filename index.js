@@ -326,15 +326,28 @@ module.exports = {
         }
       }
 
-      return self.email(req, 'emailSubmission', {
-        form: form,
-        input: data
-      },
-      {
-        from: form.email,
-        to: form.emails.map(email => email.email).join(','),
-        subject: form.title
-      });
+      try {
+        await self.email(req, 'emailSubmission', {
+          form: form,
+          input: data
+        },
+        {
+          from: form.email,
+          to: form.emails.map(email => email.email).join(','),
+          subject: form.title
+        });
+
+        return null;
+      } catch (err) {
+        self.apos.utils.error(err);
+
+        // We don't want to throw an error simply because emails didn't send.
+        self.apos.notify(req, 'There was an error sending email notifications.', {
+          type: 'error'
+        });
+
+        return null;
+      }
     });
 
     self.on('submission', 'saveSubmission', async function(req, form, data) {
