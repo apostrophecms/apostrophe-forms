@@ -327,7 +327,7 @@ module.exports = {
       }
 
       try {
-        self.email(req, 'emailSubmission', {
+        await self.email(req, 'emailSubmission', {
           form: form,
           input: data
         },
@@ -340,7 +340,7 @@ module.exports = {
         return null;
       } catch (err) {
         // We don't want to throw an error simply because emails didn't send.
-        self.apos.notify('There was an error sending email notifications.', {
+        self.apos.notify(req, 'There was an error sending email notifications.', {
           type: 'error'
         });
 
