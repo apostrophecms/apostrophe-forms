@@ -23,3 +23,11 @@
 .apos-forms-error {
   color: @apos-forms-red;
 }
+
+.apos-forms-conditional[disabled] {
+  display: none;
+
+  .apos-modal-content & {
+    display: block;
+  }
+}

@@ -15,7 +15,8 @@ module.exports = {
       'apostrophe-forms-checkboxes-field-widgets',
       'apostrophe-forms-textarea-field-widgets',
       'apostrophe-forms-file-field-widgets',
-      'apostrophe-forms-boolean-field-widgets'
+      'apostrophe-forms-boolean-field-widgets',
+      'apostrophe-forms-conditional-widgets'
     ]
   },
 
@@ -42,6 +43,7 @@ module.exports = {
             'apostrophe-forms-select-field': {},
             'apostrophe-forms-radio-field': {},
             'apostrophe-forms-checkboxes-field': {},
+            'apostrophe-forms-conditional': {},
             'apostrophe-rich-text': {
               toolbar: [
                 'Styles', 'Bold', 'Italic', 'Link', 'Anchor', 'Unlink',
@@ -180,6 +182,7 @@ module.exports = {
         createdAt: -1
       });
     };
+
     // Route to accept the submitted form.
     self.apiRoute('post', 'submit', async (req, res, next) => {
       const input = req.body;
@@ -217,16 +220,33 @@ module.exports = {
         });
 
         const fieldNames = [];
+        const conditionals = {};
+        const skipFields = [];
+
+        // Populate the conditionals object fully to clear disabled values
+        // before starting sanitization.
+        for (const area of areas) {
+          const widgets = area.items || [];
+          for (const widget of widgets) {
+            // Capture field names for the params check list.
+            fieldNames.push(widget.fieldName);
+
+            if (widget.type === 'apostrophe-forms-conditional') {
+              trackConditionals(conditionals, widget);
+            }
+          }
+        }
+
+        collectToSkip(input, conditionals, skipFields);
 
         for (const area of areas) {
           const widgets = area.items || [];
           for (const widget of widgets) {
-            // Capture field names.
-            fieldNames.push(widget.fieldName);
-
             const manager = self.apos.areas.getWidgetManager(widget.type);
-            if (manager && manager.sanitizeFormField) {
-
+            if (
+              manager && manager.sanitizeFormField &&
+              !skipFields.includes(widget.fieldName)
+            ) {
               try {
                 manager.checkRequired(req, form, widget, input);
                 await manager.sanitizeFormField(req, form, widget, input, output);
@@ -333,5 +353,48 @@ module.exports = {
       superPushAssets();
       self.pushAsset('stylesheet', 'lean', { when: 'lean' });
     };
+
+    function trackConditionals(conditionals = {}, widget) {
+      const conditionName = widget.conditionName;
+      const conditionValue = widget.conditionValue;
+
+      if (!widget || !widget.contents || !widget.contents.items) {
+        return;
+      }
+
+      conditionals[conditionName] = conditionals[conditionName] || {};
+
+      conditionals[conditionName][conditionValue] = conditionals[conditionName][conditionValue] || [];
+
+      widget.contents.items.forEach(item => {
+        conditionals[conditionName][conditionValue].push(item.fieldName);
+      });
+
+      // If there aren't any fields in the conditional group, don't bother
+      // tracking it.
+      if (conditionals[conditionName][conditionValue].length === 0) {
+        delete conditionals[conditionName][conditionValue];
+      }
+    }
+
+    function collectToSkip(input, conditionals, skipFields) {
+      // Check each field that controls a conditional group.
+      for (const name in conditionals) {
+        // For each value that a conditional group is looking for, check if the
+        // value matches in the output and, if not, remove the output properties
+        // for the conditional fields.
+        for (let value in conditionals[name]) {
+          // Booleans are tracked as true/false, but their field values are 'on'. TEMP?
+          if (input[name] === true && value === 'on') {
+            value = true;
+          }
+          if (input[name] !== value) {
+            conditionals[name][value].forEach(field => {
+              skipFields.push(field);
+            });
+          }
+        }
+      }
+    }
   }
 };
