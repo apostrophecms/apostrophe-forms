@@ -339,11 +339,12 @@ module.exports = {
 
         return null;
       } catch (err) {
-        self.apos.utils.error(err);
+        self.apos.utils.error('⚠️ apostrophe-forms submission email notification error: ', err);
 
         // We don't want to throw an error simply because emails didn't send.
         self.apos.notify(req, 'There was an error sending email notifications.', {
-          type: 'error'
+          type: 'error',
+          dismiss: true
         });
 
         return null;
