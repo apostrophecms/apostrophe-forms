@@ -548,7 +548,7 @@ forms.Forms = function(options, callback) {
         throw err;
       }
       self.submissions = collection;
-      return self.submissions.ensureIndex({ formId: 1 }, { safe: true }, function(err) {
+      return self.submissions.ensureIndex({ formId: 1 }, {}, function(err) {
         if (err) {
           throw err;
         }
