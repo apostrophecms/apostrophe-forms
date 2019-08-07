@@ -77,31 +77,22 @@ module.exports = {
         }
       },
       {
-        name: 'hasConfirmationEmail',
+        name: 'sendConfirmationEmail',
         label: 'Do you want to send a confirmation email?',
         type: 'boolean',
         choices: [
           {
             value: true,
             showFields: [
-              'confirmationEmails'
+              'confirmationEmail'
             ]
           }
         ]
       },
       {
-        name: 'confirmationEmails',
-        label: 'Email Address(es) for Confirmation',
-        type: 'array',
-        titleField: 'email',
-        schema: [
-          {
-            name: 'email',
-            type: 'email',
-            required: true,
-            label: 'Email Address for Confirmation'
-          }
-        ]
+        name: 'confirmationEmail',
+        label: 'Which is your confirmation email field?',
+        type: 'string'
       },
       {
         name: 'enableQueryParams',
@@ -160,8 +151,8 @@ module.exports = {
     const afterSubmitFields = [
       'thankYouHeading',
       'thankYouBody',
-      'hasConfirmationEmail',
-      'confirmationEmails'
+      'sendConfirmationEmail',
+      'confirmationEmail'
 
     ].concat(options.emailSubmissions !== false ? ['emails'] : []);
 
@@ -347,19 +338,31 @@ module.exports = {
       });
     });
 
-    self.on('submission', 'emailConfirmation', async function(req, form) {
-      if (form.hasConfirmationEmail === false ||
+    self.on('submission', 'emailConfirmation', async function(req, form, data) {
+      if (form.sendConfirmationEmail !== true ||
         !form.confirmationEmails || form.confirmationEmails.length === 0) {
         return;
       }
-      return self.email(req, 'emailConfirmation', {
-        form: form
-      },
-      {
-        from: form.email,
-        to: form.emails.map(email => email.email).join(','),
-        subject: form.title
-      });
+
+      for (let i = 0; i < form.contents.items.length; i++) {
+        if(form.contents.items[i].fieldName == form.confirmationEmail) {
+          // Email validation
+          let re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+          if (!re.test(data[form.confirmationEmail])) {
+            return;
+          }
+          else {
+            return self.email(req, 'emailConfirmation', {
+              form: form
+            },
+            {
+              from: form.email,
+              to: data[form.confirmationEmail],
+              subject: form.title
+            });
+          }
+        }
+      }
     });
 
     self.on('submission', 'saveSubmission', async function(req, form, data) {
