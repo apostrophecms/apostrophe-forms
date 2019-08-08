@@ -79,6 +79,24 @@ module.exports = {
         }
       },
       {
+        name: 'sendConfirmationEmail',
+        label: 'Do you want to send a confirmation email?',
+        type: 'boolean',
+        choices: [
+          {
+            value: true,
+            showFields: [
+              'confirmationEmail'
+            ]
+          }
+        ]
+      },
+      {
+        name: 'confirmationEmail',
+        label: 'Which is your confirmation email field?',
+        type: 'string'
+      },
+      {
         name: 'enableQueryParams',
         label: 'Enable Query Parameter Capture',
         type: 'boolean',
@@ -134,7 +152,10 @@ module.exports = {
 
     const afterSubmitFields = [
       'thankYouHeading',
-      'thankYouBody'
+      'thankYouBody',
+      'sendConfirmationEmail',
+      'confirmationEmail'
+
     ].concat(options.emailSubmissions !== false ? ['emails'] : []);
 
     options.arrangeFields = (options.arrangeFields || []).concat([
@@ -347,6 +368,26 @@ module.exports = {
         });
 
         return null;
+      }
+    });
+
+    self.on('submission', 'emailConfirmation', async function(req, form, data) {
+      if (form.sendConfirmationEmail !== true ||
+        !form.confirmationEmail) {
+        return;
+      }
+
+      // Email validation (Regex reference: https://stackoverflow.com/questions/46155/how-to-validate-an-email-address-in-javascript)
+      const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+      if (re.test(data[form.confirmationEmail])) {
+        return self.email(req, 'emailConfirmation', {
+          form: form
+        },
+        {
+          from: form.email,
+          to: data[form.confirmationEmail],
+          subject: form.title
+        });
       }
     });
 
