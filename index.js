@@ -80,21 +80,26 @@ module.exports = {
       },
       {
         name: 'sendConfirmationEmail',
-        label: 'Do you want to send a confirmation email?',
+        label: 'Send a Confirmation Email',
+        // NOTE: The confirmation email is in `views/emailConfirmation.html`.
+        // Edit the message there, adding any dynamic content as needed.
+        help: 'Enable this to send a message to the person who submits this form.',
         type: 'boolean',
         choices: [
           {
             value: true,
             showFields: [
-              'confirmationEmail'
+              'emailConfirmationField'
             ]
           }
         ]
       },
       {
-        name: 'confirmationEmail',
+        name: 'emailConfirmationField',
         label: 'Which is your confirmation email field?',
-        type: 'string'
+        help: 'Enter the "name" value of the field where people with enter their email address.',
+        type: 'string',
+        required: true
       },
       {
         name: 'enableQueryParams',
@@ -154,7 +159,7 @@ module.exports = {
       'thankYouHeading',
       'thankYouBody',
       'sendConfirmationEmail',
-      'confirmationEmail'
+      'emailConfirmationField'
 
     ].concat(options.emailSubmissions !== false ? ['emails'] : []);
 
@@ -372,20 +377,19 @@ module.exports = {
     });
 
     self.on('submission', 'emailConfirmation', async function(req, form, data) {
-      if (form.sendConfirmationEmail !== true ||
-        !form.confirmationEmail) {
+      if (form.sendConfirmationEmail !== true || !form.emailConfirmationField) {
         return;
       }
 
       // Email validation (Regex reference: https://stackoverflow.com/questions/46155/how-to-validate-an-email-address-in-javascript)
       const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-      if (re.test(data[form.confirmationEmail])) {
+      if (re.test(data[form.emailConfirmationField])) {
         return self.email(req, 'emailConfirmation', {
           form: form
         },
         {
           from: form.email,
-          to: data[form.confirmationEmail],
+          to: data[form.emailConfirmationField],
           subject: form.title
         });
       }
