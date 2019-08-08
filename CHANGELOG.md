@@ -1,8 +1,8 @@
 # Change log
 
-## 1.2.2: 2019-07-24
+## 1.3.0: 2019-08-08
 
-- Improves error handling with message label and auto-dismissing notification. Arranges fields in form field widgets.
+- Adds an email confirmation option post-submission. Improves error handling with message label. Arranges fields in form field widgets.
 
 ## 1.2.1: 2019-07-22
 
