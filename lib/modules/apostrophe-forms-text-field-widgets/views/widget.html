@@ -6,4 +6,4 @@
   {% if not widget.required %} {{ __("(Optional)") }}{% endif %}
   <span class="apos-forms-label-message" data-apos-input-message="{{ widget.fieldName}}" hidden></span>
 </label>
-<input class="apos-forms-input" type="text" id="{{ id }}" name="{{ widget.fieldName}}" {% if widget.required %}required{% endif %} />
+<input class="apos-forms-input" type="text" id="{{ id }}" name="{{ widget.fieldName}}" placeholder="{{widget.fieldPlaceholder}}" {% if widget.required %}required{% endif %} />
