@@ -2,7 +2,7 @@
 
 ## 1.3.0: 2019-08-08
 
-- Adds an email confirmation option post-submission.
+- Adds an email confirmation option post-submission. Prevents `apostrophe-anchors` from adding fields to each form input widget.
 
 ## 1.2.1: 2019-07-22
 
