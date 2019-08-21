@@ -2,11 +2,11 @@
 
 ## 1.3.0: 2019-08-08
 
-- Adds an email confirmation option post-submission. Prevents `apostrophe-anchors` from adding fields to each form input widget.
+- Adds an email confirmation option post-submission. Improves error handling with message label. Arranges fields in form field widgets. Prevents `apostrophe-anchors` from adding fields to each form input widget.
 
 ## 1.2.1: 2019-07-22
 
-- Improves error handling for email notifications.
+- Added error handling for misconfigured email submission sending.
 
 ## 1.2.0: 2019-07-22
 
