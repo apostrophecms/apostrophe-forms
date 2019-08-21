@@ -342,10 +342,6 @@ module.exports = {
         self.apos.utils.error(err);
 
         // We don't want to throw an error simply because emails didn't send.
-        self.apos.notify(req, 'There was an error sending email notifications.', {
-          type: 'error'
-        });
-
         return null;
       }
     });
