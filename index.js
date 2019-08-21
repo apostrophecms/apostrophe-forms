@@ -79,6 +79,29 @@ module.exports = {
         }
       },
       {
+        name: 'sendConfirmationEmail',
+        label: 'Send a Confirmation Email',
+        // NOTE: The confirmation email is in `views/emailConfirmation.html`.
+        // Edit the message there, adding any dynamic content as needed.
+        help: 'Enable this to send a message to the person who submits this form.',
+        type: 'boolean',
+        choices: [
+          {
+            value: true,
+            showFields: [
+              'emailConfirmationField'
+            ]
+          }
+        ]
+      },
+      {
+        name: 'emailConfirmationField',
+        label: 'Which is your confirmation email field?',
+        help: 'Enter the "name" value of the field where people with enter their email address.',
+        type: 'string',
+        required: true
+      },
+      {
         name: 'enableQueryParams',
         label: 'Enable Query Parameter Capture',
         type: 'boolean',
@@ -134,7 +157,10 @@ module.exports = {
 
     const afterSubmitFields = [
       'thankYouHeading',
-      'thankYouBody'
+      'thankYouBody',
+      'sendConfirmationEmail',
+      'emailConfirmationField'
+
     ].concat(options.emailSubmissions !== false ? ['emails'] : []);
 
     options.arrangeFields = (options.arrangeFields || []).concat([
@@ -339,14 +365,28 @@ module.exports = {
 
         return null;
       } catch (err) {
-        self.apos.utils.error(err);
-
-        // We don't want to throw an error simply because emails didn't send.
-        self.apos.notify(req, 'There was an error sending email notifications.', {
-          type: 'error'
-        });
+        self.apos.utils.error('⚠️ apostrophe-forms submission email notification error: ', err);
 
         return null;
+      }
+    });
+
+    self.on('submission', 'emailConfirmation', async function(req, form, data) {
+      if (form.sendConfirmationEmail !== true || !form.emailConfirmationField) {
+        return;
+      }
+
+      // Email validation (Regex reference: https://stackoverflow.com/questions/46155/how-to-validate-an-email-address-in-javascript)
+      const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+      if (re.test(data[form.emailConfirmationField])) {
+        return self.email(req, 'emailConfirmation', {
+          form: form
+        },
+        {
+          from: form.email,
+          to: data[form.emailConfirmationField],
+          subject: form.title
+        });
       }
     });
 
