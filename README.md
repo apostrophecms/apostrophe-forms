@@ -21,7 +21,7 @@ modules: {
   'apostrophe-forms-radio-field-widgets': {},
   'apostrophe-forms-checkboxes-field-widgets': {},
   'apostrophe-forms-boolean-field-widgets': {},
-  'apostrophe-forms-conditional': {},
+  'apostrophe-forms-conditional-widgets': {},
   // END of field widgets
   'apostrophe-email': {
     // See the email tutorial for required configuration.
