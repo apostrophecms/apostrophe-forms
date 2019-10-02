@@ -1,5 +1,9 @@
 # Change log
 
+## 1.3.1: 2019-10-02
+
+- Removes default parameter usage. Fixes a typo in the README's default app.js configuration.
+
 ## 1.3.0: 2019-08-08
 
 - Adds an email confirmation option post-submission. Improves error handling with message label. Arranges fields in form field widgets. Prevents `apostrophe-anchors` from adding fields to each form input widget.
