@@ -36,6 +36,7 @@
     "mocha": "^6.1.4"
   },
   "dependencies": {
+    "lodash.uniq": "^4.5.0",
     "request": "^2.88.0",
     "request-promise": "^4.2.4"
   },
