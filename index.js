@@ -1,4 +1,5 @@
 const request = require('request-promise');
+const uniq = require('lodash.uniq');
 
 module.exports = {
   name: 'apostrophe-forms',
@@ -150,6 +151,27 @@ module.exports = {
             type: 'email',
             required: true,
             label: 'Email Address for Results'
+          },
+          {
+            name: 'conditions',
+            label: 'Set Conditions for this Notification',
+            help: 'e.g., only notify this email address if the "country" field is set to "Austria. All conditions must be met. Add the email again with another conditional set if needed."',
+            type: 'array',
+            titleField: 'value',
+            schema: [
+              {
+                name: 'field',
+                label: 'Enter a field to use as your condition.',
+                type: 'string',
+                help: 'Only select (drop-down) and checkbox fields can be used for this condition.'
+              },
+              {
+                name: 'value',
+                type: 'string',
+                label: 'Enter the value an end-user will enter to meet this conditional.',
+                choices: 'getConditionChoices'
+              }
+            ]
           }
         ]
       }
@@ -345,6 +367,35 @@ module.exports = {
         return;
       }
 
+      let emails = [];
+
+      form.emails.forEach(mailRule => {
+        if (!mailRule.conditions || mailRule.conditions.length === 0) {
+          emails.push(mailRule.email);
+          return;
+        }
+
+        let passed = true;
+
+        mailRule.conditions.forEach(condition => {
+          if (!data[condition.field]) {
+            passed = false;
+          } else if (typeof data[condition.field] === 'string' &&
+            data[condition.field] !== condition.value) {
+            passed = false;
+          } else if (Array.isArray(data[condition.field]) &&
+            !data[condition.field].includes(condition.value)) {
+            passed = false;
+          }
+        });
+
+        if (passed === true) {
+          emails.push(mailRule.email);
+        }
+      });
+
+      emails = uniq(emails);
+
       for (const key in data) {
         // Add some space to array lists.
         if (Array.isArray(data[key])) {
@@ -359,7 +410,7 @@ module.exports = {
         },
         {
           from: form.email,
-          to: form.emails.map(email => email.email).join(','),
+          to: emails.join(','),
           subject: form.title
         });
 

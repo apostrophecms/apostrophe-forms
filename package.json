@@ -24,7 +24,7 @@
   },
   "homepage": "https://github.com/apostrophecms/apostrophe-forms#readme",
   "devDependencies": {
-    "apostrophe": "^2.92.0",
+    "apostrophe": "^2.98.1",
     "axios": "^0.19.0",
     "eslint": "^4.15.0",
     "eslint-config-apostrophe": "^2.0.2",
@@ -36,6 +36,7 @@
     "mocha": "^6.1.4"
   },
   "dependencies": {
+    "lodash.uniq": "^4.5.0",
     "request": "^2.88.0",
     "request-promise": "^4.2.4"
   },
