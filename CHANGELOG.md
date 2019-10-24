@@ -1,5 +1,9 @@
 # Change log
 
+## 1.4.0 2019-10-24
+
+- Adds a feature to email submission notifications to make those emails conditional on another field's value.
+
 ## 1.3.1: 2019-10-02
 
 - Removes default parameter usage. Fixes a typo in the README's default app.js configuration.
