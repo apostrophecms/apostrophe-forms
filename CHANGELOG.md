@@ -1,8 +1,8 @@
 # Change log
 
-## 1.4.0 2019-10-24
+## 1.4.0 2019-10-30
 
-- Adds a feature to email submission notifications to make those emails conditional on another field's value.
+- Adds a feature to email submission notifications to make those emails conditional on another field's value. Also adds the ability to set placeholder values on text and textarea form fields.
 
 ## 1.3.1: 2019-10-02
 
