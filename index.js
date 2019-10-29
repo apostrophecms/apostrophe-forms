@@ -169,6 +169,7 @@ module.exports = {
                 name: 'value',
                 type: 'string',
                 label: 'Enter the value an end-user will enter to meet this conditional.',
+                htmlHelp: 'Use comma-separated values to check multiple values on this field (an OR relationship). Values that actually contain commas should be entered in double-quotation marks (e.g., <code>Proud Mary, The Best, "River Deep, Mountain High"</code>).',
                 choices: 'getConditionChoices'
               }
             ]
@@ -182,7 +183,6 @@ module.exports = {
       'thankYouBody',
       'sendConfirmationEmail',
       'emailConfirmationField'
-
     ].concat(options.emailSubmissions !== false ? ['emails'] : []);
 
     options.arrangeFields = (options.arrangeFields || []).concat([
@@ -361,7 +361,7 @@ module.exports = {
       }
     };
 
-    self.on('submission', 'emailSubmission', async function(req, form, data) {
+    self.sendEmailSubmissions = async function (req, form, data) {
       if (self.options.emailSubmissions === false ||
         !form.emails || form.emails.length === 0) {
         return;
@@ -378,14 +378,34 @@ module.exports = {
         let passed = true;
 
         mailRule.conditions.forEach(condition => {
+          if (!condition.value) {
+            return;
+          }
+
           if (!data[condition.field]) {
             passed = false;
           } else if (typeof data[condition.field] === 'string' &&
             data[condition.field] !== condition.value) {
             passed = false;
-          } else if (Array.isArray(data[condition.field]) &&
-            !data[condition.field].includes(condition.value)) {
-            passed = false;
+          } else if (Array.isArray(data[condition.field])) {
+            // Regex for comma-separation from https://stackoverflow.com/questions/11456850/split-a-string-by-commas-but-ignore-commas-within-double-quotes-using-javascript/11457952#comment56094979_11457952
+            const regex = /(".*?"|[^",]+)(?=\s*,|\s*$)/g;
+            let acceptable = condition.value.match(regex);
+
+            acceptable = acceptable.map(value => {
+              // Remove leading/trailing white space and bounding double-quotes.
+              value = value.trim();
+
+              if (value[0] === '"' && value[value.length - 1] === '"') {
+                value = value.slice(1, -1);
+              }
+
+              return value.trim();
+            });
+
+            if (!(data[condition.field].some(val => acceptable.includes(val)))) {
+              passed = false;
+            }
           }
         });
 
@@ -395,6 +415,10 @@ module.exports = {
       });
 
       emails = uniq(emails);
+
+      if (self.options.testing) {
+        return emails;
+      }
 
       for (const key in data) {
         // Add some space to array lists.
@@ -420,6 +444,10 @@ module.exports = {
 
         return null;
       }
+    };
+
+    self.on('submission', 'emailSubmission', async function (req, form, data) {
+      await self.sendEmailSubmissions(req, form, data);
     });
 
     self.on('submission', 'emailConfirmation', async function(req, form, data) {
@@ -429,6 +457,7 @@ module.exports = {
 
       // Email validation (Regex reference: https://stackoverflow.com/questions/46155/how-to-validate-an-email-address-in-javascript)
       const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
       if (re.test(data[form.emailConfirmationField])) {
         return self.email(req, 'emailConfirmation', {
           form: form
