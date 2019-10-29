@@ -169,6 +169,7 @@ module.exports = {
                 name: 'value',
                 type: 'string',
                 label: 'Enter the value an end-user will enter to meet this conditional.',
+                htmlHelp: 'Use comma-separated values to check multiple values on this field (an OR relationship). Values that actually contain commas should be entered in double-quotation marks (e.g., <code>Proud Mary, The Best, "River Deep, Mountain High"</code>).',
                 choices: 'getConditionChoices'
               }
             ]
@@ -365,7 +366,7 @@ module.exports = {
         !form.emails || form.emails.length === 0) {
         return;
       }
-      console.log('💌', form.emails.length, self.options.testing);
+
       let emails = [];
 
       form.emails.forEach(mailRule => {
@@ -377,14 +378,34 @@ module.exports = {
         let passed = true;
 
         mailRule.conditions.forEach(condition => {
+          if (!condition.value) {
+            return;
+          }
+
           if (!data[condition.field]) {
             passed = false;
           } else if (typeof data[condition.field] === 'string' &&
             data[condition.field] !== condition.value) {
             passed = false;
-          } else if (Array.isArray(data[condition.field]) &&
-            !data[condition.field].includes(condition.value)) {
-            passed = false;
+          } else if (Array.isArray(data[condition.field])) {
+            // Regex for comma-separation from https://stackoverflow.com/questions/11456850/split-a-string-by-commas-but-ignore-commas-within-double-quotes-using-javascript/11457952#comment56094979_11457952
+            const regex = /(".*?"|[^",]+)(?=\s*,|\s*$)/g;
+            let acceptable = condition.value.match(regex);
+
+            acceptable = acceptable.map(value => {
+              // Remove leading/trailing white space and bounding double-quotes.
+              value = value.trim();
+
+              if (value[0] === '"' && value[value.length - 1] === '"') {
+                value = value.slice(1, -1);
+              }
+
+              return value.trim();
+            });
+
+            if (!(data[condition.field].some(val => acceptable.includes(val)))) {
+              passed = false;
+            }
           }
         });
 

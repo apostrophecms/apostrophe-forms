@@ -398,7 +398,7 @@ describe('Forms module', function () {
         "conditions": [
           {
             "field": "DogTraits",
-            "value": "Likes treats"
+            "value": 'Likes treats, It\'s a dog'
           },
           {
             "field": "DogBreed",
@@ -412,7 +412,7 @@ describe('Forms module', function () {
         "conditions": [
           {
             "field": "DogTraits",
-            "value": "Likes treats"
+            "value": 'Likes treats, "Comma, test"'
           }
         ]
       }
@@ -506,7 +506,7 @@ describe('Forms module', function () {
     'DogName': 'Jenkins',
     'DogTraits': [
       'Runs fast',
-      'Likes treats'
+      'Comma, test'
     ],
     'DogBreed': 'Irish Wolfhound'
   };
