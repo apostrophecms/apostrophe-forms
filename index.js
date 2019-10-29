@@ -182,7 +182,6 @@ module.exports = {
       'thankYouBody',
       'sendConfirmationEmail',
       'emailConfirmationField'
-
     ].concat(options.emailSubmissions !== false ? ['emails'] : []);
 
     options.arrangeFields = (options.arrangeFields || []).concat([
@@ -366,7 +365,7 @@ module.exports = {
         !form.emails || form.emails.length === 0) {
         return;
       }
-
+      console.log('💌', form.emails.length, self.options.testing);
       let emails = [];
 
       form.emails.forEach(mailRule => {
@@ -395,6 +394,10 @@ module.exports = {
       });
 
       emails = uniq(emails);
+
+      if (self.options.testing) {
+        return emails;
+      }
 
       for (const key in data) {
         // Add some space to array lists.

@@ -384,6 +384,42 @@ describe('Forms module', function () {
   let apos3;
   let savedForm3;
   let submission4 = { ...submission1 };
+  let form3 = {
+    ...form1,
+    "emails": [
+      {
+        "id": "emailCondOne",
+        "email": "emailOne@example.net",
+        "conditions": []
+      },
+      {
+        "id": "emailCondTwo",
+        "email": "emailTwo@example.net",
+        "conditions": [
+          {
+            "field": "DogTraits",
+            "value": "Likes treats"
+          },
+          {
+            "field": "DogBreed",
+            "value": "Cesky Terrier"
+          }
+        ]
+      },
+      {
+        "id": "emailCondThree",
+        "email": "emailThree@example.net",
+        "conditions": [
+          {
+            "field": "DogTraits",
+            "value": "Likes treats"
+          }
+        ]
+      }
+    ]
+  };
+  form3.slug = 'test-form-three';
+  form3._id = 'form3';
 
   it('should be a property of the apos3 object', function (done) {
     apos3 = require('apostrophe')({
@@ -400,6 +436,8 @@ describe('Forms module', function () {
           }
         },
         'apostrophe-forms': {
+          emailSubmissions: true,
+          testing: true,
           // reCAPTCHA test keys https://developers.google.com/recaptcha/docs/faq#id-like-to-run-automated-tests-with-recaptcha-what-should-i-do
           recaptchaSite: '6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI',
           recaptchaSecret: '6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe'
@@ -423,7 +461,7 @@ describe('Forms module', function () {
   it('should return a form error if missing required reCAPTHCA token', async function () {
     const req = apos3.tasks.getReq();
 
-    await apos3.docs.db.insert(form1)
+    await apos3.docs.db.insert(form3)
       .then(function () {
         return apos3.docs.getManager('apostrophe-forms').find(req, {})
           .toObject();
@@ -462,6 +500,42 @@ describe('Forms module', function () {
     assert(response.status === 200);
     assert(response.data.status === 'ok');
     assert(!response.data.formErrors);
+  });
+
+  const submission5 = {
+    'DogName': 'Jenkins',
+    'DogTraits': [
+      'Runs fast',
+      'Likes treats'
+    ],
+    'DogBreed': 'Irish Wolfhound'
+  };
+
+  const submission6 = {
+    'DogName': 'Jenkins',
+    'DogTraits': [
+      'Runs fast',
+      'Likes treats'
+    ],
+    'DogBreed': 'Cesky Terrier'
+  };
+
+  it('should populate email notification lists based on conditions', async function () {
+    const req = apos3.tasks.getReq();
+
+    const emailSetOne = await apos3.modules['apostrophe-forms'].sendEmailSubmissions(req, savedForm3, submission5);
+
+    assert(emailSetOne.length === 2);
+    assert(emailSetOne.indexOf('emailOne@example.net') > -1);
+    assert(emailSetOne.indexOf('emailTwo@example.net') === -1);
+    assert(emailSetOne.indexOf('emailThree@example.net') > -1);
+
+    const emailSetTwo = await apos3.modules['apostrophe-forms'].sendEmailSubmissions(req, savedForm3, submission6);
+
+    assert(emailSetTwo.length === 3);
+    assert(emailSetTwo.indexOf('emailOne@example.net') > -1);
+    assert(emailSetTwo.indexOf('emailTwo@example.net') > -1);
+    assert(emailSetTwo.indexOf('emailThree@example.net') > -1);
   });
 
   it('destroys the third instance', function (done) {
