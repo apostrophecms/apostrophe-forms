@@ -5,6 +5,8 @@ module.exports = {
   name: 'apostrophe-forms',
   label: 'Form',
   extend: 'apostrophe-pieces',
+  seo: false,
+  openGraph: false,
   moogBundle: {
     directory: 'lib/modules',
     modules: [
@@ -155,7 +157,7 @@ module.exports = {
           {
             name: 'conditions',
             label: 'Set Conditions for this Notification',
-            help: 'e.g., only notify this email address if the "country" field is set to "Austria. All conditions must be met. Add the email again with another conditional set if needed."',
+            help: 'For example, if you only notify this email address if the "country" field is set to "Austria". All conditions must be met. Add the email again with another conditional set if needed."',
             type: 'array',
             titleField: 'value',
             schema: [
@@ -175,6 +177,13 @@ module.exports = {
             ]
           }
         ]
+      },
+      {
+        name: 'email',
+        label: 'Primary internal email address',
+        type: 'string',
+        required: true,
+        help: 'You may enter one from the previous list. This is the address that will be used as the "from" address on any generated email messages.'
       }
     ] : []).concat(options.addFields || []);
 
@@ -183,7 +192,10 @@ module.exports = {
       'thankYouBody',
       'sendConfirmationEmail',
       'emailConfirmationField'
-    ].concat(options.emailSubmissions !== false ? ['emails'] : []);
+    ].concat(options.emailSubmissions !== false ? [
+      'emails',
+      'email'
+    ] : []);
 
     options.arrangeFields = (options.arrangeFields || []).concat([
       {
