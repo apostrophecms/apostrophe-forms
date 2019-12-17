@@ -87,7 +87,7 @@ describe('Forms module', function () {
   it('should have a default collection for submissions', function (done) {
     apos.db.collection('aposFormSubmissions', function (err, collection) {
       assert(!err);
-      assert(collection.namespace === 'test.aposFormSubmissions');
+      assert(collection);
       done();
     });
   });
