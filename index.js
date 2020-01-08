@@ -124,6 +124,7 @@ module.exports = {
         label: 'Query Parameter Keys',
         type: 'array',
         titleField: 'key',
+        required: true,
         help: 'Create an array item for each query parameter value you wish to capture.',
         schema: [
           {
