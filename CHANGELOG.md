@@ -1,5 +1,17 @@
 # Change log
 
+## 1.5.0 2020-01-08
+
+- Adds checkbox fields as an option for a conditional fieldset control.
+
+## 1.4.2 2019-12-17
+
+- Makes the "Query Parameter Keys" field required again following an ApostropheCMS core fix.
+
+## 1.4.1 2019-12-17
+
+- Returns an `email` field that had  been removed to allow sending results to multiple email addresses, but it's still needed to send messages from the app in some transports. Fixes a test.
+
 ## 1.4.0 2019-10-30
 
 - Adds a feature to email submission notifications to make those emails conditional on another field's value. Also adds the ability to set placeholder values on text and textarea form fields.
