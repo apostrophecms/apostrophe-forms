@@ -1,5 +1,9 @@
 # Change log
 
+## 1.5.1 2020-01-22
+
+- Fixes a bug where the submission notification process did not test comma-separated values property for values stored as strings.
+
 ## 1.5.0 2020-01-08
 
 - Adds checkbox fields as an option for a conditional fieldset control.
