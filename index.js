@@ -395,12 +395,11 @@ module.exports = {
             return;
           }
 
-          if (!data[condition.field]) {
+          let answer = data[condition.field];
+
+          if (!answer) {
             passed = false;
-          } else if (typeof data[condition.field] === 'string' &&
-            data[condition.field] !== condition.value) {
-            passed = false;
-          } else if (Array.isArray(data[condition.field])) {
+          } else {
             // Regex for comma-separation from https://stackoverflow.com/questions/11456850/split-a-string-by-commas-but-ignore-commas-within-double-quotes-using-javascript/11457952#comment56094979_11457952
             const regex = /(".*?"|[^",]+)(?=\s*,|\s*$)/g;
             let acceptable = condition.value.match(regex);
@@ -416,7 +415,12 @@ module.exports = {
               return value.trim();
             });
 
-            if (!(data[condition.field].some(val => acceptable.includes(val)))) {
+            // If the value is stored as a string, convert to an array for checking.
+            if (!Array.isArray(answer)) {
+              answer = [answer];
+            }
+
+            if (!(answer.some(val => acceptable.includes(val)))) {
               passed = false;
             }
           }
@@ -431,6 +435,10 @@ module.exports = {
 
       if (self.options.testing) {
         return emails;
+      }
+
+      if (emails.length === 0) {
+        return null;
       }
 
       for (const key in data) {

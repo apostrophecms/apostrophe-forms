@@ -402,7 +402,7 @@ describe('Forms module', function () {
           },
           {
             "field": "DogBreed",
-            "value": "Cesky Terrier"
+            "value": "Cesky Terrier, Pumi"
           }
         ]
       },
