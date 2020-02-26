@@ -1,5 +1,9 @@
 # Change log
 
+## 1.6.0 2020-02-26
+
+- Adds the option to select a more specific input type for text fields (e.g., email, password, telephone). Thanks to Jose96GIT for the contribution.
+
 ## 1.5.1 2020-01-22
 
 - Fixes a bug where the submission notification process did not test comma-separated values property for values stored as strings.
