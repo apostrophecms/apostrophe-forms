@@ -481,7 +481,8 @@ module.exports = {
 
       if (re.test(data[form.emailConfirmationField])) {
         return self.email(req, 'emailConfirmation', {
-          form: form
+          form: form,
+          input: data
         },
         {
           from: form.email,
