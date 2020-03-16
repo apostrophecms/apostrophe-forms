@@ -1,5 +1,9 @@
 # Change log
 
+## 1.7.0 2020-03-16
+
+- Adds submission data from the end user to an `input` property sent to the `emailConfirmation` template. Thanks to Ricky Rodríguez Álvarez for the contribution.
+
 ## 1.6.0 2020-02-26
 
 - Adds the option to select a more specific input type for text fields (e.g., email, password, telephone). Thanks to Jose96GIT for the contribution.
