@@ -92,7 +92,8 @@ module.exports = {
           {
             value: true,
             showFields: [
-              'emailConfirmationField'
+              'emailConfirmationField',
+              'emailConfirmationSubject'
             ]
           }
         ]
@@ -103,6 +104,12 @@ module.exports = {
         help: 'Enter the "name" value of the field where people with enter their email address.',
         type: 'string',
         required: true
+      },
+      {
+        name: 'emailConfirmationSubject',
+        label: 'Email Subject for Confirmation Email',
+        help: 'Add a custom subject to the confirmation email. Default to Form Title',
+        type: 'string',
       },
       {
         name: 'enableQueryParams',
@@ -180,6 +187,12 @@ module.exports = {
         ]
       },
       {
+        name: 'emailSubmissionSubject',
+        label: 'Email Subject for Results',
+        help: 'Add a custom subject to the submission email. Default to Form Title',
+        type: 'string'
+      },
+      {
         name: 'email',
         label: 'Primary internal email address',
         type: 'string',
@@ -192,9 +205,11 @@ module.exports = {
       'thankYouHeading',
       'thankYouBody',
       'sendConfirmationEmail',
-      'emailConfirmationField'
+      'emailConfirmationField',
+      'emailConfirmationSubject'
     ].concat(options.emailSubmissions !== false ? [
       'emails',
+      'emailSubmissionSubject',
       'email'
     ] : []);
 
@@ -456,7 +471,7 @@ module.exports = {
         {
           from: form.email,
           to: emails.join(','),
-          subject: form.title
+          subject: form.emailSubmissionSubject || form.title
         });
 
         return null;
@@ -487,7 +502,7 @@ module.exports = {
         {
           from: form.email,
           to: data[form.emailConfirmationField],
-          subject: form.title
+          subject: form.emailConfirmationSubject || form.title
         });
       }
     });
