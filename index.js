@@ -93,7 +93,6 @@ module.exports = {
             value: true,
             showFields: [
               'emailConfirmationField',
-              'emailConfirmationSubject'
             ]
           }
         ]
@@ -104,12 +103,6 @@ module.exports = {
         help: 'Enter the "name" value of the field where people with enter their email address.',
         type: 'string',
         required: true
-      },
-      {
-        name: 'emailConfirmationSubject',
-        label: 'Email Subject for Confirmation Email',
-        help: 'Add a custom subject to the confirmation email. Default to Form Title',
-        type: 'string',
       },
       {
         name: 'enableQueryParams',
@@ -187,12 +180,6 @@ module.exports = {
         ]
       },
       {
-        name: 'emailSubmissionSubject',
-        label: 'Email Subject for Results',
-        help: 'Add a custom subject to the submission email. Default to Form Title',
-        type: 'string'
-      },
-      {
         name: 'email',
         label: 'Primary internal email address',
         type: 'string',
@@ -206,10 +193,8 @@ module.exports = {
       'thankYouBody',
       'sendConfirmationEmail',
       'emailConfirmationField',
-      'emailConfirmationSubject'
     ].concat(options.emailSubmissions !== false ? [
       'emails',
-      'emailSubmissionSubject',
       'email'
     ] : []);
 
@@ -464,15 +449,13 @@ module.exports = {
       }
 
       try {
-        await self.email(req, 'emailSubmission', {
-          form: form,
-          input: data
-        },
-        {
-          from: form.email,
-          to: emails.join(','),
-          subject: form.emailSubmissionSubject || form.title
-        });
+        const emailOptions = {
+          form,
+          data,
+          to: emails.join(",")
+        }
+
+        await self.sendEmail(req, "emailSubmission", emailOptions);
 
         return null;
       } catch (err) {
@@ -480,6 +463,25 @@ module.exports = {
 
         return null;
       }
+    };
+
+    //options: form, data, options
+    self.sendEmail = (req,emailTemplate, options) => {
+      const form = options.form;
+      const data = options.data;
+      return self.email(
+        req,
+        emailTemplate,
+        {
+          form: form,
+          input: data
+        },
+        {
+          from: options.from || form.email,
+          to: options.to || data[form.emailConfirmationField],
+          subject: options.subject || form.title
+        }
+      );
     };
 
     self.on('submission', 'emailSubmission', async function (req, form, data) {
@@ -495,15 +497,11 @@ module.exports = {
       const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
       if (re.test(data[form.emailConfirmationField])) {
-        return self.email(req, 'emailConfirmation', {
-          form: form,
-          input: data
-        },
-        {
-          from: form.email,
-          to: data[form.emailConfirmationField],
-          subject: form.emailConfirmationSubject || form.title
-        });
+        const emailOptions = {
+          form,
+          data,
+        }
+        return self.sendEmail(req, "emailConfirmation", emailOptions);
       }
     });
 
