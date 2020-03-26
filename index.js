@@ -465,7 +465,7 @@ module.exports = {
       }
     };
 
-    //options: form, data, options
+    //Should be handled async. Options are: form, data, from, to and subject
     self.sendEmail = (req,emailTemplate, options) => {
       const form = options.form;
       const data = options.data;
