@@ -374,6 +374,25 @@ module.exports = {
       }
     };
 
+    //Should be handled async. Options are: form, data, from, to and subject
+    self.sendEmail = (req,emailTemplate, options) => {
+      const form = options.form;
+      const data = options.data;
+      return self.email(
+        req,
+        emailTemplate,
+        {
+          form: form,
+          input: data
+        },
+        {
+          from: options.from || form.email,
+          to: options.to,
+          subject: options.subject || form.title
+        }
+      );
+    };
+
     self.sendEmailSubmissions = async function (req, form, data) {
       if (self.options.emailSubmissions === false ||
         !form.emails || form.emails.length === 0) {
@@ -465,24 +484,6 @@ module.exports = {
       }
     };
 
-    //Should be handled async. Options are: form, data, from, to and subject
-    self.sendEmail = (req,emailTemplate, options) => {
-      const form = options.form;
-      const data = options.data;
-      return self.email(
-        req,
-        emailTemplate,
-        {
-          form: form,
-          input: data
-        },
-        {
-          from: options.from || form.email,
-          to: options.to || data[form.emailConfirmationField],
-          subject: options.subject || form.title
-        }
-      );
-    };
 
     self.on('submission', 'emailSubmission', async function (req, form, data) {
       await self.sendEmailSubmissions(req, form, data);
@@ -505,6 +506,7 @@ module.exports = {
         const emailOptions = {
           form,
           data,
+          to: data[emailConfirmationField]
         }
         await self.sendEmail(req, "emailConfirmation", emailOptions);
 
