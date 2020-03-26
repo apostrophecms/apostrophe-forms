@@ -496,12 +496,23 @@ module.exports = {
       // Email validation (Regex reference: https://stackoverflow.com/questions/46155/how-to-validate-an-email-address-in-javascript)
       const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
-      if (re.test(data[form.emailConfirmationField])) {
+
+      if (!re.test(data[form.emailConfirmationField])) {
+        return null;
+      }
+
+      try {
         const emailOptions = {
           form,
           data,
         }
-        return self.sendEmail(req, "emailConfirmation", emailOptions);
+        await self.sendEmail(req, "emailConfirmation", emailOptions);
+
+        return null;
+      } catch (err) {
+        self.apos.utils.error('⚠️ apostrophe-forms submission email confirmation error: ', err);
+
+        return null;
       }
     });
 

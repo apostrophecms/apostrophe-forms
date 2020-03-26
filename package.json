@@ -1,6 +1,6 @@
 {
   "name": "apostrophe-forms",
-  "version": "1.6.0",
+  "version": "1.7.1",
   "description": "Build forms for ApostropheCMS in a simple user interface.",
   "main": "index.js",
   "scripts": {
@@ -17,7 +17,7 @@
     "forms",
     "form builder"
   ],
-  "author": "P'unk Avenue LLC",
+  "author": "Apostrophe Technologies, Inc.",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/apostrophecms/apostrophe-forms/issues"
