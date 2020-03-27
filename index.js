@@ -92,7 +92,7 @@ module.exports = {
           {
             value: true,
             showFields: [
-              'emailConfirmationField',
+              'emailConfirmationField'
             ]
           }
         ]
@@ -192,7 +192,7 @@ module.exports = {
       'thankYouHeading',
       'thankYouBody',
       'sendConfirmationEmail',
-      'emailConfirmationField',
+      'emailConfirmationField'
     ].concat(options.emailSubmissions !== false ? [
       'emails',
       'email'
@@ -374,8 +374,8 @@ module.exports = {
       }
     };
 
-    //Should be handled async. Options are: form, data, from, to and subject
-    self.sendEmail = (req,emailTemplate, options) => {
+    // Should be handled async. Options are: form, data, from, to and subject
+    self.sendEmail = (req, emailTemplate, options) => {
       const form = options.form;
       const data = options.data;
       return self.email(
@@ -472,7 +472,7 @@ module.exports = {
           form,
           data,
           to: emails.join(",")
-        }
+        };
 
         await self.sendEmail(req, "emailSubmission", emailOptions);
 
@@ -483,7 +483,6 @@ module.exports = {
         return null;
       }
     };
-
 
     self.on('submission', 'emailSubmission', async function (req, form, data) {
       await self.sendEmailSubmissions(req, form, data);
@@ -497,7 +496,6 @@ module.exports = {
       // Email validation (Regex reference: https://stackoverflow.com/questions/46155/how-to-validate-an-email-address-in-javascript)
       const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
-
       if (!re.test(data[form.emailConfirmationField])) {
         return null;
       }
@@ -506,8 +504,8 @@ module.exports = {
         const emailOptions = {
           form,
           data,
-          to: data[emailConfirmationField]
-        }
+          to: data[form.emailConfirmationField]
+        };
         await self.sendEmail(req, "emailConfirmation", emailOptions);
 
         return null;
