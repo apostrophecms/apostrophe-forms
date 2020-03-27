@@ -92,7 +92,7 @@ module.exports = {
           {
             value: true,
             showFields: [
-              'emailConfirmationField'
+              'emailConfirmationField',
             ]
           }
         ]
@@ -192,7 +192,7 @@ module.exports = {
       'thankYouHeading',
       'thankYouBody',
       'sendConfirmationEmail',
-      'emailConfirmationField'
+      'emailConfirmationField',
     ].concat(options.emailSubmissions !== false ? [
       'emails',
       'email'
@@ -374,6 +374,25 @@ module.exports = {
       }
     };
 
+    //Should be handled async. Options are: form, data, from, to and subject
+    self.sendEmail = (req,emailTemplate, options) => {
+      const form = options.form;
+      const data = options.data;
+      return self.email(
+        req,
+        emailTemplate,
+        {
+          form: form,
+          input: data
+        },
+        {
+          from: options.from || form.email,
+          to: options.to,
+          subject: options.subject || form.title
+        }
+      );
+    };
+
     self.sendEmailSubmissions = async function (req, form, data) {
       if (self.options.emailSubmissions === false ||
         !form.emails || form.emails.length === 0) {
@@ -449,15 +468,13 @@ module.exports = {
       }
 
       try {
-        await self.email(req, 'emailSubmission', {
-          form: form,
-          input: data
-        },
-        {
-          from: form.email,
-          to: emails.join(','),
-          subject: form.title
-        });
+        const emailOptions = {
+          form,
+          data,
+          to: emails.join(",")
+        }
+
+        await self.sendEmail(req, "emailSubmission", emailOptions);
 
         return null;
       } catch (err) {
@@ -466,6 +483,7 @@ module.exports = {
         return null;
       }
     };
+
 
     self.on('submission', 'emailSubmission', async function (req, form, data) {
       await self.sendEmailSubmissions(req, form, data);
@@ -479,20 +497,18 @@ module.exports = {
       // Email validation (Regex reference: https://stackoverflow.com/questions/46155/how-to-validate-an-email-address-in-javascript)
       const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
+
       if (!re.test(data[form.emailConfirmationField])) {
         return null;
       }
 
       try {
-        await self.email(req, 'emailConfirmation', {
-          form: form,
-          input: data
-        },
-        {
-          from: form.email,
-          to: data[form.emailConfirmationField],
-          subject: form.title
-        });
+        const emailOptions = {
+          form,
+          data,
+          to: data[emailConfirmationField]
+        }
+        await self.sendEmail(req, "emailConfirmation", emailOptions);
 
         return null;
       } catch (err) {
