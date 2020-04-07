@@ -1,4 +1,5 @@
 package-lock.json
+yarn.lock
 test/public/modules/*
 test/public/css/master-*
 test/locales
