@@ -60,13 +60,22 @@ If `apostrophe-email` is configured, submissions can be sent to multiple email a
 
 ## Styling
 
-Starter styles for user-facing forms are included in a forms.less file. These offer some spacing as well as styling for error states. If you do not want to use these, the `disableBaseStyles: true` option to `apostrophe-forms-widgets`. This file can also be used to identify the error state classes that you should style in your project.
+Starter styles for user-facing forms are included in a forms.less file. These offer some spacing as well as styling for error states. If you do not want to use these, pass the `disableBaseStyles: true` option to `apostrophe-forms-widgets`. This file can also be used to identify the error state classes that you should style in your project.
 
 ```javascript
 'apostrophe-forms-widgets': {
   disableBaseStyles: true
 },
 ```
+
+Need more control over your styling? You can include your own class prefix that will be in included on most of the labels, inputs, and message/error elements within the forms. The class that is created uses the [BEM](http://getbem.com/naming/) convention. You add the prefix you want in the `apostrophe-forms` configuration.
+
+```javascript
+'apostrophe-forms': {
+  classPrefix: 'my-form'
+}
+```
+This results in a class like `my-form__input` being added to input elements in the form, for example.
 
 ## Using reCAPTCHA for user validation
 
