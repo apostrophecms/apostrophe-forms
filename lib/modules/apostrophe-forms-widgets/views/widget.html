@@ -13,7 +13,7 @@
       {% endif %}
     {% endfor %}
   {% endif %}
-  <form {% if classPrefix %}class="{{classPrefix}}"{% endif %} data-apos-forms-form="{{ form._id }}" autocomplete="off" {% if form.enableQueryParams %}data-apos-forms-params='{{params}}'{% endif %}>
+  <form {% if classPrefix %}class="{{ classPrefix + '__form' }}"{% endif %} data-apos-forms-form="{{ form._id }}" autocomplete="off" {% if form.enableQueryParams %}data-apos-forms-params='{{params}}'{% endif %}>
     {{ apos.area(form, 'contents', {
       edit: false
     }) }}
