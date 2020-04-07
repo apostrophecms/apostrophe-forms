@@ -1,4 +1,5 @@
-<fieldset data-apos-form-condition="{{data.widget.conditionName}}" data-apos-form-condition-value="{{data.widget.conditionValue}}" class="{% if data.widget.classPrefix %}{{data.widget.classPrefix}}__conditional{% else %}apos-forms-conditional{% endif %}" disabled>
+{% set classPrefix = data.widget.classPrefix %}
+<fieldset data-apos-form-condition="{{data.widget.conditionName}}" data-apos-form-condition-value="{{data.widget.conditionValue}}" class="apos-forms-conditional {{ classPrefix + '__conditional' if classPrefix }}" disabled>
   {{ apos.area(data.widget, 'contents', {
     edit: false
   }) }}

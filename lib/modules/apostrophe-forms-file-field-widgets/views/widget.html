@@ -1,12 +1,13 @@
 {# ids must be unique doc-wide #}
 {% set id = apos.utils.generateId() %}
 {% set widget = data.widget %}
-<label for="{{ id }}" class="{% if data.widget.classPrefix %}{{data.widget.classPrefix}}__label{% else %}apos-forms-label{% endif %}">
+{% set classPrefix = data.widget.classPrefix %}
+<label for="{{ id }}" class="apos-forms-label {{classPrefix + '__label' if classPrefix }}">
   {{ widget.fieldLabel}}
   {% if not widget.required %} {{ __("(Optional)") }}{% endif %}
-  <span class="%{ if data.widget.classPrefix %}{{data.widget.classPrefix}}__label-message{% else %}apos-forms-label-message{% endif %}" data-apos-input-message="{{ widget.fieldName}}" hidden></span>
-  <span class="{% if data.widget.classPrefix %}{{data.widget.classPrefix}}__label-message{% else %}apos-forms-label-message{% endif %}" data-apos-forms-file-spinner hidden>Uploading...</span>
-  <span class="{% if data.widget.classPrefix %}{{data.widget.classPrefix}}__error {{data.widget.classPrefix}}__label-message{% else %}apos-forms-error apos-forms-label-message{% endif %}" data-apos-forms-file-error role="alert" hidden>An error occurred uploading the file. It may be too large or of an inappropriate type.</span>
+  <span class="apos-forms-label-message {{ classPrefix + '__label-message' if classPrefix }}" data-apos-input-message="{{ widget.fieldName}}" hidden></span>
+  <span class="apos-forms-label-message {{ classPrefix + '__label-message' if classPrefix }}" data-apos-forms-file-spinner hidden>Uploading...</span>
+  <span class="apos-forms-error apos-forms-label-message {{classPrefix + '__error' if classPrefix }} {{ classPrefix + '__label-message' if classPrefix }}" data-apos-forms-file-error role="alert" hidden>An error occurred uploading the file. It may be too large or of an inappropriate type.</span>
 </label>
-<input class="{% if data.widget.classPrefix %}{{data.widget.classPrefix}}__input{% else %}apos-forms-input{% endif %}" type="file" id="{{ id }}" multiple
+<input class="apos-forms-input {{ classPrefix + '__input' if classPrefix }}" type="file" id="{{ id }}" multiple
   name="{{ widget.fieldName}}" {% if widget.required %}required{% endif %}>

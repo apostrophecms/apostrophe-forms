@@ -1,5 +1,6 @@
 {% set widget = data.widget %}
 {% set form = data.widget._form %}
+{% set classPrefix = data.widget.classPrefix %}
 {% if form %}
   {% set params = false %}
   {% if form.queryParamList %}
@@ -12,7 +13,7 @@
       {% endif %}
     {% endfor %}
   {% endif %}
-  <form {% if widget.classPrefix %}class="{{widget.classPrefix}}"{% endif %} data-apos-forms-form="{{ form._id }}" autocomplete="off" {% if form.enableQueryParams %}data-apos-forms-params='{{params}}'{% endif %}>
+  <form {% if classPrefix %}class="{{classPrefix}}"{% endif %} data-apos-forms-form="{{ form._id }}" autocomplete="off" {% if form.enableQueryParams %}data-apos-forms-params='{{params}}'{% endif %}>
     {{ apos.area(form, 'contents', {
       edit: false
     }) }}
@@ -24,20 +25,20 @@
         <p>{{ __('NOTE: The form above requires Javascript enabled in the browser for submission.') }}</p>
       </noscript>
     {% endif %}
-    <button type="submit" {% if widget.classPrefix %}class="{{widget.classPrefix}}__submit"{% endif %}>{{ form.submitLabel or 'Submit' }}</button>
+    <button type="submit" {% if classPrefix %}class="{{classPrefix + '__submit' }}"{% endif %}>{{ form.submitLabel or 'Submit' }}</button>
   </form>
-  <p role="alert" class="apos-forms-hidden {% if widget.classPrefix %}{{widget.classPrefix}}__error{% else %}apos-forms-error{% endif %}" data-apos-forms-submit-error>
+  <p role="alert" class="apos-forms-hidden apos-forms-error {{ classPrefix + '__error' if classPrefix }}" data-apos-forms-submit-error>
     {{ __("An error occurred submitting the form. Please try again.") }}
     <span data-apos-forms-global-error></span>
   </p>
 
   {% if recaptchaSite %}
-    <p role="alert" class="apos-forms-hidden {% if widget.classPrefix %}{{widget.classPrefix}}__error{% else %}apos-forms-error{% endif %}" data-apos-forms-recaptcha-error>
+    <p role="alert" class="apos-forms-hidden apos-forms-error {{ classPrefix + '__error' if classPrefix }}" data-apos-forms-recaptcha-error>
       {{ __("Please complete the reCAPTCHA validation.") }}
     </p>
   {% endif %}
-  <p class="apos-forms-hidden {% if widget.classPrefix %}{{widget.classPrefix}}__spinner{% endif %}" data-apos-forms-spinner>Submitting...</p>
-  <div role="alert" class="apos-forms-hidden" data-apos-forms-thank-you class="{% if widget.classPrefix %}{{widget.classPrefix}}__thank-you{% else %}apos-forms-submission-thank-you{% endif %}">
+  <p class="apos-forms-hidden {{classPrefix + '__spinner' if classPrefix }}" data-apos-forms-spinner>Submitting...</p>
+  <div role="alert" class="apos-forms-hidden apos-forms-submission-thank-you {{ classPrefix + '__submission-thank-you' if classPrefix }}" data-apos-forms-thank-you>
     {% if form.thankYouHeading %}
       <h3>{{ form.thankYouHeading }}</h3>
     {% endif %}
