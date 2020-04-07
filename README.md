@@ -54,6 +54,8 @@ By default, submissions are saved to a new MongoDB collection, `aposFormSubmissi
 
 Form submission triggers a `'submission'` event that you can listen for and handle in an additional method if you choose. The callback for that event is provided the arguments, `req, form (the form object), output (the submission output)`.
 
+The module also emits browser events on submission (`apostrophe-forms:submission-form`) and submission failure (`apostrophe-forms:submission-failed`). Both events are attached to the document `body` element.
+
 ### Email
 
 If `apostrophe-email` is configured, submissions can be sent to multiple email addresses as well. In the "After-Submission" tab, enter a comma-separated list of email addresses to the "Email Address(es) for Results" field. If not using this feature, set the `emailSubmissions: false` on the `apostrophe-forms` module to hide the related field on forms.
