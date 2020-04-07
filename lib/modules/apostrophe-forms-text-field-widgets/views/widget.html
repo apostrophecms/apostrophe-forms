@@ -1,9 +1,10 @@
 {# ids must be unique doc-wide #}
 {% set id = apos.utils.generateId() %}
 {% set widget = data.widget %}
-<label for="{{ id }}" class="apos-forms-label">
+{% set classPrefix = data.widget.classPrefix %}
+<label for="{{ id }}" class="apos-forms-label {{ classPrefix + '__label' if classPrefix }}">
   {{ widget.fieldLabel}}
   {% if not widget.required %} {{ __("(Optional)") }}{% endif %}
-  <span class="apos-forms-label-message" data-apos-input-message="{{ widget.fieldName}}" hidden></span>
+  <span class="apos-forms-label-message {{ classPrefix + '__label-message' if classPrefix }}" data-apos-input-message="{{ widget.fieldName}}" hidden></span>
 </label>
-<input class="apos-forms-input" type="{{ widget.inputType or "text" }}" id="{{ id }}" name="{{ widget.fieldName}}" placeholder="{{widget.placeholder}}" {% if widget.required %}required{% endif %} />
+<input class="apos-forms-input {{ classPrefix + '__input' if classPrefix }}" type="{{ widget.inputType or "text" }}" id="{{ id }}" name="{{ widget.fieldName}}" placeholder="{{widget.placeholder}}" {% if widget.required %}required{% endif %} />
