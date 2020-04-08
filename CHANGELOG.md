@@ -5,6 +5,7 @@
 - Moves the mechanism that sends emails into the `self.sendEmail` method, allowing for this to be more easily overridden in a project. The initiating purpose was to add project-level subject line functionality that might not make sense for everyone. Thanks to [Ricky Rodríguez Álvarez](https://github.com/rjrodriguezalvarez97) for the contribution.
 - Adds event emission on the body element for form submission (`apostrophe-forms:submission-form`) and submission failure (`apostrophe-forms:submission-failed`). Again, thanks to Ricky Álverez for the contribution.
 - Adds the option to use a custom class prefix to add classes to the form templates in addition to the `.apos-form-` classes. Thanks to [Brett Gaynor](https://github.com/bgaynor78) for the contribution.
+- Adds `date` as an input type option to the string input widget.
 - Updates the ESLint configuration to `eslint-config-apostrophe@3.10` and fixes linter errors.
 
 ## 1.7.1 2020-03-25
