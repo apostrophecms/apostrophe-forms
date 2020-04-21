@@ -1,5 +1,9 @@
 # Change log
 
+## 1.8.1 2020-04-22
+
+- Fixes IE11 bug by converting a NodeList to an Array before using `.forEach()`.
+
 ## 1.8.0 2020-03-25
 
 - Moves the mechanism that sends emails into the `self.sendEmail` method, allowing for this to be more easily overridden in a project. The initiating purpose was to add project-level subject line functionality that might not make sense for everyone. Thanks to [Ricky Rodríguez Álvarez](https://github.com/rjrodriguezalvarez97) for the contribution.
