@@ -1,5 +1,9 @@
 # Change log
 
+## 1.8.2 2020-05-14
+
+- Bump peer dependency on the apostrophe module to a minimum of 2.105.2 because of the need for a working version of `apos.utils.emit`. However we do recommend updating to the latest in the apostrophe module 2.x series when updating this module. Specifically we recommend setting your dependencies on all Apostrophe modules using the `^`, i.e. `^2.0.0`. When you are ready to test an update of your dependencies use `npm update`, then review your project's functionality before deploying.
+
 ## 1.8.1 2020-04-22
 
 - Fixes IE11 bug by converting a NodeList to an Array before using `.forEach()`.

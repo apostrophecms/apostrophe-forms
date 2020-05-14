@@ -41,6 +41,6 @@
     "request-promise": "^4.2.4"
   },
   "peerDependencies": {
-    "apostrophe": "^2.89.0"
+    "apostrophe": "^2.105.2"
   }
 }
