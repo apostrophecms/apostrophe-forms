@@ -1,5 +1,10 @@
 # Change log
 
+## 1.9.0 2020-06-17
+
+- Introduced multiselect dropdowns as an alternate style choice available to form creators when they select the "checkboxes" widget. The provided CSS is basic but the DOM structure is intended to be suitable for styling as you see fit.
+- Added the `checkboxLabel` option to the `apostrophe-forms-checkboxes-field-widgets` module. This is a module-level option; it should be set when configuring the module, not every time it is used. If set to `first`, the label text appears before the checkbox or dropdown element. If set to `last`, it appears after. In both cases, the `input` checkbox is nested inside the `label` DOM element, for easier styling of the choice as a whole. For backwards compatibility, the default setting is `legacy`, in which the `input` element is not nested in `label`.
+
 ## 1.8.2 2020-05-14
 
 - Bump peer dependency on the apostrophe module to a minimum of 2.105.2 because of the need for a working version of `apos.utils.emit`. However we do recommend updating to the latest in the apostrophe module 2.x series when updating this module. Specifically we recommend setting your dependencies on all Apostrophe modules using the `^`, i.e. `^2.0.0`. When you are ready to test an update of your dependencies use `npm update`, then review your project's functionality before deploying.
