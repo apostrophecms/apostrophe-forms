@@ -28,11 +28,10 @@
 .apos-forms-checkboxes-toggle:after {
   padding-left: 2em;
   content: '▶';
-}
-
-.apos-forms-checkboxes--dropdown-active .apos-forms-checkboxes-toggle:after {
-  padding-left: 2em;
-  content: '▲';
+  .apos-forms-checkboxes-dropdown--active & {
+    padding-left: 2em;
+    content: '▲';
+  }
 }
 
 .apos-forms-checkboxes-dropdown-choices {
