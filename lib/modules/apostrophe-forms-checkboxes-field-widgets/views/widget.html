@@ -37,10 +37,17 @@
     <div class="apos-forms-checkboxes-dropdown-choices">
       {% for choice in widget.choices %}
         {% set choiceId = id + apos.utils.slugify(choice.value) %}
-        <label {% if classPrefix %}class="{{ classPrefix + '__label' }}"{% endif %} for="{{ choiceId }}">
-          <input {% if classPrefix %}class="{{ classPrefix + '__input' }}"{% endif %} type="checkbox" id="{{ choiceId }}" name="{{ widget.fieldName}}" value="{{ choice.value }}">
-          {{ choice.label }}
-        </label>
+        {% if checkboxLabel == 'first' %}
+          <label {% if classPrefix %}class="{{ classPrefix + '__label' }}"{% endif %} for="{{ choiceId }}">
+            {{ choice.label }}
+            <input {% if classPrefix %}class="{{ classPrefix + '__input' }}"{% endif %} type="checkbox" id="{{ choiceId }}" name="{{ widget.fieldName}}" value="{{ choice.value }}">
+          </label>
+        {% else %}
+          <label {% if classPrefix %}class="{{ classPrefix + '__label' }}"{% endif %} for="{{ choiceId }}">
+            <input {% if classPrefix %}class="{{ classPrefix + '__input' }}"{% endif %} type="checkbox" id="{{ choiceId }}" name="{{ widget.fieldName}}" value="{{ choice.value }}">
+            {{ choice.label }}
+          </label>
+        {% endif %}
       {% endfor %}
     </div>
   {% endif %}
