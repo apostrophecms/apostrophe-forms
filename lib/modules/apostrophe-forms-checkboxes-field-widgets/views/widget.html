@@ -32,7 +32,7 @@
       {% endif %}
     {% endfor %}
   {% else %}
-    <button data-apos-toggle {% if classPrefix %}class="{{ classPrefix + '__toggle' }}"{% endif %}>{{ widget.fieldLabel}}
+    <button data-apos-toggle class="apos-forms-checkboxes-toggle {% if classPrefix %}{{ classPrefix + '__toggle' }}{% endif %}">{{ widget.fieldLabel}}
     {% if not widget.required %} {{ __("(Optional)") }}{% endif %}</button>
     <div class="apos-forms-checkboxes-dropdown-choices">
       {% for choice in widget.choices %}
