@@ -10,7 +10,11 @@ Enable the modules in your `app.js` file as with other modules:
 // in app.js
 modules: {
   // ...,
-  'apostrophe-forms': {},
+  'apostrophe-forms': {
+    // Best practice: set to first or last so that inputs are nested in labels
+    // and easier to style
+    optionLabelPosition: 'last'
+  },
   'apostrophe-forms-widgets': {},
   // Enable only the field widgets that your application needs to make it
   // easier for application/website managers.
@@ -62,6 +66,8 @@ If `apostrophe-email` is configured, submissions can be sent to multiple email a
 
 ## Styling
 
+### Disabling the starter styles
+
 Starter styles for user-facing forms are included in a forms.less file. These offer some spacing as well as styling for error states. If you do not want to use these, pass the `disableBaseStyles: true` option to `apostrophe-forms-widgets`. This file can also be used to identify the error state classes that you should style in your project.
 
 ```javascript
@@ -69,6 +75,8 @@ Starter styles for user-facing forms are included in a forms.less file. These of
   disableBaseStyles: true
 },
 ```
+
+### Custom class prefix
 
 Need more control over your styling? You can include your own class prefix that will be in included on most of the labels, inputs, and message/error elements within the forms. The class that is created uses the [BEM](http://getbem.com/naming/) convention. You add the prefix you want in the `apostrophe-forms` configuration.
 
@@ -78,6 +86,23 @@ Need more control over your styling? You can include your own class prefix that 
 }
 ```
 This results in a class like `my-form__input` being added to input elements in the form, for example.
+
+### Controlling the option label position
+
+The `apostrophe-forms-checkboxes-field-widgets` and `apostrophe-forms-radio-field-widgets` modules both support `optionLabelPosition`. If `optionLabelPosition` is set to `'first'` or `'last'`, the input elements for both radio and checkbox inputs are nested inside the label, with the label's text appearing first or last as appropriate. If no relevant option is set, for backwards compatibility the input is not nested in the label checkboxLabel. This can be explicitly chosen by setting the appropriate option to `'legacy'`. This is more difficult to style, so we recommend setting `optionLabelPosition` to `first` or `last`. You may set the option for both modules by setting it for `apostrophe-forms-base-field-widgets`, which they both inherit from.
+
+```javascript
+'apostrophe-forms-checkboxes-field-widgets': {
+  optionLabelPosition: 'first',
+},
+'apostrophe-forms-radio-field-widgets': {
+  optionLabelPosition: 'last',
+},
+// OR, we can set it for both in one place
+'apostrophe-forms-base-field-widgets': {
+  optionLabelPosition: 'first',
+},
+```
 
 ## Using reCAPTCHA for user validation
 

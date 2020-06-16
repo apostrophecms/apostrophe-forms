@@ -2,13 +2,27 @@
 {% set id = apos.utils.generateId() %}
 {% set widget = data.widget %}
 {% set classPrefix = data.widget.classPrefix %}
+{% set radioLabel = module.getOption('optionLabelPosition', 'legacy') %}
 <fieldset class="apos-forms-fieldset {{ classPrefix + '__fieldset' if classPrefix }}">
   <legend {% if classPrefix %}class="{{classPrefix + '__legend' }}"{% endif %}>{{ widget.fieldLabel}}</legend>
   {% if not widget.required %} {{ __("(Optional)") }}{% endif %}
   {% for choice in widget.choices %}
     {% set choiceId = id + apos.utils.slugify(choice.value) %}
-    <input {% if classPrefix %}class="{{classPrefix + '__input' }}"{% endif %} type="radio" id="{{ choiceId }}" name="{{ widget.fieldName}}" value="{{ choice.value }}">
-    <label {% if classPrefix %}class="{{classPrefix + '__label' }}"{% endif %} for="{{ choiceId }}">{{ choice.label }}</label>
+    {% if radioLabel == 'first' %}
+      <label {% if classPrefix %}class="{{classPrefix + '__label' }}"{% endif %} for="{{ choiceId }}">
+        {{ choice.label }}
+        <input {% if classPrefix %}class="{{classPrefix + '__input' }}"{% endif %} type="radio" id="{{ choiceId }}" name="{{ widget.fieldName}}" value="{{ choice.value }}">
+      </label>
+    {% elseif radioLabel == 'last' %}
+      <label {% if classPrefix %}class="{{classPrefix + '__label' }}"{% endif %} for="{{ choiceId }}">
+        <input {% if classPrefix %}class="{{classPrefix + '__input' }}"{% endif %} type="radio" id="{{ choiceId }}" name="{{ widget.fieldName}}" value="{{ choice.value }}">
+        {{ choice.label }}
+      </label>
+    {% else %}
+      {# Legacy #}
+      <input {% if classPrefix %}class="{{classPrefix + '__input' }}"{% endif %} type="radio" id="{{ choiceId }}" name="{{ widget.fieldName}}" value="{{ choice.value }}">
+      <label {% if classPrefix %}class="{{classPrefix + '__label' }}"{% endif %} for="{{ choiceId }}">{{ choice.label }}</label>
+    {% endif %}
   {% endfor %}
   <p data-apos-input-message="{{ widget.fieldName}}" hidden></p>
 </fieldset>

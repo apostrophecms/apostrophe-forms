@@ -3,7 +3,7 @@
 ## 1.9.0 2020-06-17
 
 - Introduced multiselect dropdowns as an alternate style choice available to form creators when they select the "checkboxes" widget. The provided CSS is basic but the DOM structure is intended to be suitable for styling as you see fit.
-- Added the `checkboxLabel` option to the `apostrophe-forms-checkboxes-field-widgets` module. This is a module-level option; it should be set when configuring the module, not every time it is used. If set to `first`, the label text appears before the checkbox or dropdown element. If set to `last`, it appears after. In both cases, the `input` checkbox is nested inside the `label` DOM element, for easier styling of the choice as a whole. For backwards compatibility, the default setting is `legacy`, in which the `input` element is not nested in `label`.
+- Added the `optionLabelPosition` option to the `apostrophe-forms-checkboxes-field-widgets` and `apostrophe-forms-radio-field-widgets` modules. If `optionLabelPosition` is set to `'first'` or `'last'`, the input elements for both radio and checkbox inputs are nested inside the label, with the label's text appearing first or last as appropriate. If no relevant option is set, for backwards compatibility the input is not nested in the label checkboxLabel. This can be explicitly chosen by setting the appropriate option to `'legacy'`. This is more difficult to style, so we recommend setting `optionLabelPosition` to `first` or `last`. You may set the option for both modules by setting it for `apostrophe-forms-base-field-widgets`, which they both inherit from.
 
 ## 1.8.2 2020-05-14
 

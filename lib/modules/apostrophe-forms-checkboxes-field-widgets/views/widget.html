@@ -4,7 +4,7 @@
 {% set classPrefix = data.widget.classPrefix %}
 {% set style = data.widget.style or "checkboxes" %}
 
-{% set checkboxLabel = module.getOption('checkboxLabel', 'legacy') %}
+{% set checkboxLabel = module.getOption('optionLabelPosition', 'legacy') %}
 {% if style == 'dropdown' and checkboxLabel == 'legacy' %}
   {% set checkboxLabel = 'last' %}
 {% endif %}
