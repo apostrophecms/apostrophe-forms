@@ -9,7 +9,7 @@
   {% set checkboxLabel = 'last' %}
 {% endif %}
 
-<fieldset class="apos-forms-fieldset apos-forms-checkboxes--{{ style }} {{ classPrefix + '__fieldset' if classPrefix }}">
+<fieldset {% if style == 'dropdown' %}data-apos-form-dropdown{% endif %} class="apos-forms-fieldset apos-forms-checkboxes--{{ style }} {{ classPrefix + '__fieldset' if classPrefix }}">
   {% if style == 'checkboxes' %}
     <legend {% if classPrefix %}class="{{ classPrefix + '__legend' }}"{% endif %}>{{ widget.fieldLabel}}
     {% if not widget.required %} {{ __("(Optional)") }}{% endif %}</legend>
@@ -32,7 +32,7 @@
       {% endif %}
     {% endfor %}
   {% else %}
-    <button data-apos-toggle class="apos-forms-checkboxes-toggle {% if classPrefix %}{{ classPrefix + '__toggle' }}{% endif %}">{{ widget.fieldLabel}}
+    <button data-apos-form-toggle class="apos-forms-checkboxes-toggle {% if classPrefix %}{{ classPrefix + '__toggle' }}{% endif %}">{{ widget.fieldLabel}}
     {% if not widget.required %} {{ __("(Optional)") }}{% endif %}</button>
     <div class="apos-forms-checkboxes-dropdown-choices">
       {% for choice in widget.choices %}
