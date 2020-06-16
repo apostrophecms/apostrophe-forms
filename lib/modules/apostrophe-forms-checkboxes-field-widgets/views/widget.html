@@ -9,7 +9,7 @@
   {% set checkboxLabel = 'last' %}
 {% endif %}
 
-<fieldset class="apos-forms-fieldset apos-forms-checkboxes-{{ style }} {{ classPrefix + '__fieldset' if classPrefix }}">
+<fieldset class="apos-forms-fieldset apos-forms-checkboxes--{{ style }} {{ classPrefix + '__fieldset' if classPrefix }}">
   {% if style == 'checkboxes' %}
     <legend {% if classPrefix %}class="{{ classPrefix + '__legend' }}"{% endif %}>{{ widget.fieldLabel}}
     {% if not widget.required %} {{ __("(Optional)") }}{% endif %}</legend>
