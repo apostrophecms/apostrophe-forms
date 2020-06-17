@@ -2,13 +2,54 @@
 {% set id = apos.utils.generateId() %}
 {% set widget = data.widget %}
 {% set classPrefix = data.widget.classPrefix %}
-<fieldset class="apos-forms-fieldset {{ classPrefix + '__fieldset' if classPrefix }}">
-  <legend {% if classPrefix %}class="{{ classPrefix + '__legend' }}"{% endif %}>{{ widget.fieldLabel}}</legend>
-  {% if not widget.required %} {{ __("(Optional)") }}{% endif %}
-  {% for choice in widget.choices %}
-    {% set choiceId = id + apos.utils.slugify(choice.value) %}
-    <input {% if classPrefix %}class="{{ classPrefix + '__input' }}"{% endif %} type="checkbox" id="{{ choiceId }}" name="{{ widget.fieldName}}" value="{{ choice.value }}">
-    <label {% if classPrefix %}class="{{ classPrefix + '__label' }}"{% endif %} for="{{ choiceId }}">{{ choice.label }}</label>
-  {% endfor %}
+{% set style = data.widget.style or "checkboxes" %}
+
+{% set checkboxLabel = module.getOption('optionLabelPosition', 'legacy') %}
+{% if style == 'dropdown' and checkboxLabel == 'legacy' %}
+  {% set checkboxLabel = 'last' %}
+{% endif %}
+
+<fieldset {% if style == 'dropdown' %}data-apos-form-dropdown{% endif %} class="apos-forms-fieldset apos-forms-checkboxes--{{ style }} {{ classPrefix + '__fieldset' if classPrefix }}">
+  {% if style == 'checkboxes' %}
+    <legend {% if classPrefix %}class="{{ classPrefix + '__legend' }}"{% endif %}>{{ widget.fieldLabel}}</legend>
+    {% if not widget.required %}<span class="apos-form-field-optional"> {{ __("(Optional)") }}</span>{% endif %}
+    {% for choice in widget.choices %}
+      {% set choiceId = id + apos.utils.slugify(choice.value) %}
+      {% if checkboxLabel == 'first' %}
+        <label {% if classPrefix %}class="{{ classPrefix + '__label' }}"{% endif %} for="{{ choiceId }}">
+          {{ choice.label }}
+          <input {% if classPrefix %}class="{{ classPrefix + '__input' }}"{% endif %} type="checkbox" id="{{ choiceId }}" name="{{ widget.fieldName}}" value="{{ choice.value }}">
+        </label>
+      {% elseif checkboxLabel == 'last' %}
+        <label {% if classPrefix %}class="{{ classPrefix + '__label' }}"{% endif %} for="{{ choiceId }}">
+          <input {% if classPrefix %}class="{{ classPrefix + '__input' }}"{% endif %} type="checkbox" id="{{ choiceId }}" name="{{ widget.fieldName}}" value="{{ choice.value }}">
+          {{ choice.label }}
+        </label>
+      {% else %}
+        {# for bc this is the default. Harder to style because there is no row container #}
+        <input {% if classPrefix %}class="{{ classPrefix + '__input' }}"{% endif %} type="checkbox" id="{{ choiceId }}" name="{{ widget.fieldName}}" value="{{ choice.value }}">
+        <label {% if classPrefix %}class="{{ classPrefix + '__label' }}"{% endif %} for="{{ choiceId }}">{{ choice.label }}</label>
+      {% endif %}
+    {% endfor %}
+  {% else %}
+    <button data-apos-form-toggle class="apos-forms-checkboxes-toggle {% if classPrefix %}{{ classPrefix + '__toggle' }}{% endif %}">{{ widget.fieldLabel}}
+    {% if not widget.required %}<span class="apos-form-field-optional"> {{ __("(Optional)") }}</span>{% endif %}</button>
+    <div class="apos-forms-checkboxes-dropdown-choices">
+      {% for choice in widget.choices %}
+        {% set choiceId = id + apos.utils.slugify(choice.value) %}
+        {% if checkboxLabel == 'first' %}
+          <label {% if classPrefix %}class="{{ classPrefix + '__label' }}"{% endif %} for="{{ choiceId }}">
+            {{ choice.label }}
+            <input {% if classPrefix %}class="{{ classPrefix + '__input' }}"{% endif %} type="checkbox" id="{{ choiceId }}" name="{{ widget.fieldName}}" value="{{ choice.value }}">
+          </label>
+        {% else %}
+          <label {% if classPrefix %}class="{{ classPrefix + '__label' }}"{% endif %} for="{{ choiceId }}">
+            <input {% if classPrefix %}class="{{ classPrefix + '__input' }}"{% endif %} type="checkbox" id="{{ choiceId }}" name="{{ widget.fieldName}}" value="{{ choice.value }}">
+            {{ choice.label }}
+          </label>
+        {% endif %}
+      {% endfor %}
+    </div>
+  {% endif %}
   <p data-apos-input-message="{{ widget.fieldName}}" hidden></p>
 </fieldset>

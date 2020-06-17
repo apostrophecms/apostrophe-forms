@@ -16,3 +16,35 @@
     margin-bottom: @apos-forms-spacing;
   }
 }
+
+.apos-forms-checkboxes--dropdown {
+  display: inline-block;
+}
+
+.apos-forms-checkboxes-toggle {
+  width: auto;
+}
+
+.apos-forms-checkboxes-toggle:after {
+  padding-left: 24px;
+  content: '▶';
+  .apos-forms-checkboxes-dropdown--active & {
+    padding-left: 24px;
+    content: '▲';
+  }
+}
+
+.apos-forms-checkboxes-dropdown-choices {
+  width: auto;
+  height: 0px;
+  overflow: hidden;
+  label {
+    width: auto;
+    display: block;
+    line-height: 1.5;
+  }
+  .apos-forms-checkboxes--dropdown-active & {
+    height: auto;
+    overflow: auto;
+  }
+}
