@@ -58,7 +58,7 @@ By default, submissions are saved to a new MongoDB collection, `aposFormSubmissi
 
 Form submission triggers a `'submission'` event that you can listen for and handle in an additional method if you choose. The callback for that event is provided the arguments, `req, form (the form object), output (the submission output)`.
 
-The module also emits browser events on submission (`apostrophe-forms:submission-form`) and submission failure (`apostrophe-forms:submission-failed`). Both events are attached to the document `body` element.
+The module also emits browser events on submission (`apostrophe-forms:submission-form`) and submission failure (`apostrophe-forms:submission-failed`). If reCAPTCHA is enabled (see [Using reCAPTCHA for user validation](#Using-reCAPTCHA-for-user-validation), it emits an event on submission with an unchecked reCAPTCHA (`apostrophe-forms:submissions-missing-recaptcha`). All three events are attached to the document `body` element.
 
 ### Email
 
