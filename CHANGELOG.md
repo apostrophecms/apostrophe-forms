@@ -1,5 +1,9 @@
 # Change log
 
+## 1.10.0 2020-06-26
+
+- Adds an event `apostrophe-forms:submission-missing-recaptcha`, which is emitted when a form is submitted before the reCAPTCHA is checked (e.g. expired after a while or invalidated after a failed submission).
+
 ## 1.9.0 2020-06-17
 
 - Introduced multiselect dropdowns as an alternate style choice available to form creators when they select the "checkboxes" widget. The provided CSS is basic but the DOM structure is intended to be suitable for styling as you see fit.
