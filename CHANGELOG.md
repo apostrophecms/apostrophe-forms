@@ -2,7 +2,7 @@
 
 ## 1.10.0 2020-06-26
 
-- Adds an event `apostrophe-forms:submission-missing-recaptcha`, which is emitted when a form is submitted before the reCAPTCHA is checked (e.g. expired after a while or invalidated after a failed submission).
+- Adds an event `apostrophe-forms:submission-missing-recaptcha`, which is emitted when a form is submitted before the reCAPTCHA is checked (e.g. expired after a while or invalidated after a failed submission). Thank you to [J. Garijo](https://github.com/jogarijo) for the contribution.
 
 ## 1.9.0 2020-06-17
 
