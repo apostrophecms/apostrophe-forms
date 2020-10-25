@@ -1,5 +1,9 @@
 # Change log
 
+## 1.10.1 2020-11-04
+
+* Allow project level code to override arrangeFields easily. Because the base class runs last in beforeConstruct, it should prepend to what the project provides, not the other way around. Otherwise project level groupings get overridden by the base class.
+
 ## 1.10.0 2020-06-26
 
 - Adds an event `apostrophe-forms:submission-missing-recaptcha`, which is emitted when a form is submitted before the reCAPTCHA is checked (e.g. expired after a while or invalidated after a failed submission). Thank you to [J. Garijo](https://github.com/jogarijo) for the contribution.
