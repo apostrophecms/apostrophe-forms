@@ -198,7 +198,7 @@ module.exports = {
       'email'
     ] : []);
 
-    options.arrangeFields = (options.arrangeFields || []).concat([
+    options.arrangeFields = [
       {
         name: 'form',
         label: 'Form',
@@ -217,7 +217,7 @@ module.exports = {
           'queryParamList'
         ]
       }
-    ]);
+    ].concat(options.arrangeFields || []);
   },
 
   afterConstruct: async function(self, callback) {
