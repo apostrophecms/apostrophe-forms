@@ -10,7 +10,7 @@ module.exports = {
       if (fs.existsSync(path)) {
         files = fs.readdirSync(path);
         files.forEach(function (file, index) {
-          var curPath = path + "/" + file;
+          var curPath = path + '/' + file;
           if (fs.lstatSync(curPath).isDirectory()) { // recurse
             deleteFolderRecursive(curPath);
           } else { // delete file

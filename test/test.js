@@ -42,7 +42,7 @@ describe('Forms module', function () {
         'apostrophe-express': {
           port: 4242,
           csrf: {
-            exceptions: ['/modules/apostrophe-forms/submit']
+            exceptions: [ '/modules/apostrophe-forms/submit' ]
           },
           session: {
             secret: 'test-the-forms'
@@ -249,7 +249,7 @@ describe('Forms module', function () {
 
     const response = await axios({
       method: 'post',
-      url: `http://localhost:4242/modules/apostrophe-forms/submit`,
+      url: 'http://localhost:4242/modules/apostrophe-forms/submit',
       data: submission1
     });
 
@@ -299,7 +299,7 @@ describe('Forms module', function () {
         'apostrophe-express': {
           port: 5000,
           csrf: {
-            exceptions: ['/modules/apostrophe-forms/submit']
+            exceptions: [ '/modules/apostrophe-forms/submit' ]
           },
           session: {
             secret: 'test-the-forms-more'
@@ -342,7 +342,7 @@ describe('Forms module', function () {
 
     const response = await axios({
       method: 'post',
-      url: `http://localhost:5000/modules/apostrophe-forms/submit`,
+      url: 'http://localhost:5000/modules/apostrophe-forms/submit',
       data: submission2
     });
 
@@ -369,7 +369,7 @@ describe('Forms module', function () {
 
     const response = await axios({
       method: 'post',
-      url: `http://localhost:4242/modules/apostrophe-forms/submit`,
+      url: 'http://localhost:4242/modules/apostrophe-forms/submit',
       data: submission3
     });
 
@@ -386,33 +386,33 @@ describe('Forms module', function () {
   let submission4 = { ...submission1 };
   let form3 = {
     ...form1,
-    "emails": [
+    'emails': [
       {
-        "id": "emailCondOne",
-        "email": "emailOne@example.net",
-        "conditions": []
+        'id': 'emailCondOne',
+        'email': 'emailOne@example.net',
+        'conditions': []
       },
       {
-        "id": "emailCondTwo",
-        "email": "emailTwo@example.net",
-        "conditions": [
+        'id': 'emailCondTwo',
+        'email': 'emailTwo@example.net',
+        'conditions': [
           {
-            "field": "DogTraits",
-            "value": 'Likes treats, It\'s a dog'
+            'field': 'DogTraits',
+            'value': 'Likes treats, It\'s a dog'
           },
           {
-            "field": "DogBreed",
-            "value": "Cesky Terrier, Pumi"
+            'field': 'DogBreed',
+            'value': 'Cesky Terrier, Pumi'
           }
         ]
       },
       {
-        "id": "emailCondThree",
-        "email": "emailThree@example.net",
-        "conditions": [
+        'id': 'emailCondThree',
+        'email': 'emailThree@example.net',
+        'conditions': [
           {
-            "field": "DogTraits",
-            "value": 'Likes treats, "Comma, test"'
+            'field': 'DogTraits',
+            'value': 'Likes treats, "Comma, test"'
           }
         ]
       }
@@ -429,7 +429,7 @@ describe('Forms module', function () {
         'apostrophe-express': {
           port: 6000,
           csrf: {
-            exceptions: ['/modules/apostrophe-forms/submit']
+            exceptions: [ '/modules/apostrophe-forms/submit' ]
           },
           session: {
             secret: 'test-the-forms-again'
@@ -478,7 +478,7 @@ describe('Forms module', function () {
 
     const response = await axios({
       method: 'post',
-      url: `http://localhost:6000/modules/apostrophe-forms/submit`,
+      url: 'http://localhost:6000/modules/apostrophe-forms/submit',
       data: submission4
     });
 
@@ -493,7 +493,7 @@ describe('Forms module', function () {
 
     const response = await axios({
       method: 'post',
-      url: `http://localhost:6000/modules/apostrophe-forms/submit`,
+      url: 'http://localhost:6000/modules/apostrophe-forms/submit',
       data: submission4
     });
 
@@ -578,7 +578,7 @@ describe('Forms module', function () {
     textareaWidgets.sanitizeFormField(null, null, widget, input1, output1);
     assert(output1.textAreaField === longText);
 
-    const input2 = { textAreaField: [127, 0] };
+    const input2 = { textAreaField: [ 127, 0 ] };
     const output2 = {};
 
     textareaWidgets.sanitizeFormField(null, null, widget, input2, output2);
@@ -650,7 +650,7 @@ describe('Forms module', function () {
         { value: 'fourth' }
       ]
     };
-    const input1 = { checkboxField: ['second', 'fourth', 'seventeenth'] };
+    const input1 = { checkboxField: [ 'second', 'fourth', 'seventeenth' ] };
     const output1 = {};
 
     checkboxesWidgets.sanitizeFormField(null, null, widget, input1, output1);
@@ -674,7 +674,7 @@ describe('Forms module', function () {
   it('sanitizes file widget input', async function () {
     const widget = { fieldName: 'fileField' };
     const output1 = {};
-    const input1 = { fileField: [fileId] };
+    const input1 = { fileField: [ fileId ] };
 
     await fileWidgets.sanitizeFormField(null, null, widget, input1, output1);
 
