@@ -436,7 +436,7 @@ module.exports = {
 
             // If the value is stored as a string, convert to an array for checking.
             if (!Array.isArray(answer)) {
-              answer = [answer];
+              answer = [ answer ];
             }
 
             if (!(answer.some(val => acceptable.includes(val)))) {
@@ -471,10 +471,10 @@ module.exports = {
         const emailOptions = {
           form,
           data,
-          to: emails.join(",")
+          to: emails.join(',')
         };
 
-        await self.sendEmail(req, "emailSubmission", emailOptions);
+        await self.sendEmail(req, 'emailSubmission', emailOptions);
 
         return null;
       } catch (err) {
@@ -506,7 +506,7 @@ module.exports = {
           data,
           to: data[form.emailConfirmationField]
         };
-        await self.sendEmail(req, "emailConfirmation", emailOptions);
+        await self.sendEmail(req, 'emailConfirmation', emailOptions);
 
         return null;
       } catch (err) {

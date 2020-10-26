@@ -1,3 +1,7 @@
 {
-  "extends": "apostrophe"
+  "extends": "apostrophe",
+  "rules": {
+    "multiline-ternary": "off",
+    "node/no-path-concat": "off"
+  }
 }

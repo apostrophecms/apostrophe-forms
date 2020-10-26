@@ -42,7 +42,7 @@ describe('Forms module', function () {
         'apostrophe-express': {
           port: 4242,
           csrf: {
-            exceptions: ['/modules/apostrophe-forms/submit']
+            exceptions: [ '/modules/apostrophe-forms/submit' ]
           },
           session: {
             secret: 'test-the-forms'
@@ -94,94 +94,94 @@ describe('Forms module', function () {
 
   // Create a form
   const form1 = {
-    '_id': 'form1',
-    'published': true,
-    'type': 'apostrophe-forms',
-    'title': 'First test form',
-    'slug': 'test-form-one',
-    'contents': {
-      'type': 'area',
-      'items': [
+    _id: 'form1',
+    published: true,
+    type: 'apostrophe-forms',
+    title: 'First test form',
+    slug: 'test-form-one',
+    contents: {
+      type: 'area',
+      items: [
         {
-          '_id': 'dogNameId',
-          'fieldLabel': 'Dog name',
-          'fieldName': 'DogName',
-          'required': true,
-          'type': 'apostrophe-forms-text-field'
+          _id: 'dogNameId',
+          fieldLabel: 'Dog name',
+          fieldName: 'DogName',
+          required: true,
+          type: 'apostrophe-forms-text-field'
         },
         {
-          '_id': 'dogTraitsId',
-          'fieldLabel': 'Check all that apply',
-          'fieldName': 'DogTraits',
-          'required': true,
-          'type': 'apostrophe-forms-checkboxes-field',
-          'choices': [
+          _id: 'dogTraitsId',
+          fieldLabel: 'Check all that apply',
+          fieldName: 'DogTraits',
+          required: true,
+          type: 'apostrophe-forms-checkboxes-field',
+          choices: [
             {
-              'label': 'Runs fast',
-              'value': 'Runs fast'
+              label: 'Runs fast',
+              value: 'Runs fast'
             },
             {
-              'label': 'It\'s a dog',
-              'value': 'It\'s a dog'
+              label: 'It\'s a dog',
+              value: 'It\'s a dog'
             },
             {
-              'label': 'Likes treats',
-              'value': 'Likes treats'
+              label: 'Likes treats',
+              value: 'Likes treats'
             }
           ]
         },
         {
-          '_id': 'dogBreedId',
-          'fieldLabel': 'Dog breed',
-          'fieldName': 'DogBreed',
-          'required': false,
-          'type': 'apostrophe-forms-radio-field',
-          'choices': [
+          _id: 'dogBreedId',
+          fieldLabel: 'Dog breed',
+          fieldName: 'DogBreed',
+          required: false,
+          type: 'apostrophe-forms-radio-field',
+          choices: [
             {
-              'label': 'Irish Wolfhound',
-              'value': 'Irish Wolfhound'
+              label: 'Irish Wolfhound',
+              value: 'Irish Wolfhound'
             },
             {
-              'label': 'Cesky Terrier',
-              'value': 'Cesky Terrier'
+              label: 'Cesky Terrier',
+              value: 'Cesky Terrier'
             },
             {
-              'label': 'Dachshund',
-              'value': 'Dachshund'
+              label: 'Dachshund',
+              value: 'Dachshund'
             },
             {
-              'label': 'Pumi',
-              'value': 'Pumi'
+              label: 'Pumi',
+              value: 'Pumi'
             }
           ]
         },
         {
-          '_id': 'dogPhotoId',
-          'fieldLabel': 'Photo of your dog',
-          'fieldName': 'DogPhoto',
-          'required': false,
-          'type': 'apostrophe-forms-file-field'
+          _id: 'dogPhotoId',
+          fieldLabel: 'Photo of your dog',
+          fieldName: 'DogPhoto',
+          required: false,
+          type: 'apostrophe-forms-file-field'
         },
         {
-          '_id': 'agreeId',
-          'fieldLabel': 'Opt-in to participate',
-          'fieldName': 'agree',
-          'required': true,
-          'checked': false,
-          'type': 'apostrophe-forms-boolean-field'
+          _id: 'agreeId',
+          fieldLabel: 'Opt-in to participate',
+          fieldName: 'agree',
+          required: true,
+          checked: false,
+          type: 'apostrophe-forms-boolean-field'
         }
       ]
     },
-    'enableQueryParams': true,
-    'queryParamList': [
+    enableQueryParams: true,
+    queryParamList: [
       {
-        'id': 'source',
-        'key': 'source'
+        id: 'source',
+        key: 'source'
       },
       {
-        'id': 'memberId',
-        'key': 'member-id',
-        'lengthLimit': 6
+        id: 'memberId',
+        key: 'member-id',
+        lengthLimit: 6
       }
     ]
   };
@@ -228,19 +228,19 @@ describe('Forms module', function () {
 
   // Submitting gets 200 response
   const submission1 = {
-    'DogName': 'Jasper',
-    'DogTraits': [
+    DogName: 'Jasper',
+    DogTraits: [
       'Runs fast',
       'Likes treats'
     ],
-    'DogBreed': 'Irish Wolfhound',
-    'DogToy': 'Frisbee',
-    'LifeStory': 'Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit. Donec ullamcorper nulla non metus auctor fringilla.',
-    'agree': true,
-    'queryParams': {
+    DogBreed: 'Irish Wolfhound',
+    DogToy: 'Frisbee',
+    LifeStory: 'Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit. Donec ullamcorper nulla non metus auctor fringilla.',
+    agree: true,
+    queryParams: {
       'member-id': '123456789',
-      'source': 'newspaper',
-      'malicious': 'evil'
+      source: 'newspaper',
+      malicious: 'evil'
     }
   };
 
@@ -249,7 +249,7 @@ describe('Forms module', function () {
 
     const response = await axios({
       method: 'post',
-      url: `http://localhost:4242/modules/apostrophe-forms/submit`,
+      url: 'http://localhost:4242/modules/apostrophe-forms/submit',
       data: submission1
     });
 
@@ -276,8 +276,8 @@ describe('Forms module', function () {
     }, function (err, doc) {
       assert(!err);
       assert(doc.data['member-id'] === '123456');
-      assert(doc.data['source'] === 'newspaper');
-      assert(doc.data['malicious'] === undefined);
+      assert(doc.data.source === 'newspaper');
+      assert(doc.data.malicious === undefined);
 
       return done();
     });
@@ -289,7 +289,7 @@ describe('Forms module', function () {
   form2.slug = 'test-form-two';
   form2._id = 'form2';
   let savedForm2;
-  let submission2 = { ...submission1 };
+  const submission2 = { ...submission1 };
 
   it('should be a property of the apos2 object', function (done) {
     apos2 = require('apostrophe')({
@@ -299,7 +299,7 @@ describe('Forms module', function () {
         'apostrophe-express': {
           port: 5000,
           csrf: {
-            exceptions: ['/modules/apostrophe-forms/submit']
+            exceptions: [ '/modules/apostrophe-forms/submit' ]
           },
           session: {
             secret: 'test-the-forms-more'
@@ -342,7 +342,7 @@ describe('Forms module', function () {
 
     const response = await axios({
       method: 'post',
-      url: `http://localhost:5000/modules/apostrophe-forms/submit`,
+      url: 'http://localhost:5000/modules/apostrophe-forms/submit',
       data: submission2
     });
 
@@ -361,7 +361,7 @@ describe('Forms module', function () {
 
   // Get form errors returned from missing required data.
   const submission3 = {
-    'agree': true
+    agree: true
   };
 
   it('should return errors for missing data', async function () {
@@ -369,7 +369,7 @@ describe('Forms module', function () {
 
     const response = await axios({
       method: 'post',
-      url: `http://localhost:4242/modules/apostrophe-forms/submit`,
+      url: 'http://localhost:4242/modules/apostrophe-forms/submit',
       data: submission3
     });
 
@@ -383,36 +383,36 @@ describe('Forms module', function () {
   // Test basic reCAPTCHA requirements.
   let apos3;
   let savedForm3;
-  let submission4 = { ...submission1 };
-  let form3 = {
+  const submission4 = { ...submission1 };
+  const form3 = {
     ...form1,
-    "emails": [
+    emails: [
       {
-        "id": "emailCondOne",
-        "email": "emailOne@example.net",
-        "conditions": []
+        id: 'emailCondOne',
+        email: 'emailOne@example.net',
+        conditions: []
       },
       {
-        "id": "emailCondTwo",
-        "email": "emailTwo@example.net",
-        "conditions": [
+        id: 'emailCondTwo',
+        email: 'emailTwo@example.net',
+        conditions: [
           {
-            "field": "DogTraits",
-            "value": 'Likes treats, It\'s a dog'
+            field: 'DogTraits',
+            value: 'Likes treats, It\'s a dog'
           },
           {
-            "field": "DogBreed",
-            "value": "Cesky Terrier, Pumi"
+            field: 'DogBreed',
+            value: 'Cesky Terrier, Pumi'
           }
         ]
       },
       {
-        "id": "emailCondThree",
-        "email": "emailThree@example.net",
-        "conditions": [
+        id: 'emailCondThree',
+        email: 'emailThree@example.net',
+        conditions: [
           {
-            "field": "DogTraits",
-            "value": 'Likes treats, "Comma, test"'
+            field: 'DogTraits',
+            value: 'Likes treats, "Comma, test"'
           }
         ]
       }
@@ -429,7 +429,7 @@ describe('Forms module', function () {
         'apostrophe-express': {
           port: 6000,
           csrf: {
-            exceptions: ['/modules/apostrophe-forms/submit']
+            exceptions: [ '/modules/apostrophe-forms/submit' ]
           },
           session: {
             secret: 'test-the-forms-again'
@@ -478,7 +478,7 @@ describe('Forms module', function () {
 
     const response = await axios({
       method: 'post',
-      url: `http://localhost:6000/modules/apostrophe-forms/submit`,
+      url: 'http://localhost:6000/modules/apostrophe-forms/submit',
       data: submission4
     });
 
@@ -493,7 +493,7 @@ describe('Forms module', function () {
 
     const response = await axios({
       method: 'post',
-      url: `http://localhost:6000/modules/apostrophe-forms/submit`,
+      url: 'http://localhost:6000/modules/apostrophe-forms/submit',
       data: submission4
     });
 
@@ -503,21 +503,21 @@ describe('Forms module', function () {
   });
 
   const submission5 = {
-    'DogName': 'Jenkins',
-    'DogTraits': [
+    DogName: 'Jenkins',
+    DogTraits: [
       'Runs fast',
       'Comma, test'
     ],
-    'DogBreed': 'Irish Wolfhound'
+    DogBreed: 'Irish Wolfhound'
   };
 
   const submission6 = {
-    'DogName': 'Jenkins',
-    'DogTraits': [
+    DogName: 'Jenkins',
+    DogTraits: [
       'Runs fast',
       'Likes treats'
     ],
-    'DogBreed': 'Cesky Terrier'
+    DogBreed: 'Cesky Terrier'
   };
 
   it('should populate email notification lists based on conditions', async function () {
@@ -578,7 +578,7 @@ describe('Forms module', function () {
     textareaWidgets.sanitizeFormField(null, null, widget, input1, output1);
     assert(output1.textAreaField === longText);
 
-    const input2 = { textAreaField: [127, 0] };
+    const input2 = { textAreaField: [ 127, 0 ] };
     const output2 = {};
 
     textareaWidgets.sanitizeFormField(null, null, widget, input2, output2);
@@ -650,7 +650,7 @@ describe('Forms module', function () {
         { value: 'fourth' }
       ]
     };
-    const input1 = { checkboxField: ['second', 'fourth', 'seventeenth'] };
+    const input1 = { checkboxField: [ 'second', 'fourth', 'seventeenth' ] };
     const output1 = {};
 
     checkboxesWidgets.sanitizeFormField(null, null, widget, input1, output1);
@@ -674,7 +674,7 @@ describe('Forms module', function () {
   it('sanitizes file widget input', async function () {
     const widget = { fieldName: 'fileField' };
     const output1 = {};
-    const input1 = { fileField: [fileId] };
+    const input1 = { fileField: [ fileId ] };
 
     await fileWidgets.sanitizeFormField(null, null, widget, input1, output1);
 
