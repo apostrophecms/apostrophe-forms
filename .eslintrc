@@ -1,6 +1,3 @@
 {
-  "extends": "apostrophe",
-  "rules": {
-    "indent": ["warn", 2]
-  }
+  "extends": "apostrophe"
 }
