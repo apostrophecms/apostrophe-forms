@@ -5,7 +5,11 @@
 {% set radioLabel = module.getOption('optionLabelPosition', 'legacy') %}
 <fieldset class="apos-forms-fieldset {{ classPrefix + '__fieldset' if classPrefix }}">
   <legend {% if classPrefix %}class="{{classPrefix + '__legend' }}"{% endif %}>{{ widget.fieldLabel}}</legend>
-  {% if not widget.required %}<span class="apos-form-field-optional"> {{ __("(Optional)") }}</span>{% endif %}
+  {% if widget.required %}
+    <span class="apos-form-field-required"> {{ __("(Required)") }}</span>
+  {% else %}
+    <span class="apos-form-field-optional"> {{ __("(Optional)") }}</span>
+  {% endif %}
   {% for choice in widget.choices %}
     {% set choiceId = id + apos.utils.slugify(choice.value) %}
     {% if radioLabel == 'first' %}
