@@ -1,5 +1,9 @@
 # Change log
 
+## 1.10.2 2021-01-27
+
+- Updates axios to address a reported vulnerability.
+
 ## 1.10.1 2020-11-04
 
 - Allow project level code to override arrangeFields easily. Because the base class runs last in beforeConstruct, it should prepend to what the project provides, not the other way around. Otherwise project level groupings get overridden by the base class.
