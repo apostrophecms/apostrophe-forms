@@ -1,5 +1,9 @@
 # Change log
 
+## 1.10.3 2021-04-16
+
+- reCAPTCHA appends to `body` rather than `[data-apos-refreshable]` if the latter is not available. For ordinary Apostrophe sites there was no harm in assuming it existed, however sites injecting Apostrophe-rendered markup via the headless module or alternative techniques might not have such an element. The `body` exists for everyone.
+
 ## 1.10.2 2021-02-24
 
 - Updates axios to address a reported SSRF vulnerability.
