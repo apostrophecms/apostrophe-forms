@@ -265,7 +265,7 @@ module.exports = {
       }
 
       try {
-        if (options.recaptchaSecret) {
+        if (self.getOption(req, 'recaptchaSecret')) {
           await self.checkRecaptcha(req, input, formErrors);
         }
 
