@@ -1,5 +1,9 @@
 # Change log
 
+## UNRELEASED
+
+- Use `self.getOption` to fetch the recaptcha options for full compatibility with `apostrophe-override-options`.
+
 ## 1.10.3 2021-04-16
 
 - reCAPTCHA appends to `body` rather than `[data-apos-refreshable]` if the latter is not available. For ordinary Apostrophe sites there was no harm in assuming it existed, however sites injecting Apostrophe-rendered markup via the headless module or alternative techniques might not have such an element. The `body` exists for everyone.
