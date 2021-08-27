@@ -1,0 +1,9 @@
+{
+  "//": "this package.json file is not actually installed",
+  "//": "apostrophe requires that all npm modules to be loaded by moog",
+  "//": "exist in package.json at project level, which for a test is here",
+  "dependencies": {
+    "apostrophe": "^2.0.0",
+    "apostrophe-forms": "^1.0.0"
+  }
+}
