@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.10.5 (2021-09-07)
+
+- Fixes a bug where only the first input of type "file" was being submitted on form submit.
+
 ## 1.10.4 (2021-08-27)
 
 - Use `self.getOption` to fetch the recaptcha options for full compatibility with `apostrophe-override-options`.
