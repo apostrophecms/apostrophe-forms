@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.10.6 (2022-01-25)
+
+- Allow conditional section to match any value from a comma-seperated list.
+
 ## 1.10.5 (2021-09-07)
 
 - Fixes a bug where only the first input of type "file" was being submitted on form submit.
