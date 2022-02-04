@@ -1,5 +1,10 @@
 # Changelog
 
+## next
+
+- add `apostrophe-forms-checkboxes-field-widgets` `choices` to `arrangeFields` to prevent warning during startup
+- add `apostrophe-forms-conditional-widgets` `conditionName`, `conditionValue` & `contents` to `arrangeFields` to prevent warning during startup
+
 ## 1.10.5 (2021-10-13)
 
 - Fixes a bug where only the first input of type "file" was being submitted on form submit.
