@@ -1,5 +1,9 @@
 # Changelog
 
+## UNRELEASED
+
+- Allow server side event handlers to modify the response object sent after a form submission, and allow browser side event handlers to see that object.
+
 ## 1.10.5 (2021-10-13)
 
 - Fixes a bug where only the first input of type "file" was being submitted on form submit.
