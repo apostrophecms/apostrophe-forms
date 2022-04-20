@@ -337,7 +337,7 @@ module.exports = {
       } catch (e) {
         return next(e);
       }
-   });
+    });
 
     self.checkRecaptcha = async function (req, input, formErrors) {
       const recaptchaSecret = self.getOption(req, 'recaptchaSecret');
