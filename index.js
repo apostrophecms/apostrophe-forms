@@ -264,7 +264,7 @@ module.exports = {
         return next('notfound');
       }
 
-      let response = {};
+      const response = {};
       try {
         if (self.getOption(req, 'recaptchaSecret')) {
           await self.checkRecaptcha(req, input, formErrors);
