@@ -56,9 +56,9 @@ Example:
 
 By default, submissions are saved to a new MongoDB collection, `aposFormSubmissions`. If you do not want submissions saved to this collection, add the `saveSubmissions: false` option to the `apostrophe-forms` module.
 
-Form submission triggers a `'submission'` event that you can listen for and handle in an additional method if you choose. The callback for that event is provided the arguments, `req, form (the form object), output (the submission output)`.
+Form submission triggers a `'submission'` event that you can listen for and handle in an additional method if you choose. The callback for that event is provided the arguments, `req, form, output, response` where `form` is the form object, `output` is the data received, and `response` is an initially empty object to be sent back to the browser. Handlers may modify that object to return custom data to the browser. The default logic in the browser does not require any data in the response.
 
-The module also emits browser events on submission (`apostrophe-forms:submission-form`) and submission failure (`apostrophe-forms:submission-failed`). If reCAPTCHA is enabled (see [Using reCAPTCHA for user validation](#Using-reCAPTCHA-for-user-validation)), it emits an event on submission with an unchecked reCAPTCHA (`apostrophe-forms:submissions-missing-recaptcha`). All three events are attached to the document `body` element.
+The module also emits browser events on submission (`apostrophe-forms:submission-form`) and submission failure (`apostrophe-forms:submission-failed`). On success the object passed to the `apostrophe-forms:submission-form` event handlers includes `form` and `res` properties. On failure the object passed to the `apostrophe-forms:submission-failed` event includes `err`, `form` and `res` properties. If reCAPTCHA is enabled (see [Using reCAPTCHA for user validation (#Using-reCAPTCHA-for-user-validation)), it emits an event on submission with an unchecked reCAPTCHA (`apostrophe-forms:submissions-missing-recaptcha`). All three events are attached to the document `body` element.
 
 ### Email
 

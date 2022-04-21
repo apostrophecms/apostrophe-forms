@@ -264,6 +264,7 @@ module.exports = {
         return next('notfound');
       }
 
+      let response = {};
       try {
         if (self.getOption(req, 'recaptchaSecret')) {
           await self.checkRecaptcha(req, input, formErrors);
@@ -331,13 +332,11 @@ module.exports = {
         if (form.enableQueryParams && form.queryParamList.length > 0) {
           self.processQueryParams(req, form, input, output, fieldNames);
         }
-
-        await self.emit('submission', req, form, output);
+        await self.emit('submission', req, form, output, response);
+        return next(null, response);
       } catch (e) {
         return next(e);
       }
-
-      return next(null);
     });
 
     self.checkRecaptcha = async function (req, input, formErrors) {
