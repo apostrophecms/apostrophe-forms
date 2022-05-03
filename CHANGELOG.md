@@ -1,6 +1,6 @@
 # Changelog
 
-## UNRELEASED
+## 1.11.0 (2022-05-03)
 
 - Allow server side event handlers to modify the response object sent after a form submission, and allow browser side event handlers to see that object.
 
