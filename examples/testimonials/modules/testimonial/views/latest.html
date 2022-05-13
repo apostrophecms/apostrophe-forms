@@ -1,0 +1,15 @@
+<div class="container mx-auto mx-2">
+  <div class="flex flex-col justify-around gap-4 py-2">
+    {% set cls = cycler("", "bg-gray-200") %} {% for testimony in
+    data.testimonials %}
+    <div
+      class="{{ cls.next() }} order-2 rounded-md flex flex-col justify-between p-2 shadow-lg hover:shadow-xl cursor-pointer"
+    >
+      <h6>
+        {{ testimony.createdAt | date('D MMM') }}:&nbsp;{{ testimony.title }}
+      </h6>
+      <p>{{ testimony.testimonial }}</p>
+    </div>
+    {% endfor %}
+  </div>
+</div>
