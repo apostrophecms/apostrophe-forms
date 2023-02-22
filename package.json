@@ -39,8 +39,5 @@
     "lodash.uniq": "^4.5.0",
     "request": "^2.88.0",
     "request-promise": "^4.2.4"
-  },
-  "peerDependencies": {
-    "apostrophe": "^2.105.2"
   }
 }
