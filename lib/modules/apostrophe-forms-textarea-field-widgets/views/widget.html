@@ -4,7 +4,11 @@
 {% set classPrefix = data.widget.classPrefix %}
 <label for="{{ id }}" class="apos-forms-label {{ classPrefix + '__label' if classPrefix }}">
   {{ widget.fieldLabel}}
-  {% if not widget.required %}<span class="apos-form-field-optional"> {{ __("(Optional)") }}</span>{% endif %}
+  {% if widget.required %}
+    <span class="apos-forms-field-required"> {{ __("(Required)") }}</span>
+  {% else %}
+    <span class="apos-forms-field-optional"> {{ __("(Optional)") }}</span>
+  {% endif %}
   <span class="apos-forms-label-message {{ classPrefix + '__label-message' if classPrefix }}" data-apos-input-message="{{ widget.fieldName}}" hidden></span>
 </label>
 <textarea class="apos-forms-input {{ classPrefix + '__input' if classPrefix }}" id="{{ id }}" name="{{ widget.fieldName}}" placeholder="{{widget.placeholder}}" {% if widget.required %}required{% endif %}></textarea>

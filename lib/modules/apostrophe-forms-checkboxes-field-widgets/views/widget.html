@@ -12,7 +12,11 @@
 <fieldset {% if style == 'dropdown' %}data-apos-form-dropdown{% endif %} class="apos-forms-fieldset apos-forms-checkboxes--{{ style }} {{ classPrefix + '__fieldset' if classPrefix }}">
   {% if style == 'checkboxes' %}
     <legend {% if classPrefix %}class="{{ classPrefix + '__legend' }}"{% endif %}>{{ widget.fieldLabel}}</legend>
-    {% if not widget.required %}<span class="apos-form-field-optional"> {{ __("(Optional)") }}</span>{% endif %}
+    {% if widget.required %}
+      <span class="apos-forms-field-required"> {{ __("(Required)") }}</span>
+    {% else %}
+      <span class="apos-forms-field-optional"> {{ __("(Optional)") }}</span>
+    {% endif %}
     {% for choice in widget.choices %}
       {% set choiceId = id + apos.utils.slugify(choice.value) %}
       {% if checkboxLabel == 'first' %}
@@ -33,7 +37,12 @@
     {% endfor %}
   {% else %}
     <button data-apos-form-toggle class="apos-forms-checkboxes-toggle {% if classPrefix %}{{ classPrefix + '__toggle' }}{% endif %}">{{ widget.fieldLabel}}
-    {% if not widget.required %}<span class="apos-form-field-optional"> {{ __("(Optional)") }}</span>{% endif %}</button>
+      {% if widget.required %}
+        <span class="apos-forms-field-required"> {{ __("(Required)") }}</span>
+      {% else %}
+        <span class="apos-forms-field-optional"> {{ __("(Optional)") }}</span>
+      {% endif %}
+    </button>
     <div class="apos-forms-checkboxes-dropdown-choices">
       {% for choice in widget.choices %}
         {% set choiceId = id + apos.utils.slugify(choice.value) %}
