@@ -1,4 +1,6 @@
 const assert = require('assert');
+// It's a dev dependency but eslint seems not to grasp that
+// eslint-disable-next-line import/no-extraneous-dependencies
 const axios = require('axios');
 const testUtil = require('apostrophe/test-lib/util');
 const fileUtils = require('./lib/file-utils');
