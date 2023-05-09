@@ -1,6 +1,6 @@
 # Changelog
 
-## 1.11.2 (2023-05-09)
+## UNRELEASED
 
 - Adds `Required` label to required fields since the `Optional` label is already in place.
 - Fixes small class name typo from `apos-form-...` to `apos-forms-...`
