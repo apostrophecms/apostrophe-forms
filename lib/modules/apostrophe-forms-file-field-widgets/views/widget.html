@@ -5,9 +5,9 @@
 <label for="{{ id }}" class="apos-forms-label {{classPrefix + '__label' if classPrefix }}">
   {{ widget.fieldLabel}}
   {% if widget.required %}
-    <span class="apos-form-field-required"> {{ __("(Required)") }}</span>
+    <span class="apos-forms-field-required"> {{ __("(Required)") }}</span>
   {% else %}
-    <span class="apos-form-field-optional"> {{ __("(Optional)") }}</span>
+    <span class="apos-forms-field-optional"> {{ __("(Optional)") }}</span>
   {% endif %}
   <span class="apos-forms-label-message {{ classPrefix + '__label-message' if classPrefix }}" data-apos-input-message="{{ widget.fieldName}}" hidden></span>
   <span class="apos-forms-label-message {{ classPrefix + '__label-message' if classPrefix }}" data-apos-forms-file-spinner hidden>Uploading...</span>
